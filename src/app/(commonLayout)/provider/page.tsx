@@ -1,9 +1,11 @@
+import { ProviderProfile } from '@/components/modules/providerprofile/provider'
 import React from 'react'
 
 const ProviderPage = () => {
+    
   return (
     <div>
-      this is provider page
+        <ProviderProfile/>
     </div>
   )
 }
