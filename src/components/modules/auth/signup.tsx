@@ -61,13 +61,11 @@ export function SignupForm() {
                     return;
                 }
 
-                // force login again
                 await authClient.signIn.email({
                     email: value.email,
                     password: value.password,
                 });
 
-                // refresh session
                 await authClient.getSession();
 
                 if (value.role === "Provider") {
