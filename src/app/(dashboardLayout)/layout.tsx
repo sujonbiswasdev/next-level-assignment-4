@@ -8,8 +8,7 @@ import React from 'react'
 const DashboardLayout =async ({admin,provider,children}:{admin:React.ReactNode,provider:React.ReactNode,children:React.ReactNode}) => {
 
     const userinfo=await getSession()
-    const user=userinfo.data.result
-
+    const user=userinfo.data.result!
   return (
     <SidebarProvider>
       <AppSidebar user={user} />

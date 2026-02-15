@@ -19,41 +19,38 @@ import {
     FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { authClient } from "@/lib/authClient"
 import { useRouter } from "next/navigation"
 export const formSchema = z.object({
-    email: z.email("Invalid email"),
-    password: z.string().min(6, "Password must be 6+ chars"),
+    name: z.string().min(1, "name is required"),
 });
 
-export function SigninForm() {
+export function CreateCategoryForm() {
     const router = useRouter()
     const form = useForm({
         defaultValues: {
-            email: "",
-            password: "",
-            
+            name: "",
         },
         validators: {
             onSubmit: formSchema,
         },
         onSubmit: async ({ value }) => {
-            const toastId = toast.loading("signning user");
-        
+            toast.loading("category creating.........")
             try {
-                if(!value){
-                    toast.error("please provide correct information")
-                 }
-               const { data, error } = await authClient.signIn.email(value);
-                if (error) {
-                    toast.error(error.message);
-                    return;
+                const response = await fetch('http://localhost:5000/api/admin/category', {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(value)
+                })
+                const body = await response.json()
+                if (!response.ok) {
+                    toast.error(body.message)
+                    return
                 }
-                toast.dismiss(toastId)
-                toast.success('login successfully')
-                router.push("/dashboard")
+
+                toast.success("category create successfully")
             } catch (error) {
-                toast.error("Something went wrong, please try again.", { id: toastId });
+                toast.error("Something went wrong, please try again.");
             }
         },
     })
@@ -61,9 +58,9 @@ export function SigninForm() {
     return (
         <Card className="w-full sm:max-w-md mx-auto">
             <CardHeader>
-                <CardTitle>Sign In to Your Account</CardTitle>
+                <CardTitle>Create category</CardTitle>
                 <CardDescription>
-                    Please sign in to your account to access your dashboard, manage your activities, and continue using our services securely
+                    Fresh and savory seafood dishes
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -76,13 +73,13 @@ export function SigninForm() {
                 >
                     <FieldGroup>
                         <form.Field
-                            name="email"
+                            name="name"
                             children={(field) => {
                                 const isInvalid =
                                     field.state.meta.isTouched && !field.state.meta.isValid
                                 return (
                                     <Field data-invalid={isInvalid}>
-                                        <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                                        <FieldLabel htmlFor={field.name}> Name</FieldLabel>
                                         <Input
                                             id={field.name}
                                             name={field.name}
@@ -90,33 +87,7 @@ export function SigninForm() {
                                             onBlur={field.handleBlur}
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             aria-invalid={isInvalid}
-                                            placeholder="please enter your email"
-                                            autoComplete="off"
-                                        />
-                                        {isInvalid && (
-                                            <FieldError errors={field.state.meta.errors} />
-                                        )}
-                                    </Field>
-                                )
-                            }}
-                        />
-                        <form.Field
-                            name="password"
-                            children={(field) => {
-                                const isInvalid =
-                                    field.state.meta.isTouched && !field.state.meta.isValid
-                                return (
-                                    <Field data-invalid={isInvalid}>
-                                        <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                                        <Input
-                                            id={field.name}
-                                            name={field.name}
-                                            value={field.state.value}
-                                            onBlur={field.handleBlur}
-                                            onChange={(e) => field.handleChange(e.target.value)}
-                                            aria-invalid={isInvalid}
-                                            placeholder="please enter your password"
-                                            autoComplete="off"
+                                            placeholder="please enter your category name"
                                         />
                                         {isInvalid && (
                                             <FieldError errors={field.state.meta.errors} />
@@ -133,9 +104,27 @@ export function SigninForm() {
                     <Button type="button" variant="outline" onClick={() => form.reset()}>
                         Reset
                     </Button>
-                    <Button type="submit" form="bug-report-form">
-                        Submit
+
+                    <Button
+                        type="submit" form="bug-report-form"
+                        variant="outline"
+                        onClick={() => {
+                            toast.promise<{ name: string }>(
+                                () =>
+                                    new Promise((resolve) =>
+                                        setTimeout(() => resolve({ name: "Event" }), 2000)
+                                    ),
+                                {
+                                    loading: "cateogry creating.....",
+                                }
+                            )
+                        }}
+                    >
+                        Promise
                     </Button>
+                    {/* <Button >
+            Submit
+          </Button> */}
                 </Field>
             </CardFooter>
         </Card>

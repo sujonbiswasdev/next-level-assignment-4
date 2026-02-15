@@ -1,6 +1,5 @@
 "use client"
-
-import * as React from "react"
+import { useStore } from "@tanstack/react-form";
 import { useForm } from "@tanstack/react-form"
 import { toast } from "sonner"
 import * as z from "zod"
@@ -21,18 +20,43 @@ import {
     FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { authClient } from "@/lib/authClient"
 import { useRouter } from "next/navigation"
-import { getSession } from "@/services/service"
-import { ProviderProfile } from "../providerprofile/provider"
+import { Textarea } from "@/components/ui/textarea";
 export const formSchema = z.object({
     name: z.string().min(1, "Name is required"),
-    email: z.email("Invalid email"),
+    email: z.string().email("Invalid email"),
     password: z.string().min(6, "Password must be 6+ chars"),
     image: z.string(),
     phone: z.string(),
-    role: z.enum(['Customer', "Provider"])
-});
+    role: z.enum(['Customer', "Provider"]),
+    restaurantName: z.string(),
+    address: z.string(),
+    description: z.string()
+}).superRefine((data, ctx) => {
+    if (data.role === "Provider") {
+      if (!data.restaurantName) {
+        ctx.addIssue({
+          path: ["restaurantName"],
+          message: "Restaurant name is required",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+      if (!data.address) {
+        ctx.addIssue({
+          path: ["address"],
+          message: "Address is required",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+      if (!data.description) {
+        ctx.addIssue({
+          path: ["description"],
+          message: "Description is required",
+          code: z.ZodIssueCode.custom,
+        });
+      }
+    }
+  });
 
 export function SignupForm() {
     const router = useRouter()
@@ -44,46 +68,37 @@ export function SignupForm() {
             image: "",
             phone: "",
             role: "",
+            restaurantName: "",
+            address: "",
+            description: ""
         },
         validators: {
             onSubmit: formSchema,
         },
         onSubmit: async ({ value }) => {
-            const toastId = toast.loading("Creating user");
-        
+            console.log(value, 'jdfkjsdkljfsdkljff')
             try {
-                if(!value){
-                    toast.error("please provide correct information")
-                 }
-               const { data, error } = await authClient.signUp.email(value);
-                if (error) {
-                    toast.error(error.message);
-                    return;
+                const response = await fetch('http://localhost:5000/api/auth/register', {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(value)
+                })
+                const body = await response.json()
+                console.log(body, 'jsdflksjsdata')
+                if (!response.ok) {
+                    toast.error(body.error.body.message)
+                    router.push("/")
+                    return
                 }
 
-                await authClient.signIn.email({
-                    email: value.email,
-                    password: value.password,
-                });
-
-                await authClient.getSession();
-
-                if (value.role === "Provider") {
-                    toast.dismiss(toastId)
-                    router.push("/provider");
-                    router.refresh();
-                } else {
-                    toast.success("user created successfully")
-                    toast.dismiss(toastId)
-                    router.push("/profile");
-                }
-
+                toast.success("user signup successfully")
+                router.push('/profile')
             } catch (error) {
-                toast.error("Something went wrong, please try again.", { id: toastId });
+                toast.error("Something went wrong, please try again.");
             }
         },
     })
-
+    const role = useStore(form.store, (state) => state.values.role);
     return (
         <Card className="w-full sm:max-w-md mx-auto">
             <CardHeader>
@@ -257,6 +272,89 @@ export function SignupForm() {
                             }}
 
                         />
+
+                        {role === "Provider" && (
+                            <>
+                                <form.Field
+                                    name="restaurantName"
+                                    children={(field) => {
+                                        const isInvalid =
+                                            field.state.meta.isTouched && !field.state.meta.isValid
+                                        return (
+                                            <Field data-invalid={isInvalid}>
+                                                <FieldLabel htmlFor={field.name}>restaurantName</FieldLabel>
+                                                <Input
+                                                    id={field.name}
+                                                    name={field.name}
+                                                    value={field.state.value}
+                                                    onBlur={field.handleBlur}
+                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                    aria-invalid={isInvalid}
+                                                    placeholder="please enter your name"
+                                                />
+                                                {isInvalid && (
+                                                    <FieldError errors={field.state.meta.errors} />
+                                                )}
+                                            </Field>
+                                        )
+                                    }}
+                                />
+
+
+                                <form.Field
+                                    name="address"
+                                    children={(field) => {
+                                        const isInvalid =
+                                            field.state.meta.isTouched && !field.state.meta.isValid
+                                        return (
+                                            <Field data-invalid={isInvalid}>
+                                                <FieldLabel htmlFor={field.name}>address</FieldLabel>
+                                                <Input
+                                                    id={field.name}
+                                                    name={field.name}
+                                                    value={field.state.value}
+                                                    onBlur={field.handleBlur}
+                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                    aria-invalid={isInvalid}
+                                                    placeholder="please enter your name"
+                                                />
+                                                {isInvalid && (
+                                                    <FieldError errors={field.state.meta.errors} />
+                                                )}
+                                            </Field>
+                                        )
+                                    }}
+                                />
+
+
+                                <form.Field
+                                    name="description"
+                                    children={(field) => {
+                                        const isInvalid =
+                                            field.state.meta.isTouched && !field.state.meta.isValid
+                                        return (
+                                            <Field data-invalid={isInvalid}>
+                                                <FieldLabel htmlFor={field.name}>description</FieldLabel>
+                                                <Textarea
+                                                    id={field.name}
+                                                    name={field.name}
+                                                    value={field.state.value}
+                                                    onBlur={field.handleBlur}
+                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                    aria-invalid={isInvalid}
+                                                    placeholder="please enter your name"
+                                                />
+                                                {isInvalid && (
+                                                    <FieldError errors={field.state.meta.errors} />
+                                                )}
+                                            </Field>
+                                        )
+                                    }}
+                                />
+                            </>
+
+                        )}
+
                     </FieldGroup>
                 </form>
             </CardContent>

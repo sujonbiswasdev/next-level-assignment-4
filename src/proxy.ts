@@ -7,7 +7,7 @@ enum Roles{
 }
  async function proxy(request: NextRequest) {
   const { data } = await getSession();
-  console.log(data,'sdfjskljfklsjdf')
+  console.log(data,'dta')
   const pathname = request.nextUrl.pathname;
   if (!data?.success) {
     return NextResponse.redirect(new URL("/login", request.url));
@@ -33,10 +33,6 @@ enum Roles{
   }
 
   if (pathname.startsWith('/admin-dashboard') && role !== Roles.Admin) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-if (pathname.startsWith('/provider') && role !== Roles.Provider) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
