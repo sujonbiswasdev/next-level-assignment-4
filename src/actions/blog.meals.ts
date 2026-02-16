@@ -8,3 +8,7 @@ export const createmeals = async (data:MealFormData) => {
   updateTag("mealsPost");
   return res;
 };
+
+export const getMeals=async(params?:any)=>{
+  return await mealsService.getmeals(params)
+}

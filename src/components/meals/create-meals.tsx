@@ -22,13 +22,14 @@ import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
 import { Textarea } from "@/components/ui/textarea";
 import { getuserProvider } from "@/services/service";
-import { createmeals } from "@/actions/blog.action";
+import { createmeals } from "@/actions/blog.meals";
 import { useEffect, useState } from "react"
 import { getcategory } from "@/services/category"
 import { CategoryData } from "@/types/category"
 export const formSchema = z.object({
   meals_name: z.string().min(1, "meals name is required"),
   description: z.string(),
+  image:z.string().url("Invalid URL provided"),
   price: z.int().min(1, "price is required"),
   isAvailable: z.boolean(),
   dietaryPreference: z.enum(['HALAL', 'VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'KETO']),
@@ -37,6 +38,7 @@ export const formSchema = z.object({
   cuisine: z.string()
 })
 
+
 export function MealsForm() {
   const [category, setcategory] = useState<CategoryData[] | undefined>()
   const router = useRouter()
@@ -44,6 +46,7 @@ export function MealsForm() {
     defaultValues: {
       meals_name: "",
       description: "",
+      image:"",
       price: 0,
       isAvailable: true,
       dietaryPreference: "HALAL",
@@ -56,8 +59,9 @@ export function MealsForm() {
     },
     onSubmit: async ({ value }) => {
       const mealsdData = {
-        meals_name: value.category_name,
+        meals_name: value.meals_name,
         description: value.description,
+        image:value.image,
         price: value.price,
         isAvailable: value.isAvailable,
         dietaryPreference: value.dietaryPreference as "HALAL" | "VEGAN" | "VEGETARIAN" | "ANY",
@@ -128,6 +132,32 @@ export function MealsForm() {
               }}
             />
 
+             <form.Field
+              name="image"
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Image</FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      placeholder="please enter your image"
+                      autoComplete="off"
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                )
+              }}
+            />
+
             <form.Field
               name="price"
               children={(field) => {
@@ -153,6 +183,7 @@ export function MealsForm() {
                 )
               }}
             />
+
             <form.Field
               name="cuisine"
               children={(field) => {
@@ -178,31 +209,6 @@ export function MealsForm() {
               }}
             />
 
-            {/* <form.Field
-              name="providerId"
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Image</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="please enter your image"
-                      autoComplete="off"
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                )
-              }}
-            /> */}
 
               <form.Field
               name="category_name"

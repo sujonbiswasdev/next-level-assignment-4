@@ -7,7 +7,6 @@ enum Roles{
 }
  async function proxy(request: NextRequest) {
   const { data } = await getSession();
-  console.log(data,'dta')
   const pathname = request.nextUrl.pathname;
   if (!data?.success) {
     return NextResponse.redirect(new URL("/login", request.url));

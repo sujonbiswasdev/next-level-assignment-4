@@ -11,8 +11,8 @@ export const ProviderRoutes: Route[] = [
                 url: "/provider-dashboard/create-meals",
             },
             {
-                title: "History",
-                url: "/dashboard/history",
+                title: "meals-get",
+                url: "/provider-dashboard/meals-get",
             },
         ],
     },
