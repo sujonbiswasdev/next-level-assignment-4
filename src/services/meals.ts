@@ -36,7 +36,7 @@ export const mealsService={
          return { data: null, error: { message: "Something Went Wrong" } };
     }
 },
-getmeals:async(params?:GetMealsParams,options?:ServiceOptions)=>{
+getmeals:async(params?:any,options?:ServiceOptions)=>{
  try {
   const url = new URL(`${api_url}/meals`);
 

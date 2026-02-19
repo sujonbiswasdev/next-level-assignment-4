@@ -90,6 +90,7 @@ export function MealsForm() {
     }
     fetchCategory()
   }, [])
+
   return (
     <Card className="w-full sm:max-w-md mx-auto">
       <CardHeader>

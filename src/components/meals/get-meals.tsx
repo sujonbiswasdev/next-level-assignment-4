@@ -6,20 +6,18 @@ import { CardHoverLift } from "../hover-lift"
 import { Suspense, useEffect, useState, useTransition } from "react"
 import MealLoading from "@/app/(dashboardLayout)/@provider/provider-dashboard/meals-get/loading"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
+import PaginationPage from "./Pagination"
 
-export default function RecipeCard() {
+export default function RecipeCard({ initialMeals ,initialcategory,pagination}: any) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-
   const [search,setsearch]=useState('')
+    const [isPending, startTransition] = useTransition();
 
-  //read form url 
-  const urlCategory = searchParams.get('category_name') || '';
-  const urlAvailable = searchParams.get('isAvailable')=="true"?'true':searchParams.get('isAvailable')=="false"?"false":null;
+  const urlCategory=searchParams.get("category_name") || null
+ const urlAvailable = searchParams.get('isAvailable')=="true"?'true':searchParams.get('isAvailable')=="false"?"false":null;
 
-
-  const [meals, setMeals] = useState([]);
 
   const updateFilter = (key: string, value: string | null) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -29,28 +27,14 @@ export default function RecipeCard() {
       } else {
         params.set(key, value);
       }
+
+      startTransition(()=>{
+        router.push(`${pathname}?${params.toString()}`);
+      })
       
-      router.push(`${pathname}?${params.toString()}`);
     };
 
-
-  useEffect(() => {
-    const fetchMeals = async () => {
-      try {
-        const res = await getMeals({
-          category_name: urlCategory ||null,
-          isAvailable: urlAvailable || null
-        });
-        setMeals(res?.data.result.data || []);
-      } catch (error) {
-        console.error('API Error:', error);
-      }
-    };
-
-    fetchMeals();
-  }, [urlCategory, urlAvailable]);
-
-   const filterData = meals.filter((item: any) => (item.meals_name.includes(search) || item.description.includes(search) || item.category_name.includes(search) || item.cuisine.includes(search)))
+   const filterData = initialMeals.filter((item: any) => (item.meals_name.includes(search.toLowerCase()) || item.description.includes(search.toLowerCase()) || item.category_name.includes(search.toLowerCase()) || item.cuisine.includes(search.toLowerCase())))
 
   return (
     <div>
@@ -70,23 +54,18 @@ export default function RecipeCard() {
 {/* category name fileter */}
      
           <select 
-            value={urlCategory}
             onChange={(e) => updateFilter("category_name", e.target.value)}
             className="p-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-300 bg-white shadow-lg hover:shadow-xl transition-all min-w-[200px]"
           >
-            <option value="">All Categories</option>
-            <option value="pizza">🍕 Pizza</option>
-            <option value="dessert">🍰 Dessert</option>
-            <option value="bengali">🍛 Bengali</option>
-            <option value="chinese">🥡 Chinese</option>
-            <option value="fastfood">🍔 Fast Food</option>
+             <option value="">All Categories</option>
+            {initialcategory.map((item:any)=>(<option value={item.name}>🍕 {item.name}</option>))}
           </select>
 
   
   {/* is available check */}
           <div className="flex items-center gap-3 p-4 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all border">
             <span className="font-semibold text-gray-700 whitespace-nowrap">
-              {urlAvailable=='true'?"available":urlAvailable=='false'?'not available':"All"}
+              {/* {urlAvailable=='true'?"available":urlAvailable=='false'?'not available':"All"} */}
             </span>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -111,12 +90,16 @@ export default function RecipeCard() {
         </div>
 
         {/* Results show  */}
-        <div className="mt-4 pt-4 border-t border-emerald-200">
+        <div className="flex justify-between items-center mt-4 pt-4 border-t border-emerald-200">
           <p className="text-lg font-semibold text-gray-800">
             Showing {filterData.length} meals 
             {urlCategory && ` • ${urlCategory}`}
-            {urlAvailable !== null && ` • ${urlAvailable ? 'Available' : 'All'}`}
+            {urlAvailable !== null && ` • ${urlAvailable=='true' ? 'Available' : urlAvailable=='false'?"not Available":"All"}`}
           </p>
+          
+          <div>
+            <PaginationPage pagination={pagination}/>
+          </div>
         </div>
       </div>
 
@@ -129,6 +112,7 @@ export default function RecipeCard() {
             <p className="text-gray-500">Try different filters</p>
           </div>
         ) : (
+          
           filterData.map((item: MealFormData, index: number) => (
             <div key={ index}>
               <Suspense fallback={<MealLoading />}>
@@ -178,3 +162,87 @@ export default function RecipeCard() {
     </div>
   );
 }
+
+
+
+// 'use client'
+
+// import { useState, useTransition } from "react"
+// import { useRouter, useSearchParams, usePathname } from "next/navigation"
+
+// export default function RecipeCard({ initialMeals }: any) {
+
+//   const router = useRouter()
+//   const pathname = usePathname()
+//   const searchParams = useSearchParams()
+//   const [search, setSearch] = useState("")
+//   const [isPending, startTransition] = useTransition()
+
+//   const meals = initialMeals
+
+//   // URL update function
+//   const updateFilter = (key: string, value: string | null) => {
+//     const params = new URLSearchParams(searchParams.toString())
+
+//     if (!value) {
+//       params.delete(key)
+//     } else {
+//       params.set(key, value)
+//     }
+
+//     startTransition(() => {
+//       router.push(`${pathname}?${params.toString()}`)
+//     })
+//   }
+
+//   // Instant search (client side)
+//   const filteredMeals = meals.filter((item: any) =>
+//     item.meals_name.toLowerCase().includes(search.toLowerCase()) ||
+//     item.description.toLowerCase().includes(search.toLowerCase())
+//   )
+
+//   return (
+//     <div>
+
+//       {/* Search */}
+//       <input
+//         type="text"
+//         placeholder="Search meals..."
+//         value={search}
+//         onChange={(e) => setSearch(e.target.value)}
+//         className="border p-3 rounded-lg"
+//       />
+
+//       {/* Category Filter */}
+//       <select
+//         onChange={(e) => updateFilter("category_name", e.target.value)}
+//         className="border p-3 ml-3 rounded-lg"
+//       >
+//         <option value="">All</option>
+//         <option value="pizza">Pizza</option>
+//         <option value="dessert">Dessert</option>
+//         <option value="bengali">Bengali</option>
+//       </select>
+
+//       {/* Loading Indicator */}
+//       {isPending && (
+//         <p className="mt-4 text-blue-500 font-semibold">
+//           Updating...
+//         </p>
+//       )}
+
+//       {/* Meals Grid */}
+//       <div className="grid grid-cols-3 gap-6 mt-6">
+//         {filteredMeals.map((item: any) => (
+//           <div key={item.id} className="border p-4 rounded-xl shadow">
+//             <h2 className="font-bold">{item.meals_name}</h2>
+//             <p className="text-sm text-gray-600">
+//               {item.description}
+//             </p>
+//           </div>
+//         ))}
+//       </div>
+
+//     </div>
+//   )
+// }
