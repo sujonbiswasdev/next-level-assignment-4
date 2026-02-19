@@ -26,7 +26,6 @@ export const mealsService={
       });
 
          const data = await res.json();
-         console.log(data,'data')
 
          if(!res.ok){
             return {data:null,error:data.result.data[0].message||"meals create failed"}
@@ -56,7 +55,7 @@ getmeals:async(params?:any,options?:ServiceOptions)=>{
         if (options?.revalidate) {
         config.next = { revalidate: options.revalidate };
       }
-
+      config.next={...config.next,tags:["mealsPost"]}
 
       const res = await fetch(url.toString(), config);
  

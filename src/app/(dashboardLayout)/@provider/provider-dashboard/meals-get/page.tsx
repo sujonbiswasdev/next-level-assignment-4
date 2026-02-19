@@ -3,6 +3,7 @@ import { getMeals } from '@/actions/blog.meals'
 import RecipeCard from '@/components/meals/get-meals'
 import { getcategory } from '@/services/category'
 import { mealsService } from '@/services/meals'
+import next from 'next'
 interface PageProps {
   searchParams: {
     category_name?: string

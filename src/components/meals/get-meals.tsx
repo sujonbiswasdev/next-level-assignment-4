@@ -14,7 +14,6 @@ export default function RecipeCard({ initialMeals ,initialcategory,pagination}: 
   const router = useRouter();
   const [search,setsearch]=useState('')
     const [isPending, startTransition] = useTransition();
-
   const urlCategory=searchParams.get("category_name") || null
  const urlAvailable = searchParams.get('isAvailable')=="true"?'true':searchParams.get('isAvailable')=="false"?"false":null;
 
@@ -58,7 +57,7 @@ export default function RecipeCard({ initialMeals ,initialcategory,pagination}: 
             className="p-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-300 bg-white shadow-lg hover:shadow-xl transition-all min-w-[200px]"
           >
              <option value="">All Categories</option>
-            {initialcategory.map((item:any)=>(<option value={item.name}>🍕 {item.name}</option>))}
+            {initialcategory.map((item:any)=>(<option value={item.name}>{item.name}</option>))}
           </select>
 
   

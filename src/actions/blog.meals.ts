@@ -9,6 +9,6 @@ export const createmeals = async (data:MealFormData) => {
   return res;
 };
 
-export const getMeals=async(params?:any)=>{
-  return await mealsService.getmeals(params)
+export const getMeals=async(params?:any,config?:any)=>{
+  return await mealsService.getmeals(params,config)
 }
