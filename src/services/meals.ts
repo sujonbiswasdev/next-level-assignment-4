@@ -88,5 +88,20 @@ getmealsbyid:async(id:string)=>{
       }
   }
 
+},
+
+handleDelete:async (id: string) => {
+  try {
+    const res = await fetch(`${api_url}/meals/${id}`, { method: "DELETE" });
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to delete meal");
+    }
+    return { success: true, message: "Meal deleted successfully" };
+  } catch (error: any) {
+    console.error(error);
+    alert(error.message);
+  }
 }
 }
