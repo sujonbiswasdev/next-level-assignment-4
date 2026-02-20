@@ -27,24 +27,30 @@ export const formSchema = z.object({
 });
 
 export function SigninForm() {
+
+    const signIn = async () => {
+        const data = await authClient.signIn.social({
+            provider: "google",
+        });
+    };
     const router = useRouter()
     const form = useForm({
         defaultValues: {
             email: "",
             password: "",
-            
+
         },
         validators: {
             onSubmit: formSchema,
         },
         onSubmit: async ({ value }) => {
             const toastId = toast.loading("signning user");
-        
+
             try {
-                if(!value){
+                if (!value) {
                     toast.error("please provide correct information")
-                 }
-               const { data, error } = await authClient.signIn.email(value);
+                }
+                const { data, error } = await authClient.signIn.email(value);
                 if (error) {
                     toast.error(error.message);
                     return;
@@ -57,6 +63,8 @@ export function SigninForm() {
             }
         },
     })
+
+
 
     return (
         <Card className="w-full sm:max-w-md mx-auto">
@@ -128,6 +136,14 @@ export function SigninForm() {
                     </FieldGroup>
                 </form>
             </CardContent>
+            <Button
+                onClick={() => signIn()}
+                variant="outline"
+                type="button"
+                className="w-full"
+            >
+                Continue with Google
+            </Button>
             <CardFooter>
                 <Field orientation="horizontal">
                     <Button type="button" variant="outline" onClick={() => form.reset()}>

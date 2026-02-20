@@ -4,7 +4,7 @@ import React from 'react'
 const CommonLayout = ({children}:{children:React.ReactNode}) => {
   return (
     <div>
-        <Navbar/>
+        <Navbar className='flex mx-auto'/>
       {children}
     </div>
   )

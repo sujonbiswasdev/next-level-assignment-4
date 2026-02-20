@@ -68,5 +68,25 @@ getmeals:async(params?:any,options?:ServiceOptions)=>{
   
  }
 
+},
+
+getmealsbyid:async(id:string)=>{
+  console.log(id,'id')
+
+  try {
+      const res=await fetch(`${api_url}/meals/${id}`)
+      const body= await res.json()
+      console.log(body,'bodydat')
+      return {
+        data:body,
+        error:null
+      }
+  } catch (error:any) {
+     return {
+        data:null,
+        error:error.message
+      }
+  }
+
 }
 }

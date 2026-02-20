@@ -27,7 +27,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { authClient } from "@/lib/authClient";
+import { useState } from "react";
 import ProfileCard from "./ProfileCard";
+import { useCartStore } from "@/store/CartStore";
+import { CartModal } from "../Cardmodel";
 
 interface MenuItem {
   title: string;
@@ -79,6 +82,7 @@ const Navbar = ({
   className,
 }: Navbar1Props) => {
   const { data: session } = authClient.useSession()
+  const cart = useCartStore((state) => state.cart)
   return (
     <section className={cn("py-4", className)} >
       <div className="container">
@@ -105,11 +109,15 @@ const Navbar = ({
                 </NavigationMenuList>
               </NavigationMenu>
           </div>
+          <div>
+           {<CartModal />}
+          </div>
           {session?.user ? (<>
           <ProfileCard/>
           </>) : 
           
           (<div className="flex gap-2">
+            
             <Button asChild variant="outline" size="sm">
               <a href={auth.login.url}>{auth.login.title}</a>
             </Button>

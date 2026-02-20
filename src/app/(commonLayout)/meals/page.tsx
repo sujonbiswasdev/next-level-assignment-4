@@ -23,7 +23,8 @@ const GetMeals = async ({searchParams}:PageProps) => {
   // 🔹 Server fetch
   const res = await getMeals(serch);
   const meals = res?.data?.result?.data || [];
-  const pagination=res?.data.result.pagination
+  const pagination=res?.data?.result?.pagination
+  console.log(pagination,'pagination')
  
 // category
 const categorydata = await getcategory()

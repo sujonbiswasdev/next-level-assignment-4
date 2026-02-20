@@ -2,7 +2,6 @@
 import { useForm } from "@tanstack/react-form"
 import { toast } from "sonner"
 import * as z from "zod"
-
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -30,14 +29,13 @@ export const formSchema = z.object({
   meals_name: z.string().min(1, "meals name is required"),
   description: z.string(),
   image:z.string().url("Invalid URL provided"),
-  price: z.int().min(1, "price is required"),
+  price: z.int().min(1, "price is required").max(1000,'max price only 1000'),
   isAvailable: z.boolean(),
   dietaryPreference: z.enum(['HALAL', 'VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'KETO']),
   providerId: z.string(),
   category_name: z.string().min(1, 'category name is required'),
   cuisine: z.string()
 })
-
 
 export function MealsForm() {
   const [category, setcategory] = useState<CategoryData[] | undefined>()

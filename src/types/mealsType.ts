@@ -1,4 +1,5 @@
 export type MealFormData ={
+  id?:string,
   meals_name: string;
   description: string;
    image: string;
