@@ -1,6 +1,6 @@
 import { env } from "@/env"
 import { cookies } from "next/headers"
-import { MealFormData } from "@/types/mealsType"
+import { MealFormData, UpdateMealsDate } from "@/types/mealsType"
 const api_url = env.API_URL
 
 interface ServiceOptions {
@@ -102,6 +102,30 @@ handleDelete:async (id: string) => {
   } catch (error: any) {
     console.error(error);
     alert(error.message);
+  }
+},
+updateMeals:async(id:string,mealsdata:UpdateMealsDate)=>{
+  console.log(id,'idfor ',mealsdata,'mealsjdfsdata')
+  
+  try {
+    const cookieStore = await cookies()
+    const res = await fetch(`${api_url}/provider/meals/${id}`, {
+      method: "PUT",
+      credentials:"include",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieStore.toString(),
+      },
+      body: JSON.stringify(mealsdata),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to update meal");
+    }
+    return { success: true, message: "Meal updated successfully", data };
+  } catch (error: any) {
+    console.error(error);
+    return { success: false, error: error.message || "An error occurred while updating the meal" };
   }
 }
 }

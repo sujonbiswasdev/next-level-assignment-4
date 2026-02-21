@@ -135,9 +135,9 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
                                             <button onClick={() => handleDelete(meal.id)} className="ml-2 cursor-pointer">
                                                 <Trash className="w-4 h-4 text-red-500 hover:text-red-700" />
                                             </button>
-                                            <button className="ml-2 cursor-pointer">
+                                            <Link href={`/provider-dashboard/update-meal/${meal.id}`} className="ml-2 cursor-pointer">
                                                 <Pen className="w-4 h-4 text-green-500 hover:text-green-700" />
-                                            </button>
+                                            </Link>
 
                                         </div>
                                     </td>

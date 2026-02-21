@@ -99,7 +99,6 @@ export function CartModal() {
                 clear chat
               </button>
               <Button type="submit" onClick={() => {
-                close()
                 router.push("/payment")
               }}>checkout</Button>
               <SheetClose asChild>

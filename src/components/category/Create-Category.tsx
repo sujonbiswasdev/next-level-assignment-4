@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation"
 export const formSchema = z.object({
     name: z.string().min(1, "name is required"),
 });
-
+ 
 export function CreateCategoryForm() {
     const router = useRouter()
     const form = useForm({

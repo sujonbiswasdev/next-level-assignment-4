@@ -13,8 +13,6 @@ export default async function SingleMealPage({
 }) {
   const { id } = await params;
   const res = await mealsService.getmealsbyid(id);
-  console.log(res, 'resdata')
-
   if (!res?.data) return notFound();
 
   const meal = res.data.result.data;
