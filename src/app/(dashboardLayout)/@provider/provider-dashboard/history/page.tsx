@@ -1,4 +1,4 @@
-import { getMeals } from "@/actions/blog.meals"
+import { getMeals, getmealsown } from "@/actions/blog.meals"
 import MealTable from "@/components/meals/MealsTable"
 import { getcategory } from "@/services/category"
 import { mealsService } from "@/services/meals"
@@ -8,12 +8,11 @@ interface PageProps {
     isAvailable?: string
   }
 }
-const HistoryMeals = async ({searchParams}:PageProps) => {
-     const serch=await searchParams
- 
+const HistoryMeals = async () => {
       // 🔹 Server fetch
-      const res = await getMeals(serch);
+      const res = await getmealsown();
       const meals = res?.data?.result?.data || [];
+      console.log(meals,'mealsdatas')
       const pagination=res?.data?.result?.pagination
   
   return (

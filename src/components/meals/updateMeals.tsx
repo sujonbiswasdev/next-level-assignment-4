@@ -10,8 +10,8 @@ import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 
 export const updateMealSchema = z.object({
-  meals_name: z.string().min(3, "Meal name must be at least 3 characters long").optional(),
-  description: z.string().min(15, "Description must be at least 15 characters long").optional(),
+  meals_name: z.string().optional(),
+  description: z.string().optional(),
   image: z.string().url("Image must be a valid URL").optional(),
   price: z.number().positive("Price must be a positive number").optional(),
   isAvailable: z.boolean().optional(),
@@ -32,11 +32,12 @@ const UpdateMeal = ({ mealId }: { mealId: string }) => {
     cuisine: "",
   });
   const parsedate = updateMealSchema.safeParse(mealData);
+  console.log(parsedate,'parsedat')
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data, error } = await updateMeal(mealId, parsedate.data!)
-    if (error) {
-      toast.error(error);
+    const  data = await updateMeal(mealId, parsedate.data!)
+    if (!data || data === undefined || data.error || data===null) {
+      toast.error("Failed to update meal");
     } else {
       toast.success("Meal updated successfully");
       setMealData({
@@ -57,14 +58,14 @@ const UpdateMeal = ({ mealId }: { mealId: string }) => {
         {/* Name & Price */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col space-y-2">
-            <label htmlFor="mealName" className="font-medium ml-2 ">Meal name <span className="text-red-500">*</span> </label>
+            <label htmlFor="mealName" className="font-medium ml-2 ">Meal name</label>
             <input
               type="text"
               placeholder="Meal Name"
               value={mealData.meals_name}
               onChange={(e) => setMealData({ ...mealData, meals_name: e.target.value })}
               className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-              required
+              
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -72,10 +73,10 @@ const UpdateMeal = ({ mealId }: { mealId: string }) => {
             <input
               type="number"
               placeholder="Price ($)"
-              value={mealData.price}
+              value={Number(mealData.price)}
               onChange={(e) => setMealData({ ...mealData, price: Number(e.target.value) })}
               className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-              required
+              
             />
           </div>
 
@@ -147,7 +148,7 @@ const UpdateMeal = ({ mealId }: { mealId: string }) => {
         </div>
         {/* description */}
         <div className="flex flex-col space-y-2">
-          <Label htmlFor="description" className="font-medium ml-2 ">Description <span className="text-red-500">*</span></Label>
+          <Label htmlFor="description" className="font-medium ml-2 ">Description</Label>
           <Textarea
             placeholder="Description"
             value={mealData.description}

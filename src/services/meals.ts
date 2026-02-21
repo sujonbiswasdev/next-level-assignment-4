@@ -70,13 +70,27 @@ getmeals:async(params?:any,options?:ServiceOptions)=>{
 
 },
 
-getmealsbyid:async(id:string)=>{
-  console.log(id,'id')
+getmealsown:async()=>{
+ try {
+  const cookieStore = await cookies()
+      const res = await fetch(`${api_url}/provider/meals/own`,
+        {credentials:"include",
+          next:{tags:["mealsPost"]},
+          headers:{
+            Cookie: cookieStore.toString(),
+          }});
+      const data = await res.json();
+       return { data: data, error: null };
+ } catch (error) {
+    return { data: null, error: { message: "Something Went Wrong" } };
+ }
 
+},
+
+getmealsbyid:async(id:string)=>{
   try {
       const res=await fetch(`${api_url}/meals/${id}`)
       const body= await res.json()
-      console.log(body,'bodydat')
       return {
         data:body,
         error:null
@@ -104,9 +118,7 @@ handleDelete:async (id: string) => {
     alert(error.message);
   }
 },
-updateMeals:async(id:string,mealsdata:UpdateMealsDate)=>{
-  console.log(id,'idfor ',mealsdata,'mealsjdfsdata')
-  
+updateMeals:async(id:string,mealsdata:UpdateMealsDate)=>{  
   try {
     const cookieStore = await cookies()
     const res = await fetch(`${api_url}/provider/meals/${id}`, {

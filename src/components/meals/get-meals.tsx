@@ -184,11 +184,13 @@ export default function RecipeCard({ initialMeals, initialcategory, pagination }
             <div key={index}>
               <Suspense fallback={<Skeletonmeals />}>
                 <CardHoverLift>
-                  <div className="relative w-full h-55 overflow-hidden rounded-lg">
-                    <Image
+                  <div className="relative w-full h-60 overflow-hidden rounded-lg">
+                    <img
                       src={item.image?.startsWith("https") ? item.image : "https://images.pexels.com/photos/2903384/pexels-photo-2903384.jpeg"}
                       alt={item.meals_name}
-                      fill
+                      onError={(e:any)=>{
+                        e.target.src="/images/default-meal.jpg"
+                      }}
                       loading="lazy"
                       className="object-cover transition-transform duration-700 hover:scale-110"
                     />

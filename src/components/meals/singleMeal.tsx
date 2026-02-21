@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import { Button } from '../ui/button'
 import { useCartStore } from '@/store/CartStore'
+import Link from 'next/link'
 const SignleMealByid = ({ meal }: any) => {
   const addToCart = useCartStore((state) => state.addToCart)
   return (
@@ -12,12 +13,17 @@ const SignleMealByid = ({ meal }: any) => {
 
           {/* HERO SECTION */}
           <div className="relative w-full h-[300px] sm:h-[450px] lg:h-[550px] rounded-3xl overflow-hidden shadow-xl">
-            <Image
+      
+            <img
               src={meal.image}
               alt={meal.meals_name}
-              fill
-              priority
-              className="object-cover"
+              className="w-full h-full object-cover rounded-2xl"
+              loading="lazy"
+              onError={(e: any) => {
+                e.target.src = "/images/default-meal.jpg";
+              }}
+              width={400}
+              height={300}
             />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -167,7 +173,7 @@ const SignleMealByid = ({ meal }: any) => {
                       : "Currently Unavailable"}
                   </Button>
                   <button
-                  disabled={!meal.isAvailable}
+                    disabled={!meal.isAvailable}
                     onClick={() =>
                       addToCart({
                         id: meal.id,
@@ -177,7 +183,7 @@ const SignleMealByid = ({ meal }: any) => {
                         quantity: 1,
                       })
                     }
-                    className={` text-white px-4 py-1.5 rounded-lg hover:bg-gray-800${meal.isAvailable?"cursor-pointer bg-black":"cursor-not-allowed bg-black/50"}`}
+                    className={` text-white px-4 py-1.5 rounded-lg hover:bg-gray-800${meal.isAvailable ? "cursor-pointer bg-black" : "cursor-not-allowed bg-black/50"}`}
                   >
                     Add to cart
                   </button>
@@ -186,13 +192,21 @@ const SignleMealByid = ({ meal }: any) => {
 
                 {/* Provider */}
                 <div className="border-t pt-6">
-                  <h3 className="font-semibold mb-3">Restaurant</h3>
-                  <p className="text-sm text-gray-600">
-                    {meal.provider?.restaurantName}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {meal.provider?.address}
-                  </p>
+                  <Link href={`/provider/${meal.provider?.id}`} className='w-full h-32 mb-4'>
+                    <img src={meal.provider?.image ? meal.provider?.image : "/default-meal.jpg"} alt="provider" className="w-full h-32 object-cover rounded-lg" />
+                  </Link>
+                  <div>
+                    <h3 className="font-semibold mb-1">Provided By</h3>
+                    <p className="text-sm text-gray-600">
+                      {meal.provider?.restaurantName}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {meal.provider?.address}
+                    </p>
+                  </div>
+
+
+
                 </div>
               </div>
             </div>
