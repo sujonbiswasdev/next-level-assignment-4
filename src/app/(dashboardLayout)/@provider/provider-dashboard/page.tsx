@@ -12,7 +12,7 @@ const ProviderPage = async() => {
   const ownorderstats=ownorderdata as OrderStatsApiResponse
   return (
     <div>
-     <RevenueStats stats={revenuestats} mealstats={mealstats} ownorderstats={ownorderdata as OrderStatsApiResponse} />
+     <RevenueStats stats={revenuestats} mealstats={mealstats} ownorderstats={ownorderstats as OrderStatsApiResponse} />
     </div>
   )
 }

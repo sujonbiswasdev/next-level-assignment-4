@@ -172,7 +172,6 @@ export function AppSidebar({user,...props }:{user:{role:string} & React.Componen
     default:
       routes=[]
   }
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -183,7 +182,7 @@ export function AppSidebar({user,...props }:{user:{role:string} & React.Componen
         <NavProjects siteManu={routes} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user as any} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

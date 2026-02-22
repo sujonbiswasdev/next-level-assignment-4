@@ -181,9 +181,9 @@ export default function ProfileCard() {
 
         {/* Logout */}
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOut />
-          <Button onClick={handleLogout}>Log out</Button>
+           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

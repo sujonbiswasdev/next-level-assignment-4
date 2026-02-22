@@ -118,7 +118,7 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
                                             className={`px-2 py-0.5 rounded-full text-sm font-semibold ${meal.isAvailable ? "bg-green-100 text-green-700" : " text-red-700"
                                                 }`}
                                         >
-                                            {meal.isAvailable ? (<Status variant="success" className="bg-green-500 text-white">
+                                            {meal.isAvailable ? (<Status variant="success" className="bg-green-400 text-white">
                                                 <StatusIndicator />
                                                 <StatusLabel >Available</StatusLabel>
                                             </Status>) : (<Status variant="error" className="bg-red-400 text-white">

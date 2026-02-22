@@ -139,61 +139,61 @@ export default function RevenueStats({ stats, mealstats, ownorderstats }: { stat
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
                         <StatCard
                             title="total order"
-                            value={Number(ownorderstats.data?.result.totalorders) as any}
+                            value={Number(ownorderstats.data?.result.totalorders) as any || 0}
                             percentage={Number(ownorderstats.data?.result.totalorders) / 100 as any || 0.00}
                             positive
                         />
 
                         <StatCard
                             title="today order"
-                            value={Number(ownorderstats.data?.result.todayorders) as any}
+                            value={Number(ownorderstats.data?.result.todayorders) as any || 0}
                             percentage={Number(ownorderstats.data?.result.todayorders) / 100 as any || 0.00}
                             positive
                         />
                         <StatCard
                             title="monthly order"
-                            value={Number(ownorderstats.data?.result.oneMonth) as any}
+                            value={Number(ownorderstats.data?.result.oneMonth) as any || 0}
                             percentage={Number(ownorderstats.data?.result.oneMonth) / 100 as any || 0.00}
                             positive
                         />
 
                         <StatCard
                             title="total cancelled order"
-                            value={Number(ownorderstats.data?.result.totalcancelledmeals) as any}
+                            value={Number(ownorderstats.data?.result.totalcancelledmeals) as any || 0}
                             percentage={Number(ownorderstats.data?.result.totalcancelledmeals) / 100 as any || 0.00}
                             positive
                         />
 
                         <StatCard
                             title="total placed order"
-                            value={Number(ownorderstats.data?.result.totalplacedmeals) as any}
+                            value={Number(ownorderstats.data?.result.totalplacedmeals) as any || 0}
                             percentage={Number(ownorderstats.data?.result.totalplacedmeals) / 100 as any || 0.00}
                             positive
                         />
                         <StatCard
                             title="total preparing order"
-                            value={Number(ownorderstats.data?.result.totalpreparingmeals) as any}
+                            value={Number(ownorderstats.data?.result.totalpreparingmeals) as any || 0}
                             percentage={Number(ownorderstats.data?.result.totalpreparingmeals) / 100 as any || 0.00}
                             positive
                         />
 
                         <StatCard
                             title="total ready order"
-                            value={Number(ownorderstats.data?.result.totalreadymeals) as any}
+                            value={Number(ownorderstats.data?.result.totalreadymeals) as any || 0}
                             percentage={Number(ownorderstats.data?.result.totalreadymeals) / 100 as any || 0.00}
                             positive
                         />
 
                         <StatCard
                             title="total delivery order"
-                            value={Number(ownorderstats.data?.result.totaldeliveredmeals) as any}
+                            value={Number(ownorderstats.data?.result.totaldeliveredmeals) as any || 0}
                             percentage={Number(ownorderstats.data?.result.totaldeliveredmeals) / 100 as any || 0.00}
                             positive
                         />
 
                            <StatCard
                             title="total queantity"
-                            value={Number(ownorderstats.data?.result.totalquantity._sum.quantity) as any}
+                            value={Number(ownorderstats.data?.result.totalquantity._sum.quantity) as any || 0}
                             percentage={Number(ownorderstats.data?.result.totalquantity) / 100 as any || 0.00}
                             positive
                         />
