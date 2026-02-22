@@ -10,15 +10,16 @@ import PaginationPage from "./Pagination"
 import Link from "next/link"
 import { Button } from "../ui/button"
 import { useCartStore } from "@/store/CartStore"
-import Skeletonmeals from "../ui/skeletonmeals"
+
 import { toast } from "sonner"
+import Skeletonmeals from "../ui/skeletonmeals"
 
 const dietaryOptions = [
   "HALAL",
 ];
 const MIN_PRICE_LIMIT = 0;
 const MAX_PRICE_LIMIT = 1000;
-export default function RecipeCard({ initialMeals, initialcategory, pagination }: any) {
+export default function MealsCard({ initialMeals, initialcategory, pagination }: any) {
   const addToCart = useCartStore((state) => state.addToCart)
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -29,8 +30,8 @@ export default function RecipeCard({ initialMeals, initialcategory, pagination }
   const urlAvailable = searchParams.get('isAvailable') == "true" ? 'true' : searchParams.get('isAvailable') == "false" ? "false" : null;
   const priceParam = searchParams.get("price");
   const [price, setPrice] = useState(
-  priceParam ? Number(priceParam) : null
-);
+    priceParam ? Number(priceParam) : null
+  );
 
   const handlePriceChange = (value: string) => {
     let parsed = Number(value);
@@ -56,7 +57,7 @@ export default function RecipeCard({ initialMeals, initialcategory, pagination }
   const updateFilter = (key: string, value: string | null) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (value === null || value === '' || value==='0') {
+    if (value === null || value === '' || value === '0') {
       params.delete(key);
     } else {
       params.set(key, value);
@@ -91,7 +92,7 @@ export default function RecipeCard({ initialMeals, initialcategory, pagination }
             className="p-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-300 bg-white shadow-lg hover:shadow-xl transition-all min-w-[200px]"
           >
             <option value="">All Categories</option>
-            {initialcategory.map((item: any) => (<option value={item.name}>{item.name}</option>))}
+            {initialcategory.map((item: any, index: number) => (<option key={index} value={item.name}>{item.name}</option>))}
           </select>
 
 
@@ -122,38 +123,38 @@ export default function RecipeCard({ initialMeals, initialcategory, pagination }
           )}
         </div>
 
-  <div className="flex justify-between items-center flex-wrap gap-4 mt-4"> 
+        <div className="flex justify-between items-center flex-wrap gap-4 mt-4">
           {/* Dietary Preference */}
-        <div className="flex-1">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Dietary Preference
-          </label>
-          <select
-            onChange={(e) => updateFilter("dietaryPreference", e.target.value)}
-            className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 px-4 py-2 outline-none transition"
-          >
-            {dietaryOptions.map((option, index: number) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="flex-1">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Dietary Preference
+            </label>
+            <select
+              onChange={(e) => updateFilter("dietaryPreference", e.target.value)}
+              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 px-4 py-2 outline-none transition"
+            >
+              {dietaryOptions.map((option, index: number) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/*  Price */}
-        <div className="flex-1">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Price ($)
-          </label>
-          <input
-            type={price as any>0 ?"number":"text"}
-            value={price as any>0?price:"" as any}
-            onChange={(e) => handlePriceChange(e.target.value)}
-            placeholder="please enter your price"
-            className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 px-4 py-2 outline-none transition"
-          />
+          {/*  Price */}
+          <div className="flex-1">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Price ($)
+            </label>
+            <input
+              type={price as any > 0 ? "number" : "text"}
+              value={price as any > 0 ? price : "" as any}
+              onChange={(e) => handlePriceChange(e.target.value)}
+              placeholder="please enter your price"
+              className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 px-4 py-2 outline-none transition"
+            />
+          </div>
         </div>
-  </div>
 
 
         {/* Results show  */}
@@ -182,15 +183,12 @@ export default function RecipeCard({ initialMeals, initialcategory, pagination }
 
           filterData.map((item: MealFormData, index: number) => (
             <div key={index}>
-              <Suspense fallback={<Skeletonmeals />}>
+              <Suspense fallback={<Skeletonmeals/>}>
                 <CardHoverLift>
                   <div className="relative w-full h-60 overflow-hidden rounded-lg">
                     <img
-                      src={item.image?.startsWith("https") ? item.image : "https://images.pexels.com/photos/2903384/pexels-photo-2903384.jpeg"}
+                      src={item.image}
                       alt={item.meals_name}
-                      onError={(e:any)=>{
-                        e.target.src="/images/default-meal.jpg"
-                      }}
                       loading="lazy"
                       className="object-cover transition-transform duration-700 hover:scale-110"
                     />

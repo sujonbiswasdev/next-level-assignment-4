@@ -25,11 +25,28 @@ import { createmeals } from "@/actions/blog.meals";
 import { useEffect, useState } from "react"
 import { getcategory } from "@/services/category"
 import { CategoryData } from "@/types/category"
+const allowedDomains = [
+  "res.cloudinary.com",
+  "images.pexels.com",
+];
 export const formSchema = z.object({
   meals_name: z.string().min(1, "meals name is required"),
   description: z.string(),
-  image:z.string().url("Invalid URL provided"),
-  price: z.int().min(1, "price is required").max(1000,'max price only 1000'),
+  image: z
+    .string()
+    .min(1, "Image is required")
+    .url("Invalid image URL")
+    .refine((url) => {
+      try {
+        const parsed = new URL(url);
+        return allowedDomains.includes(parsed.hostname);
+      } catch {
+        return false;
+      }
+    }, {
+      message: "Only Cloudinary and Pexels images allowed",
+    }),
+  price: z.int().min(1, "price is required").max(1000, 'max price only 1000'),
   isAvailable: z.boolean(),
   dietaryPreference: z.enum(['HALAL', 'VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'KETO']),
   providerId: z.string(),
@@ -44,7 +61,7 @@ export function MealsForm() {
     defaultValues: {
       meals_name: "",
       description: "",
-      image:"",
+      image: "",
       price: 0,
       isAvailable: true,
       dietaryPreference: "HALAL",
@@ -59,7 +76,7 @@ export function MealsForm() {
       const mealsdData = {
         meals_name: value.meals_name,
         description: value.description,
-        image:value.image,
+        image: value.image,
         price: value.price,
         isAvailable: value.isAvailable,
         dietaryPreference: value.dietaryPreference as "HALAL" | "VEGAN" | "VEGETARIAN" | "ANY",
@@ -131,7 +148,7 @@ export function MealsForm() {
               }}
             />
 
-             <form.Field
+            <form.Field
               name="image"
               children={(field) => {
                 const isInvalid =
@@ -152,6 +169,7 @@ export function MealsForm() {
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}
+                    
                   </Field>
                 )
               }}
@@ -209,7 +227,7 @@ export function MealsForm() {
             />
 
 
-              <form.Field
+            <form.Field
               name="category_name"
               children={(field) => {
                 const isInvalid =
@@ -227,7 +245,7 @@ export function MealsForm() {
                       aria-invalid={isInvalid}
                     >
                       <option value="">Select a category</option>
-                      {category?.map((item:any,index:number)=><option key={index}>{item.name}</option>)}
+                      {category?.map((item: any, index: number) => <option key={index}>{item.name}</option>)}
                     </select>
 
                     {isInvalid && (

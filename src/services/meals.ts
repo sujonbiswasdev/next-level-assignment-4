@@ -132,7 +132,7 @@ updateMeals:async(id:string,mealsdata:UpdateMealsDate)=>{
     });
     const data = await res.json();
     if (!res.ok) {
-      throw new Error(data.message || "Failed to update meal");
+       return { success: false, error: data.result?.message || "An error occurred while updating the meal" }
     }
     return { success: true, message: "Meal updated successfully", data };
   } catch (error: any) {

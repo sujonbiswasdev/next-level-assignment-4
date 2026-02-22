@@ -1,13 +1,9 @@
-import Updatemealse from '@/components/meals/updateMeals';
-import React from 'react'
-
+import UpdateMeal from '@/components/meals/updateMeals';
 const UpdateMeals = async({params}:{params:Promise<{id:string}>}) => {
     const {id}=await params;
-
-
   return (
     <div>
-      <Updatemealse mealId={id}/>
+      <UpdateMeal mealId={id}/>
     </div>
   )
 }

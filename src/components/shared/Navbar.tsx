@@ -31,6 +31,8 @@ import { useState } from "react";
 import ProfileCard from "./ProfileCard";
 import { useCartStore } from "@/store/CartStore";
 import { CartModal } from "../Cardmodel";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface MenuItem {
   title: string;
@@ -87,8 +89,8 @@ const Navbar = ({
     <section className={cn("py-4", className)} >
       <div className="container">
         {/* Desktop Menu */}
-        <nav className="hidden items-center justify-between lg:flex">
-          <div className="flex items-center gap-6">
+        <nav className="flex justify-between">
+          <div className="flex items-center gap-12">
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-2">
               <img
@@ -100,31 +102,33 @@ const Navbar = ({
                 {logo.title}
               </span>
             </a>
-           
+
           </div>
-        <div className="flex items-center">
-              <NavigationMenu>
-                <NavigationMenuList>
-                  {menu.map((item) => renderMenuItem(item))}
-                </NavigationMenuList>
-              </NavigationMenu>
+          <div className="hidden lg:flex items-center">
+            <NavigationMenu>
+              <NavigationMenuList className="text-[20px] ">
+                {menu.map((item) => renderMenuItem(item))}
+              </NavigationMenuList>
+            </NavigationMenu>
           </div>
-          <div>
-           {<CartModal />}
+
+          <div className="flex items-center gap-4">
+            <CartModal />
+            {session?.user ? (<>
+
+              <ProfileCard />
+            </>) :
+
+              (<div className="flex gap-2">
+
+                <Button asChild variant="outline" size="sm">
+                  <a href={auth.login.url}>{auth.login.title}</a>
+                </Button>
+                <Button asChild size="sm">
+                  <a href={auth.signup.url}>{auth.signup.title}</a>
+                </Button>
+              </div>)}
           </div>
-          {session?.user ? (<>
-          <ProfileCard/>
-          </>) : 
-          
-          (<div className="flex gap-2">
-            
-            <Button asChild variant="outline" size="sm">
-              <a href={auth.login.url}>{auth.login.title}</a>
-            </Button>
-            <Button asChild size="sm">
-              <a href={auth.signup.url}>{auth.signup.title}</a>
-            </Button>
-          </div>)}
         </nav>
 
         {/* Mobile Menu */}
@@ -167,7 +171,7 @@ const Navbar = ({
 
                   {session?.user ? "profile" : (<div className="flex flex-col gap-3">
                     <Button asChild variant="outline">
-                      <a href={auth.login.url}>{"sldkfj"}</a>
+                      <a href={auth.login.url}>{"Login"}</a>
                     </Button>
                     <Button asChild>
                       <a href={auth.signup.url}>{auth.signup.title}</a>
@@ -199,13 +203,15 @@ const renderMenuItem = (item: MenuItem) => {
     );
   }
 
+   const currentPath = usePathname();
+  const isActive = currentPath === item.url;
   return (
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
         href={item.url}
-        className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground"
+        className="group text-[20px] inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground"
       >
-        {item.title}
+        <Link className={isActive ? 'text-blue-500 font-bold' : 'text-gray-500'} href={item.url}>{item.title}</Link>
       </NavigationMenuLink>
     </NavigationMenuItem>
   );

@@ -14,16 +14,12 @@ const SignleMealByid = ({ meal }: any) => {
           {/* HERO SECTION */}
           <div className="relative w-full h-[300px] sm:h-[450px] lg:h-[550px] rounded-3xl overflow-hidden shadow-xl">
       
-            <img
+            <Image
               src={meal.image}
               alt={meal.meals_name}
               className="w-full h-full object-cover rounded-2xl"
-              loading="lazy"
-              onError={(e: any) => {
-                e.target.src = "/images/default-meal.jpg";
-              }}
-              width={400}
-              height={300}
+              fill
+              priority
             />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -191,12 +187,12 @@ const SignleMealByid = ({ meal }: any) => {
 
 
                 {/* Provider */}
-                <div className="border-t pt-6">
+                <div className="border-t pt-6 ">
+                       <h3 className="font-semibold mb-1">Provided By</h3>
                   <Link href={`/provider/${meal.provider?.id}`} className='w-full h-32 mb-4'>
-                    <img src={meal.provider?.image ? meal.provider?.image : "/default-meal.jpg"} alt="provider" className="w-full h-32 object-cover rounded-lg" />
+                    <img src={meal.provider?.image ? meal.provider?.image : "/default-meal.jpg"} alt="profile" className="w-full h-32 object-cover rounded-lg" />
                   </Link>
                   <div>
-                    <h3 className="font-semibold mb-1">Provided By</h3>
                     <p className="text-sm text-gray-600">
                       {meal.provider?.restaurantName}
                     </p>
@@ -204,9 +200,6 @@ const SignleMealByid = ({ meal }: any) => {
                       {meal.provider?.address}
                     </p>
                   </div>
-
-
-
                 </div>
               </div>
             </div>

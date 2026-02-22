@@ -12,7 +12,6 @@ const HistoryMeals = async () => {
       // 🔹 Server fetch
       const res = await getmealsown();
       const meals = res?.data?.result?.data || [];
-      console.log(meals,'mealsdatas')
       const pagination=res?.data?.result?.pagination
   
   return (

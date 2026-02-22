@@ -88,7 +88,7 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
                     <thead className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
                         <tr >
                             {columns.map((col) => (
-                                <th key={col.key} className="px-4 py-2 text-left text-black font-semibold">
+                                <th key={col.key} className="px-4 py-2 text-left font-semibold">
                                     {col.label}
                                 </th>
                             ))}
@@ -97,8 +97,8 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
                     <tbody className="">
                         {meals.length > 0 ? (
                             meals.map((meal: any, index: number) => (
-                                <tr key={meal.id} className="hover:bg-gray-400 transition border-2 border-gray-400 rounded-lg">
-                                    <td className={`px-4 py-0.5 font-medium ${index % 2 === 0 ? 'bg-gray-50' : ''}`}>
+                                <tr key={meal.id} className="hover:bg-gray-100 transition border-2 border-gray-400 rounded-lg">
+                                    <td className={`px-4 py-0.5 font-medium ${index % 2 === 0 ? 'hover:bg-gray-100' : ''}`}>
                                         {index + 1}
                                     </td>
                                     <td className="px-4 py-0.5">
@@ -108,20 +108,20 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
                                             className="w-16 h-16 object-cover rounded-md"
                                         />
                                     </td>
-                                    <td className="px-4 py-0.5 font-semibold">{meal.meals_name}</td>
-                                    <td className="px-4 py-0.5 text-gray-600">{meal.description}</td>
+                                    <td className="px-4 py-0.5 font-semibold">{meal.meals_name.substring(0, 5)}{meal.meals_name.length > 5 ? '...' : ''}</td>
+                                    <td className="px-4 py-0.5 text-gray-600">{meal.description.substring(0, 10)}{meal.description.length > 10 ? '...' : ''}</td>
                                     <td className="px-4 py-0.5 font-medium">${meal.price.toFixed(2)}</td>
                                     <td className="px-4 py-0.5">{meal.category_name}</td>
                                     <td className="px-4 py-0.5">{meal.cuisine}</td>
                                     <td className="px-4 py-0.5">
                                         <span
-                                            className={`px-2 py-0.5 rounded-full text-sm font-semibold ${meal.isAvailable ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                                            className={`px-2 py-0.5 rounded-full text-sm font-semibold ${meal.isAvailable ? "bg-green-100 text-green-700" : " text-red-700"
                                                 }`}
                                         >
                                             {meal.isAvailable ? (<Status variant="success" className="bg-green-500 text-white">
                                                 <StatusIndicator />
                                                 <StatusLabel >Available</StatusLabel>
-                                            </Status>) : (<Status variant="error" className="bg-red-500 text-white">
+                                            </Status>) : (<Status variant="error" className="bg-red-400 text-white">
                                                 <StatusIndicator />
                                                 <StatusLabel>Unavailable</StatusLabel>
                                             </Status>)}

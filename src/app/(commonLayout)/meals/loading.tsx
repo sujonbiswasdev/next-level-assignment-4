@@ -3,7 +3,9 @@
 export default function MealLoading() {
   return (
     <div className="group relative w-[350px] rounded-xl overflow-hidden shadow-lg bg-white transition-all duration-300 hover:shadow-2xl">
-
+      <div>
+        loading...
+      </div>
        <div className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
       
       {/* Image Skeleton */}

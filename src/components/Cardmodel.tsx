@@ -32,19 +32,18 @@ export function CartModal() {
   const tax = subtotal * 0.1
   const total = getTotal() as number
   return (
-    <div className="flex flex-wrap gap-2 overflow-y-scroll">
+    <div className="flex flex-wrap gap-2 ">
       {SHEET_SIDES.map((side) => (
-        <Sheet key={side}>
-          <SheetTrigger asChild>
+        <Sheet key={side} >
+          <SheetTrigger asChild className="">
             <button
-              className="relative"
+              className="relative "
             >
               🛒
-              {cart.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-xs px-2 py-1 rounded-full">
-                  {cart.length}
-                </span>
-              )}
+              <span className={`${cart.length===0?"":"absolute -top-2 -right-2 bg-red-500 w-5 h-5 rounded-full text-white text-sm"}`}>
+                {cart.length===0?"":cart.length}
+              </span>
+           
             </button>
           </SheetTrigger>
           <SheetContent

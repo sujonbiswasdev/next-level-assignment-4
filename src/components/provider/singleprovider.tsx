@@ -42,15 +42,15 @@ const ProviderPage = ({ data }: { data: any }) => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 pb-32 lg:pb-24">
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 pb-32 lg:pb-24">
         {/* Provider Profile + Gallery Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           {/* Provider Profile - LEFT (1/4) */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 lg:p-10 sticky lg:top-24">
               {/* Stats */}
-              <div className='flex flex-wrap justify-between  px-2 md:px-6'>
-                <div className="space-y-4 mb-8 justify-items-start-safe">
+              <div className='flex flex-wrap px-2 md:px-6'>
+                <div className="space-y-4 mb-2 ">
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
                     <div className="flex items-center gap-3">
                       <Clock className="w-5 h-5 text-orange-500" />
@@ -70,26 +70,27 @@ const ProviderPage = ({ data }: { data: any }) => {
                     </div>
                   </div>
                 </div>
-                <div className='space-y-4 justify-items-end-safe'>
-                  <div className='flex items-center gap-2'>
+
+                <div className='space-y-4 '>
+                  <div className='flex flex-wrap items-center gap-2'>
                     <h4 className="text-sm font-medium text-gray-700">Name :</h4>
                     <p className="text-lg font-semibold text-gray-600">{data.result.user.name}</p>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <h4 className="text-sm font-medium text-gray-700">email :</h4>
                     <p className="text-sm text-gray-600">{data.result.user.email}</p>
                   </div>
-                  <div className='flex items-center gap-2'>
+                  <div className='flex flex-wrap items-center gap-2'>
                     <h4 className="text-sm font-medium text-gray-700">Phone :</h4>
                     <p className="text-sm text-gray-600">{data.result.user.phone || "Not available"}</p>
                   </div>
 
-                  <div className='flex items-center gap-2'>
+                  <div className='flex flex-wrap items-center gap-2'>
                     <h4 className="text-sm font-medium text-gray-700">isActive :</h4>
                     <p className="text-sm text-gray-600">{data.result.user.isActive ? "Yes" : "No"}</p>
                   </div>
-                  <div className='flex items-center gap-2'>
+                  <div className='flex flex-wrap items-center gap-2'>
                     <h4 className="text-sm font-medium text-gray-700">role :</h4>
                     <p className="text-sm text-gray-600">{data.result.user.role}</p>
                   </div>
@@ -97,7 +98,7 @@ const ProviderPage = ({ data }: { data: any }) => {
               </div>
 
               {/* Action Buttons */}
-              <div className="space-y-3">
+              <div className="space-y-3 mt-2">
                 <button className="w-full bg-white border-2 border-gray-200 hover:border-orange-400 text-gray-900 py-4 px-6 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3">
                   <Share2 className="w-5 h-5" />
                   Share
@@ -150,17 +151,12 @@ const MealCard = ({ meal, onAddToCart, cartItems }: any) => {
   return (
     <div className="group bg-white border border-gray-200 hover:border-orange-300 rounded-3xl p-6 hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-2">
       {/* Meal Image */}
-      <div className="relative mb-6 h-56 lg:h-60 overflow-hidden rounded-2xl shadow-md group-hover:scale-105 transition-transform duration-500">
+      <div className="relative w-full h-60 overflow-hidden rounded-lg">
         <img
           src={meal.image}
           alt={meal.meals_name}
-          className="w-full h-full object-cover rounded-2xl"
           loading="lazy"
-          onError={(e: any) => {
-            e.target.src = "/images/default-meal.jpg";
-          }}
-          width={400}
-          height={300}
+          className="object-cover transition-transform duration-700 hover:scale-110"
         />
 
         <div className={`absolute top-4 right-4  px-3 py-2 rounded-full text-xs font-bold shadow-lg ${!meal.isAvailable ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}>
