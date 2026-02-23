@@ -16,4 +16,16 @@ export const ProviderRoutes: Route[] = [
             },
         ],
     },
+
+    {
+        title: "order management",
+        icon: "string",
+        isActive: true,
+        items: [
+            {
+                title: "orders",
+                url: "/provider-dashboard/orders",
+            },
+        ],
+    },
 ];

@@ -42,7 +42,7 @@ enum Roles{
   return NextResponse.next();
 }
 export const config={
-    matcher:['/profile','/admin-dashboard','/dashboard','/provider-dashboard','/provider']
+    matcher:['/profile','/admin-dashboard/:path*','/dashboard','/provider-dashboard/:path*','/provider']
 }
 
 export default proxy
