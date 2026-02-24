@@ -1,10 +1,16 @@
 'use client'
 import Image from 'next/image'
 import { Button } from '../ui/button'
-import { useCartStore } from '@/store/CartStore'
+import { manageCartStore } from '@/store/CartStore'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { Status, StatusIndicator, StatusLabel } from '../ui/status'
 const SignleMealByid = ({ meal }: any) => {
-  const addToCart = useCartStore((state) => state.addToCart)
+  console.log(meal, 'mealsdata')
+  const addToCart = manageCartStore((state) => state.addToCart)
+  const router = useRouter()
+   const defaultIamge='https://res.cloudinary.com/drmeagmkl/image/upload/v1771962102/default_meal_kgc6mv.png'
+
   return (
     <div>
 
@@ -13,9 +19,9 @@ const SignleMealByid = ({ meal }: any) => {
 
           {/* HERO SECTION */}
           <div className="relative w-full h-[300px] sm:h-[450px] lg:h-[550px] rounded-3xl overflow-hidden shadow-xl">
-      
+
             <Image
-              src={meal.image}
+              src={meal.image || defaultIamge}
               alt={meal.meals_name}
               className="w-full h-full object-cover rounded-2xl"
               fill
@@ -157,7 +163,7 @@ const SignleMealByid = ({ meal }: any) => {
                 </div>
 
                 <div className='flex flex-wrap items-center justify-between'>
-                  <Button
+                  <Button onClick={() => router.push("/cart")}
                     disabled={!meal.isAvailable}
                     className={`py-2 px-4  rounded-sm text-lg font-semibold transition ${meal.isAvailable
                       ? "bg-black hover:bg-gray-900 cursor-pointer text-white"
@@ -172,10 +178,12 @@ const SignleMealByid = ({ meal }: any) => {
                     disabled={!meal.isAvailable}
                     onClick={() =>
                       addToCart({
-                        id: meal.id,
-                        name: meal.name,
+                        id: meal.id as string,
+                        mealid: meal.id as string,
+                        name: meal.meals_name as string,
                         price: meal.price,
-                        image: meal.image,
+                        image: meal.image || defaultIamge,
+                        isAvailable: meal.isAvailable,
                         quantity: 1,
                       })
                     }
@@ -188,17 +196,72 @@ const SignleMealByid = ({ meal }: any) => {
 
                 {/* Provider */}
                 <div className="border-t pt-6 ">
-                       <h3 className="font-semibold mb-1">Provided By</h3>
-                  <Link href={`/provider/${meal.provider?.id}`} className='w-full h-32 mb-4'>
-                    <img src={meal.provider?.image ? meal.provider?.image : "/default-meal.jpg"} alt="profile" className="w-full h-32 object-cover rounded-lg" />
-                  </Link>
+                  <h3 className="font-semibold mb-1">Provided By</h3>
                   <div>
-                    <p className="text-sm text-gray-600">
-                      {meal.provider?.restaurantName}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {meal.provider?.address}
-                    </p>
+                    <Link href={`/providers/${meal.provider?.id}`} className='w-[15px] h-[15px] mb-4'>
+                      <div className="relative w-8 h-8 rounded-full overflow-hidden border-primary shadow-md">
+                        <Image
+                          src={meal.provider.image || defaultIamge}
+                          alt={meal.name}
+                          fill
+                          priority
+                          className="object-cover"
+                        />
+                      </div>
+                    </Link>
+
+                  </div>
+
+                  <div className='mt-2 space-y-1'>
+                    <div className='flex items-center flex-wrap gap-1.5'>
+                      <p className='text-gray-800'>Restaurant Name :</p>
+                      <p className="text-sm text-gray-600 shadow-sm rounded-sm p-1">
+                        {meal.provider?.restaurantName}
+                      </p>
+                    </div>
+
+                    <div className='flex items-center flex-wrap gap-1.5'>
+                      <p className='text-gray-800'>Address :</p>
+                      <p className="text-sm text-gray-600 shadow-sm rounded-sm p-1">
+                        {meal.provider?.address}
+                      </p>
+                    </div>
+
+                    <div className='flex items-center flex-wrap gap-1.5'>
+                      <p className='text-gray-800'>Name :</p>
+                      <p className="text-sm text-gray-600 shadow-sm rounded-sm p-1">
+                        {meal.provider?.user.name}
+                      </p>
+                    </div>
+
+                    <div className='flex items-center flex-wrap gap-1.5'>
+                      <p className='text-gray-800'>Email :</p>
+                      <p className="text-sm text-gray-600 shadow-sm rounded-sm p-1">
+                        {meal.provider?.user.email}
+                      </p>
+                    </div>
+                    <div>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-sm font-semibold ${meal.provider.user.isActive ? "bg-green-100 text-green-700" : " text-red-700"
+                          }`}
+                      >
+                        {meal.provider.user.isActive ? (<Status variant="success" className="bg-green-400 text-white">
+                          <StatusIndicator />
+                          <div className='flex items-center'>
+                          <p className='text-gray-800'>Active</p>
+                             <StatusLabel ></StatusLabel>
+                          </div>
+                         
+                        </Status>) : (<Status variant="error" className="bg-red-400 text-white">
+                          <StatusIndicator />
+                            <div className='flex items-center'>
+                          <p className='text-gray-800'>unActive</p>
+                             <StatusLabel ></StatusLabel>
+                          </div>
+                        </Status>)}
+                      </span>
+                    </div>
+
                   </div>
                 </div>
               </div>

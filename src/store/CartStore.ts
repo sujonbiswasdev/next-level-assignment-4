@@ -5,9 +5,11 @@ import { persist } from "zustand/middleware"
 
 export interface CartItem {
   id: string
-  name: string
+  name?: string
   price: number
+  mealid:string
   image: string
+  isAvailable:boolean
   quantity: number
 }
 
@@ -22,7 +24,7 @@ interface CartState {
   getTotal: () => number
 }
 
-export const useCartStore = create<CartState>()(
+export const manageCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       cart: [],

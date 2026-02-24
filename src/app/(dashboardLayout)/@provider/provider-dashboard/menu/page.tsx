@@ -1,7 +1,5 @@
 import { getMeals, getmealsown } from "@/actions/blog.meals"
 import MealTable from "@/components/meals/MealsTable"
-import { getcategory } from "@/services/category"
-import { mealsService } from "@/services/meals"
 interface PageProps {
   searchParams: {
     category_name?: string

@@ -14,8 +14,11 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useCartStore } from "@/store/CartStore";
-import { toast } from "sonner";
+import { manageCartStore } from "@/store/CartStore";
+import { OrderForm } from "../modules/orders/OrderContactForm";
+import PaymentSuccess from "../payment-success";
+import PaymentFailed from "../payment-failed";
+import { toast } from "react-toastify";
 
 export interface finalTextProps {
   text: string;
@@ -38,18 +41,14 @@ export interface PaymentCardProps {
   className?: string;
 }
 
-export function PaymentCard({
-  title,
-  description,
-  price,
-  feature,
-  featuredescription,
-  feature2,
-  feature2description,
-  finalText = [],
-  onPay,
-  className,
+export function PaymentCard({title,description,finalText = [],onPay,className,
 }: PaymentCardProps) {
+   const { cart, getSubtotal, getTotal ,clearCart} =
+      manageCartStore()
+
+   const subtotal = getSubtotal()
+  const tax = subtotal * 0.1
+  const [activeButton,setactiveButton]=useState(false)
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvc, setCvc] = useState("");
@@ -59,7 +58,6 @@ export function PaymentCard({
     expiry?: string;
     cvc?: string;
   }>({});
-
   const validate = () => {
     const newErrors: typeof errors = {};
 
@@ -93,10 +91,12 @@ export function PaymentCard({
     if (validate()) {
       if (onPay) {
         onPay({ cardNumber, expiry, cvc });
-        toast.success("Payment processed!")
-        console.log();
+        toast.success(<PaymentSuccess amount={getTotal()}/>,{autoClose:3000,theme:"light"})
+        clearCart()
+        return 
       } else {
-        toast.error("Payment failed!")
+        toast.error(<PaymentFailed/>,{autoClose:3000,theme:"light"})
+        return 
       }
     }
   };
@@ -111,11 +111,7 @@ export function PaymentCard({
 
     return () => clearInterval(interval);
   }, [finalText]);
-   const { cart, getSubtotal, getTotal } =
-      useCartStore()
-
-   const subtotal = getSubtotal()
-  const tax = subtotal * 0.1
+  
 
   return (
     <div className={cn("mx-auto w-full max-w-4xl", className)}>
@@ -132,58 +128,25 @@ export function PaymentCard({
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="tabular-nums">{getSubtotal().toFixed(2)}</span>
+                    <span className="tabular-nums">${getSubtotal().toFixed(2)}</span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">tax</span>
-                    <span className="tabular-nums">{tax.toFixed(2)}</span>
+                    <span className="tabular-nums">${tax.toFixed(2)}</span>
                   </div>
                   <div className="flex items-center justify-between border-t pt-2">
                     <span className="font-medium">Total</span>
                     <span className="text-xl font-semibold tabular-nums">
-                      {getTotal().toFixed(2)}
+                      ${getTotal().toFixed(2)}
                     </span>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Features */}
-            <Card>
-              <CardHeader>
-                <CardTitle>What's Included</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex gap-3">
-                    <Check className="text-primary mt-0.5 h-4 w-4 shrink-0" />
-                    <div className="space-y-1">
-                      <p className="text-sm leading-none font-medium">
-                        {feature || "Payment & Invoice"}
-                      </p>
-                      <p className="text-muted-foreground text-sm">
-                        {featuredescription ||
-                          "Automated billing and detailed transaction records"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <Check className="text-primary mt-0.5 h-4 w-4 shrink-0" />
-                    <div className="space-y-1">
-                      <p className="text-sm leading-none font-medium">
-                        {feature2 || "Priority Support"}
-                      </p>
-                      <p className="text-muted-foreground text-sm">
-                        {feature2description ||
-                          "Faster response times and technical support"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+           {/* form design */}
+           <OrderForm  setactiveButton={setactiveButton} />
           </div>
         </div>
 
@@ -286,8 +249,8 @@ export function PaymentCard({
             </div>
 
             {/* Pay Button */}
-            <Button className="mt-2 w-full" onClick={handlePay}>
-              Pay {getTotal().toFixed(2)}
+            <Button  disabled={!activeButton} className={`mt-2 w-full ${activeButton?"bg-gray-950 cursor-pointer":"bg-gray-700 cursor-not-allowed"}`} onClick={handlePay}>
+              Pay ${getTotal().toFixed(2)}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </CardContent>

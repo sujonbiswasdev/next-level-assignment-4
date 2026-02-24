@@ -9,7 +9,7 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import PaginationPage from "./Pagination"
 import Link from "next/link"
 import { Button } from "../ui/button"
-import { useCartStore } from "@/store/CartStore"
+import { manageCartStore } from "@/store/CartStore"
 
 import { toast } from "sonner"
 import Skeletonmeals from "../ui/skeletonmeals"
@@ -20,7 +20,7 @@ const dietaryOptions = [
 const MIN_PRICE_LIMIT = 0;
 const MAX_PRICE_LIMIT = 1000;
 export default function MealsCard({ initialMeals, initialcategory, pagination }: any) {
-  const addToCart = useCartStore((state) => state.addToCart)
+  const addToCart = manageCartStore((state) => state.addToCart)
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -32,6 +32,7 @@ export default function MealsCard({ initialMeals, initialcategory, pagination }:
   const [price, setPrice] = useState(
     priceParam ? Number(priceParam) : null
   );
+  const defaultIamge='https://res.cloudinary.com/drmeagmkl/image/upload/v1771962102/default_meal_kgc6mv.png'
 
   const handlePriceChange = (value: string) => {
     let parsed = Number(value);
@@ -187,13 +188,14 @@ export default function MealsCard({ initialMeals, initialcategory, pagination }:
                 <CardHoverLift>
                   <div className="relative w-full h-60 overflow-hidden rounded-lg">
                     <img
-                      src={item.image}
+                      src={item.image || defaultIamge}
                       alt={item.meals_name}
                       loading="lazy"
                       className="object-cover transition-transform duration-700 hover:scale-110"
                     />
                     <span className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-gray-800 text-xs font-bold px-4 py-2 rounded-full shadow-lg">
                       {item.category_name}
+                       
                     </span>
                     <span className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full shadow-lg ${item.isAvailable ? "bg-emerald-500/90 text-white" : "bg-red-500/90 text-white"
                       }`}>
@@ -224,10 +226,14 @@ export default function MealsCard({ initialMeals, initialcategory, pagination }:
                       onClick={() =>
                         addToCart({
                           id: item.id as string,
+                          mealid:item.id as string,
                           name: item.meals_name as string,
                           price: item.price,
-                          image: item.image,
+                          image: item.image || defaultIamge,
+                          isAvailable:item.isAvailable,
                           quantity: 1,
+                         
+                          
                         })
                       }
                       disabled={!item.isAvailable}

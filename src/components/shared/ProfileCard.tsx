@@ -34,12 +34,14 @@ import {
   UserPlus,
   Users,
 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export default function ProfileCard() {
+export default function ProfileCard({ profile }: { profile: any }) {
   const [data, setdata] = useState(null)
+  const defaultProfile='https://res.cloudinary.com/drmeagmkl/image/upload/v1766941482/chatgpt_m8tmep.png'
 
 
 
@@ -73,7 +75,15 @@ export default function ProfileCard() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className='outline-none border-none p-4 rounded-full cursor-pointer '>👤</button>
+        <div className="relative w-8 h-8 rounded-full overflow-hidden border-primary shadow-md">
+          <Image
+            src={profile.image || defaultProfile}
+            alt={profile.name}
+            fill
+            priority
+            className="object-cover"
+          />
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64">
         {/* Account Section */}
@@ -85,14 +95,14 @@ export default function ProfileCard() {
             <span>Profile</span>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-            {data==='Customer'?"":<DropdownMenuItem><Link href={'/dashboard'}> 📊 Dashboard</Link></DropdownMenuItem>}
+          {data === 'Customer' ? "" : <DropdownMenuItem><Link href={'/dashboard'}> 📊 Dashboard</Link></DropdownMenuItem>}
           <DropdownMenuItem>
             <Settings />
             <span>Settings</span>
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        
+
 
         {/* Team Management Section */}
         <DropdownMenuSeparator />
@@ -183,7 +193,7 @@ export default function ProfileCard() {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
           <LogOut />
-           Log out
+          Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

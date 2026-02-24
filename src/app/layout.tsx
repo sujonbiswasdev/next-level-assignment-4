@@ -27,11 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[1440px] mx-auto px-8 overflow-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[1440px] mx-auto overflow-x-hidden`}
       >
-        {children}
+             {children}
           <Toaster/>
-          <ToastContainer/>
+          <ToastContainer autoClose={1000} theme="dark" />
       </body>
     </html>
   );

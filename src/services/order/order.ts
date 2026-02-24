@@ -1,4 +1,5 @@
 import { env } from "@/env"
+import { ICreateOrderPayload } from "@/types/order/order"
 import { cookies } from "next/headers"
 
 const api_url = env.API_URL
@@ -12,7 +13,7 @@ export const OrderService = {
                         Cookie: cookiestore.toString(),
                     },
                     credentials: "include",
-                    next:{tags:['orderupdate']}
+                    next: { tags: ['orderupdate'] }
                 },
             )
             const body = await response.json()
@@ -32,7 +33,7 @@ export const OrderService = {
         }
     },
 
-    updateOrderStatus: async (id: string, orderdata:any) => {
+    updateOrderStatus: async (id: string, orderdata: any) => {
         try {
             const cookieStore = await cookies()
             const res = await fetch(`${api_url}/provider/orders/${id}`, {
@@ -43,7 +44,7 @@ export const OrderService = {
                     Cookie: cookieStore.toString(),
                 },
                 body: JSON.stringify(orderdata),
-                
+
             });
             const data = await res.json();
             if (!res.ok) {
@@ -54,7 +55,54 @@ export const OrderService = {
             console.error(error);
             return { success: false, error: error.message || "An error occurred while updating the meal" };
         }
-    }
+    },
+    createorder: async (orderData: ICreateOrderPayload) => {
+        console.log(JSON.stringify(orderData), 'dlkjdksjfjsdatatata')
+        const cookieStore = await cookies()
+        try {
+            const res = await fetch(`${api_url}/orders`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: cookieStore.toString(),
+                },
+                credentials: "include",
+                body: JSON.stringify(orderData),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                return { data: null, error: data.result.data[0].message || "meals create failed" }
+            }
+            return { data: data, error: null }
+        } catch (error) {
+            return { data: null, error: { message: `${error} Something Went Wrong` } };
+        }
+    },
+    getorderbyid: async (id: string) => {
+        try {
+            const cookiestore = await cookies()
+            const res = await fetch(`${api_url}/orders/${id}`, {
+                headers: {
+                    Cookie: cookiestore.toString(),
+                },
+                credentials: "include",
+                next: { tags: ['orderupdate'] }
+            })
+            const body = await res.json()
+            return {
+                data: body,
+                error: null
+            }
+        } catch (error: any) {
+            return {
+                data: null,
+                error: error.message
+            }
+        }
+
+    },
 
 
 }

@@ -75,6 +75,7 @@ export const providerServiceStats={
                 },
             )
              const body:OrderStatsApiResponse = await response.json()
+             console.log(body,'body data')
             if (!response.ok) {
                     throw new Error(`Error fetching provider meals: ${response.statusText}`);
                 }

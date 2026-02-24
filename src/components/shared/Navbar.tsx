@@ -29,7 +29,7 @@ import {
 import { authClient } from "@/lib/authClient";
 import { useState } from "react";
 import ProfileCard from "./ProfileCard";
-import { useCartStore } from "@/store/CartStore";
+import { manageCartStore } from "@/store/CartStore";
 import { CartModal } from "../Cardmodel";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -84,7 +84,7 @@ const Navbar = ({
   className,
 }: Navbar1Props) => {
   const { data: session } = authClient.useSession()
-  const cart = useCartStore((state) => state.cart)
+  const cart = manageCartStore((state) => state.cart)
   return (
     <section className={cn("py-4", className)} >
       <div className="container">
@@ -116,7 +116,7 @@ const Navbar = ({
             <CartModal />
             {session?.user ? (<>
 
-              <ProfileCard />
+              <ProfileCard profile={session.user} />
             </>) :
 
               (<div className="flex gap-2">
@@ -151,13 +151,13 @@ const Navbar = ({
               <SheetContent className="overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle>
-                    <a href={logo.url} className="flex items-center gap-2">
+                    <Link href={logo.url} className="flex items-center gap-2">
                       <img
                         src={logo.src}
                         className="max-h-8 dark:invert"
                         alt={logo.alt}
                       />
-                    </a>
+                    </Link>
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-6 p-4">
@@ -208,9 +208,8 @@ const renderMenuItem = (item: MenuItem) => {
   return (
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
-        href={item.url}
         className="group text-[20px] inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground"
-      >
+       asChild>
         <Link className={isActive ? 'text-blue-500 font-bold' : 'text-gray-500'} href={item.url}>{item.title}</Link>
       </NavigationMenuLink>
     </NavigationMenuItem>

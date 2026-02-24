@@ -1,6 +1,5 @@
 "use client"
 import { useForm } from "@tanstack/react-form"
-import { toast } from "sonner"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -21,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/authClient"
 import { useRouter } from "next/navigation"
+import { toast } from "react-toastify"
 export const formSchema = z.object({
     email: z.email("Invalid email"),
     password: z.string().min(6, "Password must be 6+ chars"),
@@ -48,18 +48,21 @@ export function SigninForm() {
 
             try {
                 if (!value) {
-                    toast.error("please provide correct information")
+                    toast.dismiss(toastId)
+                    toast.error("please provide correct information",{theme: "dark",autoClose: 1000})
                 }
                 const { data, error } = await authClient.signIn.email(value);
                 if (error) {
                     toast.error(error.message);
                     return;
                 }
+                localStorage.removeItem("foodhub-cart")
                 toast.dismiss(toastId)
-                toast.success('login successfully')
+                toast.success('login successfully',{theme: "dark",autoClose: 1000})
                 router.push("/dashboard")
             } catch (error) {
-                toast.error("Something went wrong, please try again.", { id: toastId });
+                toast.dismiss(toastId)
+                toast.error("Something went wrong, please try again.");
             }
         },
     })

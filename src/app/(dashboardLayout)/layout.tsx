@@ -7,11 +7,10 @@ import { cookies } from 'next/headers'
 import React from 'react'
 
 const DashboardLayout =async ({admin,provider,children}:{admin:React.ReactNode,provider:React.ReactNode,children:React.ReactNode}) => {
-
     const userinfo=await getSession()
     const user=userinfo.data.result!
   return (
-    <SidebarProvider>
+    <SidebarProvider className='px-2 sm:px-4 lg:px-8'>
       <AppSidebar user={user} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
@@ -36,7 +35,7 @@ const DashboardLayout =async ({admin,provider,children}:{admin:React.ReactNode,p
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-4 p-4 ">
           <div className="">
             {user.role==="Admin"?admin:provider}
           </div>

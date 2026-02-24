@@ -4,13 +4,13 @@ import {
   MapPin, Clock, Phone, Star, Truck, DollarSign, Heart, Share2,
   ShoppingCart, ChevronLeft, ChevronRight, Utensils, Award
 } from 'lucide-react';
-import { useCartStore } from '@/store/CartStore';
+import { manageCartStore } from '@/store/CartStore';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 
 const ProviderPage = ({ data }: { data: any }) => {
   const { cart, getSubtotal, getTotal, addToCart, removeFromCart, clearCart } =
-    useCartStore()
+    manageCartStore()
   console.log(data, 'datajdjjsdjfdsfdsf')
   return (
     <div className="min-h-screen bg-gray-50">

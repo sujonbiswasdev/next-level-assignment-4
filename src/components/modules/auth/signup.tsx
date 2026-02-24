@@ -1,7 +1,6 @@
 "use client"
 import { useStore } from "@tanstack/react-form";
 import { useForm } from "@tanstack/react-form"
-import { toast } from "sonner"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -22,11 +21,26 @@ import {
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "react-toastify";
+import { authClient } from "@/lib/authClient";
+const allowedDomains = [
+    "res.cloudinary.com",
+    "images.pexels.com",
+];
 export const formSchema = z.object({
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email"),
     password: z.string().min(6, "Password must be 6+ chars"),
-    image: z.string(),
+    image: z.url().refine((url) => {
+        try {
+            const parsed = new URL(url as any);
+            return allowedDomains.includes(parsed.hostname);
+        } catch {
+            return false;
+        }
+    }, {
+        message: "Only Cloudinary and Pexels images allowed",
+    }).optional(),
     phone: z.string(),
     role: z.enum(['Customer', "Provider"]),
     restaurantName: z.string(),
@@ -34,29 +48,29 @@ export const formSchema = z.object({
     description: z.string()
 }).superRefine((data, ctx) => {
     if (data.role === "Provider") {
-      if (!data.restaurantName) {
-        ctx.addIssue({
-          path: ["restaurantName"],
-          message: "Restaurant name is required",
-          code: z.ZodIssueCode.custom,
-        });
-      }
-      if (!data.address) {
-        ctx.addIssue({
-          path: ["address"],
-          message: "Address is required",
-          code: z.ZodIssueCode.custom,
-        });
-      }
-      if (!data.description) {
-        ctx.addIssue({
-          path: ["description"],
-          message: "Description is required",
-          code: z.ZodIssueCode.custom,
-        });
-      }
+        if (!data.restaurantName) {
+            ctx.addIssue({
+                path: ["restaurantName"],
+                message: "Restaurant name is required",
+                code: z.ZodIssueCode.custom,
+            });
+        }
+        if (!data.address) {
+            ctx.addIssue({
+                path: ["address"],
+                message: "Address is required",
+                code: z.ZodIssueCode.custom,
+            });
+        }
+        if (!data.description) {
+            ctx.addIssue({
+                path: ["description"],
+                message: "Description is required",
+                code: z.ZodIssueCode.custom,
+            });
+        }
     }
-  });
+});
 
 export function SignupForm() {
     const router = useRouter()
@@ -73,10 +87,10 @@ export function SignupForm() {
             description: ""
         },
         validators: {
-            onSubmit: formSchema,
+            onSubmit: formSchema as any,
         },
         onSubmit: async ({ value }) => {
-            console.log(value, 'jdfkjsdkljfsdkljff')
+            const toastId=toast.loading("user creating.........")
             try {
                 const response = await fetch('http://localhost:5000/api/auth/register', {
                     method: "POST",
@@ -84,16 +98,29 @@ export function SignupForm() {
                     body: JSON.stringify(value)
                 })
                 const body = await response.json()
-                console.log(body, 'jsdflksjsdata')
                 if (!response.ok) {
-                    toast.error(body.error.body.message)
+                    toast.dismiss(toastId)
+                    toast.error(body.error.body.message || 'user create failed')
                     router.push("/")
                     return
                 }
-
-                toast.success("user signup successfully")
+                toast.dismiss(toastId)
+                toast.success('user signup successfully',{});
+                 localStorage.removeItem("foodhub-cart")
+                  const signin=await authClient.signIn.email({
+                    email:value.email,
+                    password:value.password
+                })
+                 localStorage.removeItem("foodhub-cart")
+                if(signin.error){
+                    toast.dismiss(toastId)
+                    toast.error(body.error.body.message || 'user login failed')
+                    router.push("/")
+                    return
+                }
                 router.push('/profile')
             } catch (error) {
+                toast.dismiss(toastId)
                 toast.error("Something went wrong, please try again.");
             }
         },
