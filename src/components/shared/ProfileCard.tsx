@@ -74,10 +74,9 @@ export default function ProfileCard({ profile }: { profile: User }) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Link href={`${profile.role == 'Customer' ? "/profile" : profile.role == "Admin" ? "/admin-dashboard/profile" : profile.role == 'Provider' ? "/provider-dashboard/profile" : "/"}`}>profile</Link>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            <Link className='w-full' href={`${profile.role == 'Customer' ? "/profile" : profile.role == "Admin" ? "/admin-dashboard/profile" : profile.role == 'Provider' ? "/provider-dashboard/profile" : "/"}`}>👤 profile</Link>
           </DropdownMenuItem>
-          {profile.role === 'Customer' ? "" : <DropdownMenuItem><Link href={'/dashboard'}> 📊 Dashboard</Link></DropdownMenuItem>}
+          {profile.role === 'Customer' ? "" : <DropdownMenuItem><Link className='w-full' href={'/dashboard'}> 📊 Dashboard</Link></DropdownMenuItem>}
           <DropdownMenuItem>
             <Settings />
             <span>Settings</span>

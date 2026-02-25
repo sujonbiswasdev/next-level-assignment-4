@@ -3,8 +3,9 @@ import Link from "next/link";
 import { Button } from "../ui/button copy";
 import { useState } from "react";
 import { Status, StatusIndicator, StatusLabel } from "../ui/status";
-import { Eye, Pen, Trash } from "lucide-react";
+import { BadgePlus, Eye, Pen, Trash } from "lucide-react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const columns = [
     { key: "id", label: "ID" },
@@ -19,7 +20,9 @@ const columns = [
 ];
 
 const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
+    const router=useRouter()
     const [meals, setMeals] = useState(initialmeals);
+    const [search, setSearch] = useState('')
     const handleDelete = async (id: string) => {
         if (!confirm("Are you sure you want to delete this meal?")) return;
 
@@ -42,16 +45,17 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
                 Meal Table
             </h1>
 
-            {/* Filters */}
-            {/* <div className="flex flex-wrap gap-4 mb-6">
-        <input
-          type="text"
-          placeholder="Search meals..."
-          className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 w-full sm:w-auto"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <select
+            Filters
+            <div className="flex flex-1 items-center justify-between">
+                <div className="flex flex-wrap gap-4 mb-6">
+                    <input
+                        type="text"
+                        placeholder="Search meals..."
+                        className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 w-full sm:w-auto"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                    {/* <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400"
@@ -60,9 +64,8 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
           {categories.map((cat) => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
-        </select>
-        <select
-          value={dietary}
+        </select> */}
+                    {/* <select
           onChange={(e) => setDietary(e.target.value)}
           className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-400"
         >
@@ -70,8 +73,8 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
           {dietaryOptions.map((diet) => (
             <option key={diet} value={diet}>{diet}</option>
           ))}
-        </select>
-        <select
+        </select> */}
+                    {/* <select
           value={available}
           onChange={(e) => setAvailable(e.target.value)}
           className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-400"
@@ -79,8 +82,14 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
           <option value="">All Availability</option>
           <option value="true">Available</option>
           <option value="false">Unavailable</option>
-        </select>
-      </div> */}
+        </select> */}
+                </div>
+
+                   <div>
+                    <button className="font-semibold bg-gray-300 shadow-sm rounded-sm px-1.5 py-1 cursor-pointer" onClick={()=>router.push("/provider-dashboard/create-meals")}><BadgePlus/></button>
+                </div>
+
+            </div>
 
             {/* Table */}
             <div className="overflow-auto">
@@ -108,7 +117,9 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
                                             className="w-16 h-16 object-cover rounded-md"
                                         />
                                     </td>
-                                    <td className="px-4 py-0.5 font-semibold">{meal.meals_name.substring(0, 5)}{meal.meals_name.length > 5 ? '...' : ''}</td>
+                                    <td className="px-4 py-0.5 font-semibold ">
+                                        <Link className="text-blue-500 hover:underline" href={`/meals/${meal.id}`}>{meal.meals_name.substring(0, 5)}{meal.meals_name.length > 5 ? '...' : ''}</Link>
+                                    </td>
                                     <td className="px-4 py-0.5 text-gray-600">{meal.description.substring(0, 10)}{meal.description.length > 10 ? '...' : ''}</td>
                                     <td className="px-4 py-0.5 font-medium">${meal.price.toFixed(2)}</td>
                                     <td className="px-4 py-0.5">{meal.category_name}</td>

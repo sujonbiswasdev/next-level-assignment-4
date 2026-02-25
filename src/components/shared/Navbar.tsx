@@ -68,8 +68,8 @@ interface Navbar1Props {
 const Navbar = ({
 
   logo = {
-    url: "https://www.shadcnblocks.com",
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
+    url: "/",
+    src: "https://res.cloudinary.com/drmeagmkl/image/upload/v1772007286/logo_rcsr8h.png",
     alt: "logo",
     title: "FoodHub",
   },
@@ -86,7 +86,7 @@ const Navbar = ({
 }: Navbar1Props) => {
   const { data: session } = authClient.useSession()
   return (
-    <section className={cn("py-4", className)} >
+    <section className={cn("py-4 sticky top-0 bg-white rounded-xs", className)} >
       <div className="container">
         {/* Desktop Menu */}
         <nav className="flex justify-between">
@@ -95,7 +95,7 @@ const Navbar = ({
             <a href={logo.url} className="flex items-center gap-2">
               <img
                 src={logo.src}
-                className="max-h-8 dark:invert"
+                className="max-w-[50px] max-w-10 dark:invert"
                 alt={logo.alt}
               />
               <span className="text-lg font-semibold tracking-tighter">
@@ -116,7 +116,7 @@ const Navbar = ({
             <CartModal />
             {session?.user ? (<>
 
-              <ProfileCard profile={session.user as any} />
+              <ProfileCard profile={session.user as User} />
             </>) :
 
               (<div className="flex gap-2">

@@ -16,21 +16,17 @@ function ProfileModal({ user }: { user: User }) {
     const [inputvalue, setinputvalue] = useState<Partial<UpdateUserInput>>({})
     const [editfield, seteditfield] = useState<string | boolean | 'bgimage' | 'name' | 'phone' | 'isActive'>('')
     const parseData = updateUserSchema.safeParse(inputvalue)
-    console.log(parseData, 'setadjsdfkjsdparsedat')
     if (!user) {
         toast('user not found', { autoClose: 2000, theme: "colored" })
         router.push("/")
     }
     const defaultProfile = 'https://images.pexels.com/photos/952670/pexels-photo-952670.jpeg'
     const handleUpdateUser = async <k extends keyof User>(field: k, value: User[k]) => {
-
         if (value == null) {
             toast.error("please provide a value", { theme: "colored", position: "bottom-right", autoClose: 2000 })
             return
         }
-
         const parseData = updateUserSchema.safeParse({ [field]: value });
-        console.log(parseData, 'parsedatadjkasfd')
         if (!parseData.success) {
             const errors = parseData.error.flatten().fieldErrors;
 
@@ -45,7 +41,7 @@ function ProfileModal({ user }: { user: User }) {
             return;
         }
         try {
-            const toastid = toast.success(`"user ${field} updating...."`, { theme: "dark", position: "bottom-right", autoClose: 2000 })
+            const toastid = toast.loading(`"user ${field} updating...."`, { theme: "dark", position: "bottom-right", autoClose: 2000 })
             const res = await fetch(`http://localhost:5000/api/users/profile/update`, {
                 method: "PUT",
                 credentials: "include",

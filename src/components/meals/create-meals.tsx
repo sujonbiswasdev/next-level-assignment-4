@@ -114,10 +114,7 @@ export function MealsForm() {
   return (
     <Card className="w-full sm:max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>meals data create</CardTitle>
-        <CardDescription>
-          you can create meals create
-        </CardDescription>
+        <CardTitle>Create New Meal</CardTitle>
       </CardHeader>
       <CardContent>
         <form
@@ -242,6 +239,7 @@ export function MealsForm() {
                     <FieldLabel htmlFor={field.name}>Category Name</FieldLabel>
 
                     <select
+                    className="border-amber-50 shadow-sm px-2 py-2.5"
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
@@ -269,7 +267,9 @@ export function MealsForm() {
                 return (
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>dietaryPreference</FieldLabel>
-                    <select id={field.name}
+                    <select
+                    className="border-amber-50 shadow-sm px-2 py-2.5"
+                     id={field.name}
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
@@ -320,20 +320,21 @@ export function MealsForm() {
               children={(field) => {
                 const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
-                  <Field data-invalid={isInvalid} className="flex gap-3 items-center">
-                    <input
-                      type="checkbox"
-                      id={field.name}
-                      name={field.name}
-                      checked={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) =>
-                        field.handleChange(e.target.checked)
-                      }
-                    />
+                  <Field data-invalid={isInvalid} className="flex gap-3 items-center ">
 
-                    <FieldLabel htmlFor={field.name}>isAvailable</FieldLabel>
-
+                    <div className="flex items-center gap-2">
+                      <FieldLabel htmlFor={field.name}>isAvailable</FieldLabel>
+                      <input
+                        type="checkbox"
+                        id={field.name}
+                        name={field.name}
+                        checked={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) =>
+                          field.handleChange(e.target.checked)
+                        }
+                      />
+                    </div>
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}
