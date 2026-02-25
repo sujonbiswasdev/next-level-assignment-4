@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { authClient } from '@/lib/authClient';
 import { getSession } from '@/services/service';
+import { User } from '@/types/user/user';
 import {
   Bug,
   FileText,
@@ -30,7 +31,6 @@ import {
   Settings,
   Shield,
   Trash,
-  User,
   UserPlus,
   Users,
 } from 'lucide-react';
@@ -39,10 +39,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export default function ProfileCard({ profile }: { profile: any }) {
-  const [data, setdata] = useState(null)
-  const defaultProfile='https://res.cloudinary.com/drmeagmkl/image/upload/v1766941482/chatgpt_m8tmep.png'
-
+export default function ProfileCard({ profile }: { profile: User }) {
+  const defaultProfile = 'https://res.cloudinary.com/drmeagmkl/image/upload/v1766941482/chatgpt_m8tmep.png'
 
 
   const router = useRouter()
@@ -56,46 +54,30 @@ export default function ProfileCard({ profile }: { profile: any }) {
     })
   }
 
-
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await getSession();
-        setdata(data?.result.role!)
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchData();
-
-  }, [])
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="relative w-8 h-8 rounded-full overflow-hidden border-primary shadow-md">
-          <Image
+          <img
             src={profile.image || defaultProfile}
             alt={profile.name}
-            fill
-            priority
+            width={100}
+            height={100}
             className="object-cover"
           />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64">
         {/* Account Section */}
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <User />
-            <span>Profile</span>
+            <Link href={`${profile.role == 'Customer' ? "/profile" : profile.role == "Admin" ? "/admin-dashboard/profile" : profile.role == 'Provider' ? "/provider-dashboard/profile" : "/"}`}>profile</Link>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          {data === 'Customer' ? "" : <DropdownMenuItem><Link href={'/dashboard'}> 📊 Dashboard</Link></DropdownMenuItem>}
+          {profile.role === 'Customer' ? "" : <DropdownMenuItem><Link href={'/dashboard'}> 📊 Dashboard</Link></DropdownMenuItem>}
           <DropdownMenuItem>
             <Settings />
             <span>Settings</span>

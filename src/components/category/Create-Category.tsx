@@ -1,6 +1,5 @@
 "use client"
 import { useForm } from "@tanstack/react-form"
-import { toast } from "sonner"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
+import { toast } from "react-toastify"
 export const formSchema = z.object({
     name: z.string().min(1, "name is required"),
 });
@@ -34,7 +34,7 @@ export function CreateCategoryForm() {
             onSubmit: formSchema,
         },
         onSubmit: async ({ value }) => {
-            toast.loading("category creating.........")
+           const toastid= toast.loading("category creating.........",{autoClose:2000,theme:"colored",position:"bottom-right"})
             try {
                 const response = await fetch('http://localhost:5000/api/admin/category', {
                     method: "POST",
@@ -44,13 +44,14 @@ export function CreateCategoryForm() {
                 })
                 const body = await response.json()
                 if (!response.ok) {
-                    toast.error(body.message)
+                    toast.dismiss(toastid)
+                    toast.error(body.message,{autoClose:2000,theme:"dark",position:"bottom-right"})
                     return
                 }
 
-                toast.success("category create successfully")
+                toast.success("category create successfully",{autoClose:2000,theme:"colored",position:"bottom-right"})
             } catch (error) {
-                toast.error("Something went wrong, please try again.");
+                toast.error("Something went wrong, please try again.",{autoClose:2000,theme:"colored",position:"bottom-right"});
             }
         },
     })
@@ -108,19 +109,8 @@ export function CreateCategoryForm() {
                     <Button
                         type="submit" form="bug-report-form"
                         variant="outline"
-                        onClick={() => {
-                            toast.promise<{ name: string }>(
-                                () =>
-                                    new Promise((resolve) =>
-                                        setTimeout(() => resolve({ name: "Event" }), 2000)
-                                    ),
-                                {
-                                    loading: "cateogry creating.....",
-                                }
-                            )
-                        }}
                     >
-                        Promise
+                        Add
                     </Button>
                     {/* <Button >
             Submit

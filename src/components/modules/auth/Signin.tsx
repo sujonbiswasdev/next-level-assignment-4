@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/authClient"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
+import { getSession } from "@/services/service"
 export const formSchema = z.object({
     email: z.email("Invalid email"),
     password: z.string().min(6, "Password must be 6+ chars"),
@@ -45,21 +46,29 @@ export function SigninForm() {
         },
         onSubmit: async ({ value }) => {
             const toastId = toast.loading("signning user");
-
             try {
                 if (!value) {
                     toast.dismiss(toastId)
-                    toast.error("please provide correct information",{theme: "dark",autoClose: 1000})
+                    toast.error("please provide correct information", { theme: "dark", autoClose: 1000 })
+                    return
                 }
-                const { data, error } = await authClient.signIn.email(value);
+                const {data,error} = await authClient.signIn.email(value)
                 if (error) {
-                    toast.error(error.message);
-                    return;
+                    toast.dismiss(toastId)
+                    toast.error(`user login failed ${error.message}`, { theme: "dark", autoClose: 1000 })
+                    return
+                }
+                const existinguser = await getSession()
+                if (existinguser.data.result.status === 'suspend') {
+                    toast.dismiss(toastId)
+                    toast.error("Your account has been suspended. Please contact support for assistance.")
+                    await authClient.signOut();
+                    return
                 }
                 localStorage.removeItem("foodhub-cart")
                 toast.dismiss(toastId)
-                toast.success('login successfully',{theme: "dark",autoClose: 1000})
-                router.push("/dashboard")
+                toast.success('login successfully', { theme: "dark", autoClose: 1000 })
+                router.push("/profile")
             } catch (error) {
                 toast.dismiss(toastId)
                 toast.error("Something went wrong, please try again.");

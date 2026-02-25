@@ -1,11 +1,11 @@
 import z from "zod"
-  const usersData = z.object({
-    name: z.string().optional(),
-    image: z.string().optional(),
-    email: z.string().optional(),
-    password: z.string().min(8).optional(),
-    phone: z.string().min(10).max(15).optional()
-  }).strict()
+const usersData = z.object({
+  name: z.string().optional(),
+  image: z.string().optional(),
+  email: z.string().optional(),
+  password: z.string().min(8).optional(),
+  phone: z.string().min(10).max(15).optional()
+}).strict()
 
 export type UsersData = z.infer<typeof usersData>
 
@@ -32,6 +32,7 @@ export interface ProviderUser {
   email: string
   emailVerified: boolean
   image: string
+  bgimage?: string
   phone: string | null
   role: UserRole
   status: UserStatus
@@ -40,3 +41,61 @@ export interface ProviderUser {
   updatedAt: string
   provider: ProviderProfile
 }
+
+
+
+export type User = {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  bgimage?: string
+  image: string
+  phone: string | null
+  role: string
+  status: string
+  isActive: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
+
+
+const allowedDomains = [
+  "res.cloudinary.com",
+  "images.pexels.com",
+];
+export const updateUserSchema = z.object({
+  name: z.string().optional(),
+  image: z
+    .string()
+    .url("Invalid image URL")
+    .refine((url) => {
+      try {
+        const parsed = new URL(url);
+        return allowedDomains.includes(parsed.hostname);
+      } catch {
+        return false;
+      }
+    }, {
+      message: "Only Cloudinary and Pexels images allowed",
+    }).optional(),
+  bgimage: z
+    .string()
+    .url("Invalid image URL")
+    .refine((url) => {
+      try {
+        const parsed = new URL(url);
+        return allowedDomains.includes(parsed.hostname);
+      } catch {
+        return false;
+      }
+    }, {
+      message: "Only Cloudinary and Pexels images allowed",
+    }).optional(),
+  email: z.string().email().optional(),
+  password: z.string().min(8).optional(),
+  phone: z.string().min(10).max(15).optional(),
+  isActive: z.boolean().optional(),
+});
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;

@@ -1,9 +1,8 @@
-import { MealsForm } from "@/components/meals/create-meals"
-
+import { CreateCategoryForm } from "@/components/category/Create-Category"
 const CreateCategory = () => {
   return (
     <div>
-<MealsForm/>
+<CreateCategoryForm/>
     </div>
   )
 }

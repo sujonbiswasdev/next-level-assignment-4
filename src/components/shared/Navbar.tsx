@@ -33,6 +33,7 @@ import { manageCartStore } from "@/store/CartStore";
 import { CartModal } from "../Cardmodel";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { User } from "@/types/user/user";
 
 interface MenuItem {
   title: string;
@@ -84,7 +85,6 @@ const Navbar = ({
   className,
 }: Navbar1Props) => {
   const { data: session } = authClient.useSession()
-  const cart = manageCartStore((state) => state.cart)
   return (
     <section className={cn("py-4", className)} >
       <div className="container">
@@ -116,7 +116,7 @@ const Navbar = ({
             <CartModal />
             {session?.user ? (<>
 
-              <ProfileCard profile={session.user} />
+              <ProfileCard profile={session.user as any} />
             </>) :
 
               (<div className="flex gap-2">

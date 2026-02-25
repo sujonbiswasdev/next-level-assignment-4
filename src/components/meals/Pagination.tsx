@@ -12,7 +12,7 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '../ui/button';
 const PaginationPage = ({pagination}:any) => {
-  const {total,page,limit,totalpage}=pagination
+  const {total=0,page=1,limit=10,totalpage=1}=pagination??{}
      const searchParams = useSearchParams()
      const router = useRouter();
      const navigatetoPage=(page:number)=>{

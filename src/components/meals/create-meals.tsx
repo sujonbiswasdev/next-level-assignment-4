@@ -1,6 +1,5 @@
 "use client"
 import { useForm } from "@tanstack/react-form"
-import { toast } from "sonner"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import {
@@ -25,6 +24,7 @@ import { createmeals } from "@/actions/blog.meals";
 import { useEffect, useState } from "react"
 import { getcategory } from "@/services/category"
 import { CategoryData } from "@/types/category"
+import { toast } from "react-toastify"
 const allowedDomains = [
   "res.cloudinary.com",
   "images.pexels.com",
@@ -73,6 +73,7 @@ export function MealsForm() {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
+      const toastid = toast.loading("meals creating.........")
       const mealsdData = {
         meals_name: value.meals_name,
         description: value.description,
@@ -86,13 +87,16 @@ export function MealsForm() {
       try {
         const res = await createmeals(mealsdData)
         if (res.error) {
+          toast.dismiss(toastid)
           toast.error(res.error)
           return;
         }
+        toast.dismiss(toastid)
         toast.success("meals created successfully")
         form.reset()
 
       } catch (error) {
+        toast.dismiss(toastid)
         toast.error("Something went wrong, please try again.");
       }
     },
@@ -105,6 +109,7 @@ export function MealsForm() {
     }
     fetchCategory()
   }, [])
+
 
   return (
     <Card className="w-full sm:max-w-md mx-auto">
@@ -169,7 +174,7 @@ export function MealsForm() {
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}
-                    
+
                   </Field>
                 )
               }}
@@ -264,16 +269,18 @@ export function MealsForm() {
                 return (
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>dietaryPreference</FieldLabel>
-                    <Input
-                      id={field.name}
+                    <select id={field.name}
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="please enter your phone dietaryPreference"
-                      autoComplete="off"
-                    />
+                      aria-invalid={isInvalid}>
+                      <option value="VEGAN">VEGAN</option>
+                      <option value="HALAL">HALAL</option>
+                      <option value="VEGETARIAN">  VEGETARIAN</option>
+                      <option value="GLUTEN_FREE"> GLUTEN_FREE</option>
+                      <option value="KETO">KETO</option>
+                    </select>
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}

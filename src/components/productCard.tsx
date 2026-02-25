@@ -1,16 +1,17 @@
 "use client"
 
-import { useCartStore } from "@/store/CartStore"
+import { manageCartStore } from "@/store/CartStore"
 
 
 
 export default function ProductCard({ meal }: any) {
-  const addToCart = useCartStore((state) => state.addToCart)
+  const addToCart = manageCartStore((state) => state.addToCart)
+    const defaultIamge='https://res.cloudinary.com/drmeagmkl/image/upload/v1771962102/default_meal_kgc6mv.png'
 
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden">
       <img
-        src={meal.image}
+        src={meal.image || defaultIamge}
         className="w-full h-56 object-cover"
       />
 
@@ -26,11 +27,15 @@ export default function ProductCard({ meal }: any) {
           <button
             onClick={() =>
               addToCart({
-                id: meal.id,
-                name: meal.name,
+                id: meal.id as string,
+                mealid: meal.id as string,
+                name: meal.meals_name as string,
                 price: meal.price,
-                image: meal.image,
+                image: meal.image || defaultIamge,
+                isAvailable: meal.isAvailable,
                 quantity: 1,
+
+
               })
             }
             className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800"

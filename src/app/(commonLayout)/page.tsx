@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
+import { getSession } from "@/services/service";
 
-export default function Home() {
+export default async function Home() {
+  const data=await getSession()
+  console.log(data,'dd')
   return (
     <div className="">
-      <Button>Click me</Button>
+      
     </div>
   );
 }
