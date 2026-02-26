@@ -4,8 +4,13 @@ import React from 'react'
 
 const ProviderProfile = async () => {
     const user=await getSession()
-    const provider=await getuserProvider()
-    
+      if (!user || user.error) {
+    return (
+      <div className="p-4 text-red-500">
+        Failed to load users
+      </div>
+    );
+  }    
   return (
     <div>
         <ProviderProfilePage userdata={user.data.result}/>

@@ -7,13 +7,20 @@ interface PageProps {
   }
 }
 const HistoryMeals = async () => {
-      const res = await getmealsown();
-      const meals = res?.data?.result?.data || [];
-      const pagination=res?.data?.result?.pagination
-  
+  const res = await getmealsown();
+  if (!res.data || res.error) {
+    return (
+      <div className="p-4 text-red-500">
+        Failed to load users
+      </div>
+    );
+  }
+  const meals = res?.data?.result?.data || [];
+  const pagination = res?.data?.result?.pagination
+
   return (
     <div>
-        <MealTable initialmeals={meals}/>
+      <MealTable initialmeals={meals} />
     </div>
   )
 }

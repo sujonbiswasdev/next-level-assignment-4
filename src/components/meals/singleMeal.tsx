@@ -6,11 +6,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Status, StatusIndicator, StatusLabel } from '../ui/status'
 const SignleMealByid = ({ meal }: any) => {
-  console.log(meal, 'mealsdata')
   const addToCart = manageCartStore((state) => state.addToCart)
   const router = useRouter()
    const defaultIamge='https://res.cloudinary.com/drmeagmkl/image/upload/v1771962102/default_meal_kgc6mv.png'
-
   return (
     <div>
 
@@ -201,8 +199,8 @@ const SignleMealByid = ({ meal }: any) => {
                     <Link href={`/providers/${meal.provider?.id}`} className='w-[15px] h-[15px] mb-4'>
                       <div className="relative w-8 h-8 rounded-full overflow-hidden border-primary shadow-md">
                         <Image
-                          src={meal.provider.image || defaultIamge}
-                          alt={meal.name}
+                          src={meal.provider.user.image || defaultIamge}
+                          alt={meal.provider.user.name}
                           fill
                           priority
                           className="object-cover"
@@ -240,12 +238,14 @@ const SignleMealByid = ({ meal }: any) => {
                         {meal.provider?.user.email}
                       </p>
                     </div>
-                    <div>
+                    <div className='flex items-center '>
+                               <h4>isActive : </h4>
                       <span
                         className={`px-2 py-0.5 rounded-full text-sm font-semibold ${meal.provider.user.isActive ? "bg-green-100 text-green-700" : " text-red-700"
                           }`}
                       >
-                        {meal.provider.user.isActive ? (<Status variant="success" className="bg-green-400 text-white">
+                    
+                        {meal.provider.user.isActive ? (<Status variant="success" className="bg-green-500 text-white">
                           <StatusIndicator />
                           <div className='flex items-center'>
                           <p className='text-gray-800'>Active</p>

@@ -1,10 +1,7 @@
 
 import { getMeals } from '@/actions/blog.meals'
+import { getCategory } from '@/actions/categories/category'
 import MealsCard from '@/components/meals/get-meals'
-import { getcategory } from '@/services/category'
-import { mealsService } from '@/services/meals'
-import next from 'next'
-import Image from 'next/image'
 interface PageProps {
   searchParams: {
     category_name?: string
@@ -14,14 +11,27 @@ interface PageProps {
 
 const GetMeals = async ({ searchParams }: PageProps) => {
   const serch = await searchParams
-  // 🔹 Server fetch
   const res = await getMeals(serch);
+    if (!res?.data || res.error) {
+    return (
+      <div className="p-4 text-red-500">
+        Failed to load users
+      </div>
+    );
+  }
   const meals = res?.data?.result?.data || [];
   const pagination = res?.data?.result?.pagination
 
   // category
-  const categorydata = await getcategory()
+  const categorydata = await getCategory()
   const initialcategory = categorydata?.data.result.result
+    if (!categorydata?.data || categorydata.error) {
+    return (
+      <div className="p-4 text-red-500">
+        Failed to load users
+      </div>
+    );
+  }
 
   return (
     <div className="">

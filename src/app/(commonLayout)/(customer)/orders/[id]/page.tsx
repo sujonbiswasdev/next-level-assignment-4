@@ -17,7 +17,7 @@ const OrderDetailsPage = async({
 
       const { id } = await params;
       const res = await OrderService.getorderbyid(id);
-      if (!res?.data) return NotFound();
+      if (!res?.data || res.error) return NotFound();
     
       const order = res.data;
 

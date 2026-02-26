@@ -35,7 +35,6 @@ export const updateMealSchema = z.object({
 
 const UpdateMeal = ({ mealId }: { mealId: string }) => {
   const [mealData, setMealData] = React.useState<UpdateMealsDate>({});
-  const [errors, setErrors] = React.useState<Record<string, string>>({});
   const parsedata = updateMealSchema.safeParse(mealData);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -86,7 +86,7 @@ const Navbar = ({
 }: Navbar1Props) => {
   const { data: session } = authClient.useSession()
   return (
-    <section className={cn("py-4 sticky top-0 bg-white rounded-xs", className)} >
+    <section className={cn("py-4", className)} >
       <div className="container">
         {/* Desktop Menu */}
         <nav className="flex justify-between">
@@ -95,7 +95,7 @@ const Navbar = ({
             <a href={logo.url} className="flex items-center gap-2">
               <img
                 src={logo.src}
-                className="max-w-[50px] max-w-10 dark:invert"
+                className="max-w-[50px] dark:invert"
                 alt={logo.alt}
               />
               <span className="text-lg font-semibold tracking-tighter">

@@ -30,7 +30,17 @@ const allowedDomains = [
 export const formSchema = z.object({
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email"),
-    password: z.string().min(6, "Password must be 6+ chars"),
+    password: z.string().min(8, "Password must be 8+ chars"),
+    bgimage: z.url().refine((url) => {
+        try {
+            const parsed = new URL(url as any);
+            return allowedDomains.includes(parsed.hostname);
+        } catch {
+            return false;
+        }
+    }, {
+        message: "Only Cloudinary and Pexels images allowed",
+    }).optional(),
     image: z.url().refine((url) => {
         try {
             const parsed = new URL(url as any);
@@ -79,6 +89,7 @@ export function SignupForm() {
             name: "",
             email: "",
             password: "",
+            bgimage:"",
             image: "",
             phone: "",
             role: "",
@@ -129,10 +140,7 @@ export function SignupForm() {
     return (
         <Card className="w-full sm:max-w-md mx-auto">
             <CardHeader>
-                <CardTitle>Bug Report</CardTitle>
-                <CardDescription>
-                    Help us improve by reporting bugs you encounter.
-                </CardDescription>
+                <CardTitle>create a new user</CardTitle>
             </CardHeader>
             <CardContent>
                 <form
@@ -271,6 +279,31 @@ export function SignupForm() {
                             }}
                         />
 
+   <form.Field
+                            name="bgimage"
+                            children={(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched && !field.state.meta.isValid
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>bgimage</FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            aria-invalid={isInvalid}
+                                            placeholder="please enter your bgimage"
+                                            autoComplete="off"
+                                        />
+                                        {isInvalid && (
+                                            <FieldError errors={field.state.meta.errors} />
+                                        )}
+                                    </Field>
+                                )
+                            }}
+                        />
 
 
                         <form.Field

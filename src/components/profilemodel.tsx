@@ -1,5 +1,5 @@
 'use client'
-import { Camera, Pencil, Save, X } from "lucide-react";
+import { Camera, Pencil, Save, Trash2, X } from "lucide-react";
 import InfoRow from "./infoRow";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,9 @@ import { Status, StatusIndicator, StatusLabel } from "./ui/status";
 import { use, useState } from "react";
 import { Input } from "./ui/input";
 import { UpdateUserInput, updateUserSchema, User } from "@/types/user/user";
+import ShareProfileButton from "./profileshare";
+import { deleteUser } from "@/actions/user/admin";
+import { deleteuserown } from "@/actions/user/user";
 
 function ProfileModal({ user }: { user: User }) {
     const router = useRouter()
@@ -62,6 +65,19 @@ function ProfileModal({ user }: { user: User }) {
         } catch (error: any) {
             toast.error(`someting went wrong please try again`)
         }
+    }
+    const handleDelete=async()=>{
+        const toastid=toast.loading("user deleting....")
+       const res= await deleteuserown()
+       if(res.error){
+        toast.dismiss(toastid)
+        toast.error("user account delete fail")
+        return
+       }
+       toast.dismiss(toastid)
+       toast.success("user account delete successfully")
+       router.refresh()
+       window.location.reload()
     }
     return (
         <div className="w-full max-w-2xl rounded-2xl bg-white shadow-2xl mx-auto">
@@ -235,17 +251,20 @@ function ProfileModal({ user }: { user: User }) {
                     </div>)}
                 </div>
                 <InfoRow label="createdAt" value={user.createdAt.toLocaleString().slice(0, 10)} />
+                <div className="flex items-center justify-between px-6 py-4">
+                    <h2 className="text-sm font-semibold text-gray-600">Profile</h2>
 
+                    <ShareProfileButton userId={user.id} userName={user.name} />
+                </div>
+                 <div className="flex items-center justify-between px-6 py-4">
+                    <h2 className="text-sm font-semibold text-gray-600">account</h2>
 
+                    <button onClick={handleDelete} className="px-4 flex items-center gap-1 py-2 bg-red-600 text-white rounded-md shadow-sm">
+                        
+                        <Trash2/> remove 
+                    </button>
+                </div>
 
-            </div>
-
-
-            {/* Footer */}
-            <div className="flex justify-end p-6">
-                <button className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition hover:bg-blue-700 active:scale-95">
-                    Save Changes
-                </button>
             </div>
         </div>
     );

@@ -29,9 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[1440px] mx-auto overflow-x-hidden`}
       >
-             {children}
-          <Toaster/>
-          <ToastContainer autoClose={1000} theme="dark" />
+            {children}
+        <Toaster />
+        <ToastContainer autoClose={1000} theme="dark" />
       </body>
     </html>
   );

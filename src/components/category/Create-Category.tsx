@@ -20,38 +20,54 @@ import {
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
+import { createCategory } from "@/actions/categories/category"
+const allowedDomains = [
+    "res.cloudinary.com",
+    "images.pexels.com",
+];
 export const formSchema = z.object({
     name: z.string().min(1, "name is required"),
+    image: z
+        .string()
+        .min(1, "Image is required")
+        .url("Invalid image URL")
+        .refine((url) => {
+            try {
+                const parsed = new URL(url);
+                return allowedDomains.includes(parsed.hostname);
+            } catch {
+                return false;
+            }
+        }, {
+            message: "Only Cloudinary and Pexels images allowed",
+        }),
 });
- 
+
 export function CreateCategoryForm() {
     const router = useRouter()
     const form = useForm({
         defaultValues: {
             name: "",
+            image:"",
         },
         validators: {
             onSubmit: formSchema,
         },
         onSubmit: async ({ value }) => {
-           const toastid= toast.loading("category creating.........",{autoClose:2000,theme:"colored",position:"bottom-right"})
+            const toastid = toast.loading("category creating.........", { autoClose: 1000, theme: "colored", position: "bottom-right" })
             try {
-                const response = await fetch('http://localhost:5000/api/admin/category', {
-                    method: "POST",
-                    credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(value)
-                })
-                const body = await response.json()
-                if (!response.ok) {
+               const response=await createCategory(value)
+                if (!response?.success) {
                     toast.dismiss(toastid)
-                    toast.error(body.message,{autoClose:2000,theme:"dark",position:"bottom-right"})
+                    toast.error(response?.message || 'category create failed', { autoClose: 1000, theme: "dark", position: "bottom-right" })
                     return
                 }
-
-                toast.success("category create successfully",{autoClose:2000,theme:"colored",position:"bottom-right"})
+                toast.dismiss(toastid)
+                toast.success(response.message||"category create successfully", { autoClose: 2000, theme: "colored", position: "bottom-right" })
+                form.reset()
             } catch (error) {
-                toast.error("Something went wrong, please try again.",{autoClose:2000,theme:"colored",position:"bottom-right"});
+                toast.dismiss(toastid)
+                toast.error("Something went wrong, please try again.", { autoClose: 2000, theme: "colored", position: "bottom-right" });
             }
         },
     })
@@ -59,10 +75,7 @@ export function CreateCategoryForm() {
     return (
         <Card className="w-full sm:max-w-md mx-auto">
             <CardHeader>
-                <CardTitle>Create category</CardTitle>
-                <CardDescription>
-                    Fresh and savory seafood dishes
-                </CardDescription>
+                <CardTitle>Create categories</CardTitle>
             </CardHeader>
             <CardContent>
                 <form
@@ -89,6 +102,31 @@ export function CreateCategoryForm() {
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             aria-invalid={isInvalid}
                                             placeholder="please enter your category name"
+                                        />
+                                        {isInvalid && (
+                                            <FieldError errors={field.state.meta.errors} />
+                                        )}
+                                    </Field>
+                                )
+                            }}
+                        />
+
+                         <form.Field
+                            name="image"
+                            children={(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched && !field.state.meta.isValid
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}> image</FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            aria-invalid={isInvalid}
+                                            placeholder="please enter your image url"
                                         />
                                         {isInvalid && (
                                             <FieldError errors={field.state.meta.errors} />

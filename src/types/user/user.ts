@@ -10,6 +10,13 @@ const usersData = z.object({
 export type UsersData = z.infer<typeof usersData>
 
 
+export const Updateuserschema = z.object({
+   role: z.string().optional(),
+   status:z.string().optional(),
+   email:z.string()
+}).strict()
+
+export type Updateuserdata = z.infer<typeof Updateuserschema>
 
 
 export type UserRole = "Provider" | "Admin" | "Customer"

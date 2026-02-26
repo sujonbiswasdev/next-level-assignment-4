@@ -147,7 +147,6 @@ const ProviderPage = ({ data }: { data: any }) => {
 };
 
 const MealCard = ({ meal, onAddToCart, cartItems }: any) => {
-  console.log(meal, 'mealdata')
   return (
     <div className="group bg-white border border-gray-200 hover:border-orange-300 rounded-3xl p-6 hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-2">
       {/* Meal Image */}
