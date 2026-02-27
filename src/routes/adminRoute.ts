@@ -28,4 +28,16 @@ export const adminRoutes: Route[] = [
             },
         ],
     },
+
+    {
+        title: "meals Management",
+        icon: "string",
+        isActive: true,
+        items: [
+            {
+                title: "meals",
+                url: "/admin/meals",
+            },
+        ],
+    },
 ];

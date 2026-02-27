@@ -32,3 +32,9 @@ export const deleteCategory = async (id:string) => {
     return res;
  
 }
+
+export const singlecategory = async (id:string) => {
+    const res = await CategoriesService.singlecategory(id);
+    return res;
+ 
+}

@@ -22,13 +22,13 @@ export default function CategoryTable({categorydata}:{categorydata:any}) {
         <div className="min-h-screen bg-gradient-to-br from-blue-100 bg-pink-300 to-gray-100 flex justify-center p-6 shadow-sm rounded-md">
 
             {/* Container */}
-            <div className="w-full max-w-[700px] bg-white/25 rounded-2xl shadow-2xl p-6 overflow-x-auto">
+            <div className="w-full max-w-[900px] bg-white/25 rounded-2xl shadow-2xl p-6 overflow-x-auto">
                 {/* Title */}
-               <div className="flex justify-between cursor-pointer ">
+               <div className="flex justify-between ">
                  <h2 className="text-2xl font-semibold text-gray-800 mb-6">
                     Category List
                 </h2>
-                  <SquarePlus onClick={()=>router.push("/admin-dashboard/create-category")} className="shadow-sm bg-gray-300 p-0.5 rounded-sm  text-black" />
+                  <SquarePlus onClick={()=>router.push("/admin-dashboard/create-category")} className="shadow-sm bg-gray-300 p-0.5 rounded-sm  text-black cursor-pointer" />
                </div>
 
                 {/* Table */}
@@ -69,7 +69,7 @@ export default function CategoryTable({categorydata}:{categorydata:any}) {
                             </td>
                             {/* id */}
                             <td className="px-6 py-4 font-medium text-gray-600">
-                                <Link className="text-blue-600 hover:underline" href={`/admin/categories/${item.id}`}>{item.id.slice(0,7)}.....</Link>
+                                <Link className="text-blue-600 hover:underline" href={`/category/${item.id}`}>{item.id.slice(0,7)}.....</Link>
                             </td>
                             {/* adminId */}
                             <td className="px-6 py-4 font-medium text-gray-600">
@@ -85,7 +85,7 @@ export default function CategoryTable({categorydata}:{categorydata:any}) {
                             <td className="px-6 py-4">
                                 <div className="flex gap-3">
 
-                                <button onClick={()=>router.push(`/admin/categories/update/${item.id}`)} className="">
+                                <button onClick={()=>router.push(`/category/${item.id}`)} className="">
                                     <Eye className="text-blue-600 cursor-pointer hover:text-blue-700"/>
                                     </button>
 

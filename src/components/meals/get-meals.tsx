@@ -1,25 +1,21 @@
 'use client'
-import { getMeals } from "@/actions/blog.meals"
-import { MealFormData } from "@/types/mealsType"
-import Image from "next/image"
-import { CardHoverLift } from "../hover-lift"
-import { Suspense, useEffect, useState, useTransition } from "react"
-import MealLoading from "@/app/(commonLayout)/meals/loading"
+import { Suspense, useState, useTransition } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import PaginationPage from "./Pagination"
-import Link from "next/link"
-import { Button } from "../ui/button"
 import { manageCartStore } from "@/store/CartStore"
 
 import { toast } from "sonner"
-import Skeletonmeals from "../ui/skeletonmeals"
+import { MealData } from "@/types/meals/mealstype"
+import { Category } from "@/types/category"
+import { pagination } from "@/types/meals/pagination"
+import MealCard from "./MealCard"
 
 const dietaryOptions = [
   "HALAL",
 ];
 const MIN_PRICE_LIMIT = 0;
 const MAX_PRICE_LIMIT = 1000;
-export default function MealsCard({ initialMeals, initialcategory, pagination }: any) {
+export default function MealsCard({ initialMeals, initialcategory, pagination }: { initialMeals: MealData[], initialcategory: Category[], pagination: pagination }) {
   const addToCart = manageCartStore((state) => state.addToCart)
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -32,8 +28,6 @@ export default function MealsCard({ initialMeals, initialcategory, pagination }:
   const [price, setPrice] = useState(
     priceParam ? Number(priceParam) : null
   );
-  const defaultIamge='https://res.cloudinary.com/drmeagmkl/image/upload/v1771962102/default_meal_kgc6mv.png'
-
   const handlePriceChange = (value: string) => {
     let parsed = Number(value);
 
@@ -56,6 +50,7 @@ export default function MealsCard({ initialMeals, initialcategory, pagination }:
   };
 
   const updateFilter = (key: string, value: string | null) => {
+
     const params = new URLSearchParams(searchParams.toString());
 
     if (value === null || value === '' || value === '0') {
@@ -69,13 +64,12 @@ export default function MealsCard({ initialMeals, initialcategory, pagination }:
 
   };
 
-  const filterData = initialMeals.filter((item: any) => (item.meals_name.includes(search.toLowerCase()) || item.description.includes(search.toLowerCase()) || item.category_name.includes(search.toLowerCase()) || item.cuisine.includes(search.toLowerCase())))
-
+  const filterData = initialMeals.filter((meal: any) => (meal.meals_name.includes(search.toLowerCase()) || meal.description.includes(search.toLowerCase()) || meal.category_name.includes(search.toLowerCase()) || meal.cuisine.includes(search.toLowerCase())))
   return (
     <div>
 
       <div className="bg-gradient-to-r from-emerald-50 to-green-50 p-6 md:p-8 rounded-3xl shadow-2xl mb-8 border border-emerald-200">
-        <div className="flex flex-col lg:flex-row gap-4 items-end">
+        <div className="flex flex-col lg:flex-row gap-4 meals-end">
 
           {/* input search fileter */}
           <input
@@ -93,16 +87,16 @@ export default function MealsCard({ initialMeals, initialcategory, pagination }:
             className="p-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-300 bg-white shadow-lg hover:shadow-xl transition-all min-w-[200px]"
           >
             <option value="">All Categories</option>
-            {initialcategory?.map((item: any, index: number) => (<option key={index} value={item.name}>{item.name}</option>))}
+            {initialcategory?.map((meal: any, index: number) => (<option key={index} value={meal.name}>{meal.name}</option>))}
           </select>
 
 
           {/* is available check */}
-          <div className="flex items-center gap-3 p-4 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all border">
+          <div className="flex meals-center gap-3 p-4 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all border">
             <span className="font-semibold text-gray-700 whitespace-nowrap">
               {/* {urlAvailable=='true'?"available":urlAvailable=='false'?'not available':"All"} */}
             </span>
-            <label className="relative inline-flex items-center cursor-pointer">
+            <label className="relative inline-flex meals-center cursor-pointer">
               <input
                 type="checkbox"
 
@@ -124,7 +118,7 @@ export default function MealsCard({ initialMeals, initialcategory, pagination }:
           )}
         </div>
 
-        <div className="flex justify-between items-center flex-wrap gap-4 mt-4">
+        <div className="flex justify-between meals-center flex-wrap gap-4 mt-4">
           {/* Dietary Preference */}
           <div className="flex-1">
             <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -159,97 +153,21 @@ export default function MealsCard({ initialMeals, initialcategory, pagination }:
 
 
         {/* Results show  */}
-        <div className="flex justify-between items-center mt-4 pt-4 border-t border-emerald-200">
+        <div className="flex justify-between meals-center mt-4 pt-4 border-t border-emerald-200">
           <p className="text-lg font-semibold text-gray-800">
             Showing {filterData.length} meals
             {urlCategory && ` • ${urlCategory}`}
             {urlAvailable !== null && ` • ${urlAvailable == 'true' ? 'Available' : urlAvailable == 'false' ? "not Available" : "All"}`}
           </p>
 
-          <div>
+        
             <PaginationPage pagination={pagination} />
-          </div>
+         
         </div>
       </div>
 
-      {/* Meals Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-8">
-        {filterData.length === 0 ? (
-          <div className="col-span-full text-center py-20">
-            <div className="text-4xl mb-4">😔</div>
-            <p className="text-xl font-semibold text-gray-600 mb-2">No meals found</p>
-            <p className="text-gray-500">Try different filters</p>
-          </div>
-        ) : (
+      <MealCard filterData={filterData}/>
 
-          filterData.map((item: MealFormData, index: number) => (
-            <div key={index}>
-              <Suspense fallback={<Skeletonmeals/>}>
-                <CardHoverLift>
-                  <div className="relative w-full h-60 overflow-hidden rounded-lg">
-                    <img
-                      src={item.image || defaultIamge}
-                      alt={item.meals_name}
-                      loading="lazy"
-                      className="object-cover transition-transform duration-700 hover:scale-110"
-                    />
-                    <span className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-gray-800 text-xs font-bold px-4 py-2 rounded-full shadow-lg">
-                      {item.category_name}
-                       
-                    </span>
-                    <span className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full shadow-lg ${item.isAvailable ? "bg-emerald-500/90 text-white" : "bg-red-500/90 text-white"
-                      }`}>
-                      {item.isAvailable ? "Available" : "Sold Out"}
-                    </span>
-                  </div>
-
-                  <div className="p-6 space-y-3">
-                    <h2 className="text-xl font-bold text-gray-900">{item.meals_name}</h2>
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
-                      {item.description}
-                    </p>
-                    <div className="flex justify-between items-center pt-3 border-t">
-                      <p className="text-xs text-gray-500">
-                        {item.cuisine} • {item.dietaryPreference}
-                      </p>
-                      <span className="text-2xl font-bold text-amber-600">
-                        ${item.price.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center ">
-                    <Link href={`/meals/${item.id}`} className="px-4 bg-gradient-to-r from-gray-900 to-black text-white py-1.5 rounded-md font-semibold hover:from-gray-800 hover:shadow-2xl transition-all cursor-pointer mb-2 ml-3">
-                      View Details →
-                    </Link>
-                    <Button
-                      onClick={() =>
-                        addToCart({
-                          id: item.id as string,
-                          mealid:item.id as string,
-                          name: item.meals_name as string,
-                          price: item.price,
-                          image: item.image || defaultIamge,
-                          isAvailable:item.isAvailable,
-                          quantity: 1,
-                         
-                          
-                        })
-                      }
-                      disabled={!item.isAvailable}
-                      className={`mb-2 mr-2 ${item.isAvailable ? "cursor-pointer" : "cursor-not-allowed"}`}
-                    >
-                      Add to cart
-                    </Button>
-
-                  </div>
-
-                </CardHoverLift>
-              </Suspense>
-            </div>
-          ))
-        )}
-      </div>
     </div>
   );
 }

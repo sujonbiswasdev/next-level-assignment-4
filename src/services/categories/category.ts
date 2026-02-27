@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import { safeData } from "@/lib/safeResponsive";
 import { Category } from "@/types/category";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
@@ -23,10 +24,7 @@ export const CategoriesService = {
 
             })
             const body = await res.json()
-            return {
-                data: body,
-                error: null
-            }
+            return safeData(body,[])
         } catch (error) {
             console.log(error) 
         }
@@ -104,6 +102,28 @@ export const CategoriesService = {
            return { success: false, error: data.result?.message || "category data delete fail" }
         }
         return { success: true, message: "category data delete successfully", data };
+      } catch (error: any) {
+        console.error(error);
+        return { success: false, error: error.message || "something went wrong please try again" };
+      }
+        },
+singlecategory:async(id:string)=>{  
+      try {
+        const cookieStore = await cookies()
+        const res = await fetch(`${api_url}/admin/category/${id}`, {
+          credentials:"include",
+          headers: {
+            Cookie: cookieStore.toString(),
+          },
+            next: {
+                    tags: ['categorydata']
+                }
+        })
+        const data = await res.json();
+        if (!res.ok) {
+           return { success: false, error: data.result?.message || "category data retrieve fail" }
+        }
+        return safeData(data,{});
       } catch (error: any) {
         console.error(error);
         return { success: false, error: error.message || "something went wrong please try again" };

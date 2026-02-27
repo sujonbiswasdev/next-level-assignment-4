@@ -18,12 +18,10 @@ const SignleMealByid = ({ meal }: any) => {
           {/* HERO SECTION */}
           <div className="relative w-full h-[300px] sm:h-[450px] lg:h-[550px] rounded-3xl overflow-hidden shadow-xl">
 
-            <Image
+            <img
               src={meal.image || defaultIamge}
               alt={meal.meals_name}
               className="w-full h-full object-cover rounded-2xl"
-              fill
-              priority
             />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

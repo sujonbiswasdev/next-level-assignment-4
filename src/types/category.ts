@@ -2,6 +2,8 @@ export type Category = {
   id:string,
   name: string
   image: string
+  adminId:string
+  createdAt:string
   meals: any[]
   user: {
     id: string

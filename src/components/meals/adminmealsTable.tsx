@@ -19,7 +19,7 @@ const columns = [
   { key: "actions", label: "Actions" },
 ];
 
-const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
+const AdminMealsTable = ({ initialmeals }: { initialmeals: any[] }) => {
   const router = useRouter();
   const [meals, setMeals] = useState(initialmeals);
   const [search, setSearch] = useState("");
@@ -178,7 +178,7 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
                           <Eye className="w-4 h-4 text-indigo-500 hover:text-indigo-700 transition" />
                         </Link>
 
-                        <Link href={`/provider-dashboard/update-meal/${meal.id}`}>
+                        <Link href={`/admin-dashboard/meals/${meal.id}`}>
                           <Pen className="w-4 h-4 text-green-500 hover:text-green-700 transition" />
                         </Link>
 
@@ -205,4 +205,4 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
   );
 };
 
-export default MealTable;
+export default AdminMealsTable;

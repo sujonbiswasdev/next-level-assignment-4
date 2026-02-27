@@ -1,9 +1,10 @@
 import { env } from "@/env"
 import { cookies } from "next/headers"
-import { MealFormData, UpdateMealsDate } from "@/types/mealsType"
+import { safeData } from "@/lib/safeResponsive";
+import { MealData, UpdateMealsData } from "@/types/meals/mealstype";
 const api_url = env.API_URL
 
-interface ServiceOptions {
+interface ServiceOptionds {
   cache?: RequestCache;
   revalidate?: number;
 }
@@ -12,7 +13,7 @@ export interface GetMealsParams {
 }
 
 export const mealsService={
-     createMeals:async (mealsdata:MealFormData) => {
+     createMeals:async (mealsdata:MealData) => {
       console.log(JSON.stringify(mealsdata),'dlkjdksjfjsdatatata')
       const cookieStore = await cookies()
      try {
@@ -35,7 +36,7 @@ export const mealsService={
          return { data: null, error: { message: "Something Went Wrong" } };
     }
 },
-getmeals:async(params?:any,options?:ServiceOptions)=>{
+getmeals:async(params?:any,options?:ServiceOptionds)=>{
  try {
   const url = new URL(`${api_url}/meals`);
 
@@ -63,10 +64,48 @@ getmeals:async(params?:any,options?:ServiceOptions)=>{
          
       const data = await res.json();
 
-       return { data: data, error: null };
+       return safeData(data,[])
  } catch (error) {
   
  }
+
+},
+
+getmealsforadmin:async(params?:any)=>{
+
+   try {
+              const cookieStore = await cookies()
+              const url = new URL(`${api_url}/admin/meals`);
+              if (params) {
+                  Object.entries(params).forEach(([key, value]) => {
+                      if (value !== undefined && value !== null && value !== "") {
+                          url.searchParams.append(key, String(value));
+                      }
+                  });
+              }
+              const res = await fetch(url.toString(), {
+                  credentials: "include",
+                  headers: {
+                      Cookie: cookieStore.toString(),
+                  },
+                  next:{
+                      tags:['mealsPost']
+                  }
+              });
+              const data = await res.json();
+              if (!res.ok) {
+                  return {
+                      data: null,
+                      message: "user retrieve failed",
+                      error: data.error
+                  }
+              }
+  
+              return safeData(data,[])
+          } catch (error: any) {
+              return { data: null, error: error.message, message: "someting went wrong please try again" };
+  
+          }
 
 },
 
@@ -86,15 +125,31 @@ getmealsown:async()=>{
  }
 
 },
+MealStatusUpdate:async(id:string,mealsdata:string)=>{
+ try {
+  const cookieStore = await cookies()
+      const res = await fetch(`${api_url}/admin/meals/${id}`,
+        {credentials:"include",
+          next:{tags:["mealsPost"]},
+          headers:{
+            Cookie: cookieStore.toString(),
+          },
+           body: JSON.stringify(mealsdata),
+        });
+      const data = await res.json();
+       return safeData(data,{});
+ } catch (error) {
+    return { data: null, error: { message: "Something Went Wrong" } };
+ }
+
+},
+
 
 getmealsbyid:async(id:string)=>{
   try {
       const res=await fetch(`${api_url}/meals/${id}`)
       const body= await res.json()
-      return {
-        data:body,
-        error:null
-      }
+      return safeData(body,{})
   } catch (error:any) {
      return {
         data:null,
@@ -118,7 +173,7 @@ handleDelete:async (id: string) => {
     alert(error.message);
   }
 },
-updateMeals:async(id:string,mealsdata:UpdateMealsDate)=>{  
+updateMeals:async(id:string,mealsdata:UpdateMealsData)=>{  
   try {
     const cookieStore = await cookies()
     const res = await fetch(`${api_url}/provider/meals/${id}`, {

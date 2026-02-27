@@ -22,16 +22,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { getuserProvider } from "@/services/service";
 import { createmeals } from "@/actions/blog.meals";
 import { useEffect, useState } from "react"
-import { getcategory } from "@/services/category"
-import { CategoryData } from "@/types/category"
 import { toast } from "react-toastify"
+import { Category } from "@/types/category"
+import { getCategory } from "@/actions/categories/category"
+import { cuisines, dietaryPreferences } from "@/types/meals/mealstype"
 const allowedDomains = [
   "res.cloudinary.com",
   "images.pexels.com",
 ];
 export const formSchema = z.object({
   meals_name: z.string().min(1, "meals name is required"),
-  description: z.string(),
+  description: z.string().min(5, 'description atleast 5 character'),
   image: z
     .string()
     .min(1, "Image is required")
@@ -48,14 +49,14 @@ export const formSchema = z.object({
     }),
   price: z.int().min(1, "price is required").max(1000, 'max price only 1000'),
   isAvailable: z.boolean(),
-  dietaryPreference: z.enum(['HALAL', 'VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'KETO']),
+  dietaryPreference: z.enum(dietaryPreferences),
   providerId: z.string(),
   category_name: z.string().min(1, 'category name is required'),
-  cuisine: z.string()
+  cuisine: z.enum(cuisines)
 })
 
 export function MealsForm() {
-  const [category, setcategory] = useState<CategoryData[] | undefined>()
+  const [category, setcategory] = useState<Category[] | undefined>()
   const router = useRouter()
   const form = useForm({
     defaultValues: {
@@ -67,7 +68,7 @@ export function MealsForm() {
       dietaryPreference: "HALAL",
       providerId: "",
       category_name: "",
-      cuisine: "",
+      cuisine: "BANGLEDESHI",
     },
     validators: {
       onSubmit: formSchema,
@@ -104,8 +105,9 @@ export function MealsForm() {
 
   useEffect(() => {
     const fetchCategory = async () => {
-      const categorydata = await getcategory()
-      setcategory(categorydata?.data.result.result)
+      const categorydata = await getCategory()
+      console.log(categorydata, 'categyrodf')
+      setcategory(categorydata)
     }
     fetchCategory()
   }, [])
@@ -211,15 +213,18 @@ export function MealsForm() {
                 return (
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>cuisine</FieldLabel>
-                    <Input
+                    <select
+                      className="border-amber-50 shadow-sm px-2 py-2.5"
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
-                      placeholder="please enter your cuisine"
-                    />
+                    >
+                      <option value="">Select a cuisines</option>
+                      {cuisines?.map((item: any, index: number) => <option value={item} key={index}>{item}</option>)}
+                    </select>
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}
@@ -239,7 +244,7 @@ export function MealsForm() {
                     <FieldLabel htmlFor={field.name}>Category Name</FieldLabel>
 
                     <select
-                    className="border-amber-50 shadow-sm px-2 py-2.5"
+                      className="border-amber-50 shadow-sm px-2 py-2.5"
                       id={field.name}
                       name={field.name}
                       value={field.state.value}
@@ -268,18 +273,16 @@ export function MealsForm() {
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>dietaryPreference</FieldLabel>
                     <select
-                    className="border-amber-50 shadow-sm px-2 py-2.5"
-                     id={field.name}
+                      className="border-amber-50 overflow-scroll shadow-sm px-2 py-2.5"
+                      id={field.name}
                       name={field.name}
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}>
-                      <option value="VEGAN">VEGAN</option>
-                      <option value="HALAL">HALAL</option>
-                      <option value="VEGETARIAN">  VEGETARIAN</option>
-                      <option value="GLUTEN_FREE"> GLUTEN_FREE</option>
-                      <option value="KETO">KETO</option>
+                      aria-invalid={isInvalid}
+                    >
+                      <option value="">Select a dietaryPreference</option>
+                      {dietaryPreferences?.map((item: any, index: number) => <option value={item} key={index}>{item}</option>)}
                     </select>
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />

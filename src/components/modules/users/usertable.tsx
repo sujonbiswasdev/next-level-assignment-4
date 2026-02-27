@@ -11,18 +11,15 @@ import UserRoleChage from "./userprofilechange"
 import { AdminService } from "@/services/users/admin"
 import { toast } from "react-toastify"
 import { deleteUser } from "@/actions/user/admin"
+import { pagination } from "@/types/meals/pagination"
 
 interface Props {
   users: User[],
-  pagination: {
-    totalusers: number,
-    page: number,
-    limit: number,
-    totalpage: number
-  }
+  pagination: pagination
 }
 
 export default function UsersTable({ users, pagination }: Props) {
+  const {page,total,totalpage,limit}=pagination
   const [search, setSearch] = useState("")
   const [isActive, setisActive] = useState<boolean>()
   const searchParams = useSearchParams()
@@ -144,9 +141,9 @@ export default function UsersTable({ users, pagination }: Props) {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
           <div>
             <div className="flex gap-3">
-              <p className="text-gray-700 font-semibold">page:{pagination.page} of {pagination.totalpage},</p>
-              <p className="text-gray-700 font-semibold">limit:{pagination.limit},</p>
-              <p className="text-gray-700 font-semibold">totaluser:{pagination.totalusers}</p>
+              <p className="text-gray-700 font-semibold">page:{page} of {totalpage},</p>
+              <p className="text-gray-700 font-semibold">limit:{limit},</p>
+              <p className="text-gray-700 font-semibold">totaluser:{totalpage}</p>
             </div>
           </div>
 

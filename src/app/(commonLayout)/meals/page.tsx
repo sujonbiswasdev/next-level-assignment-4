@@ -11,33 +11,30 @@ interface PageProps {
 
 const GetMeals = async ({ searchParams }: PageProps) => {
   const serch = await searchParams
-  const res = await getMeals(serch);
-    if (!res?.data || res.error) {
+  const {data,pagination} = await getMeals(serch);
+  console.log(data,'padkjsfd')
+    if (!data) {
     return (
       <div className="p-4 text-red-500">
         Failed to load users
       </div>
     );
   }
-  const meals = res?.data?.result?.data || [];
-  const pagination = res?.data?.result?.pagination
-
   // category
   const categorydata = await getCategory()
-  const initialcategory = categorydata?.data.result.result
-    if (!categorydata?.data || categorydata.error) {
+    if (!categorydata) {
     return (
       <div className="p-4 text-red-500">
-        Failed to load users
+        Failed to load category
       </div>
     );
   }
+  
 
   return (
     <div className="">
       
-      <MealsCard initialMeals={meals} initialcategory={initialcategory} pagination={pagination} />
-
+      <MealsCard initialMeals={data} initialcategory={categorydata} pagination={pagination} />
     </div>
   )
 }

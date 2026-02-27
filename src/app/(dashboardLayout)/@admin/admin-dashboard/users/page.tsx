@@ -10,21 +10,19 @@ interface PageProps {
 }
 const Userpage =async ({ searchParams }: PageProps) => {
   const search=await searchParams
-  const users=await getAllusers(search)
+  const {data,pagination}=await getAllusers(search)
 
-  if (!users || users.error) {
+  if (!data) {
     return (
       <div className="p-4 text-red-500">
         Failed to load users
       </div>
     );
   }
-  const userdata=users.data.result.data || {}
-  const pagination=users.data.result.pagination || {}
   
   return (
     <div>
-        <UsersTable users={userdata} pagination={pagination}/>
+        <UsersTable users={data} pagination={pagination}/>
       
     </div>
   )

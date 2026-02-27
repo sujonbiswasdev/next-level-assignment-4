@@ -1,4 +1,5 @@
 import { env } from "@/env"
+import { safeData } from "@/lib/safeResponsive"
 import { Updateuserdata, UsersData } from "@/types/user/user"
 import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
@@ -82,7 +83,7 @@ export const AdminService = {
                 }
             }
 
-            return { data: data, error: null };
+            return safeData(data,[])
         } catch (error: any) {
             return { data: null, error: error.message, message: "someting went wrong please try again" };
 

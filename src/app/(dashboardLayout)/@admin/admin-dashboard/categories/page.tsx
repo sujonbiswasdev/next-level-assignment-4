@@ -3,8 +3,7 @@ import CategoryTable from "@/components/category/categorytable"
 
 const CreateCategory = async() => {
   const category=await getCategory()
-  const categorydata=category?.data.result.result
-    if (!category?.data || category.error || !categorydata) {
+    if (!category) {
     return (
       <div className="p-4 text-red-500">
         Failed to load users
@@ -13,7 +12,7 @@ const CreateCategory = async() => {
   }
   return (
     <div>
-      <CategoryTable categorydata={categorydata}/>
+      <CategoryTable categorydata={category}/>
     </div>
   )
 }
