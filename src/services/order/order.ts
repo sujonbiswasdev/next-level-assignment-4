@@ -7,7 +7,7 @@ export const OrderService = {
     getownorder: async () => {
         try {
             const cookiestore = await cookies()
-            const response = await fetch(`${api_url}/orders`,
+            const response = await fetch(`${api_url}/api/orders`,
                 {
                     headers: {
                         Cookie: cookiestore.toString(),
@@ -36,7 +36,7 @@ export const OrderService = {
     updateOrderStatus: async (id: string, orderdata: any) => {
         try {
             const cookieStore = await cookies()
-            const res = await fetch(`${api_url}/provider/orders/${id}`, {
+            const res = await fetch(`${api_url}/api/provider/orders/${id}`, {
                 method: "PATCH",
                 credentials: "include",
                 headers: {
@@ -57,10 +57,9 @@ export const OrderService = {
         }
     },
     createorder: async (orderData: ICreateOrderPayload) => {
-        console.log(JSON.stringify(orderData), 'dlkjdksjfjsdatatata')
         const cookieStore = await cookies()
         try {
-            const res = await fetch(`${api_url}/orders`, {
+            const res = await fetch(`${api_url}/api/orders`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -83,7 +82,7 @@ export const OrderService = {
     getorderbyid: async (id: string) => {
         try {
             const cookiestore = await cookies()
-            const res = await fetch(`${api_url}/orders/${id}`, {
+            const res = await fetch(`${api_url}/api/orders/${id}`, {
                 headers: {
                     Cookie: cookiestore.toString(),
                 },

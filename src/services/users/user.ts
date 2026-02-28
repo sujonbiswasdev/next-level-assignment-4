@@ -9,7 +9,7 @@ export const userService={
     updateUser:async(updateUser:UsersData)=>{  
   try {
     const cookieStore = await cookies()
-    const res = await fetch(`${api_url}/users/profile/update`, {
+    const res = await fetch(`${api_url}/api/users/profile/update`, {
       method: "PUT",
       credentials:"include",
       headers: {
@@ -32,7 +32,7 @@ export const userService={
      DeleteUserown: async () => {
             try {
                 const cookieStore = await cookies()
-                const res = await fetch(`${api_url}/users/profile/own`, {
+                const res = await fetch(`${api_url}/api/users/profile/own`, {
                     method:"DELETE",
                     credentials: "include",
                     headers: {

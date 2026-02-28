@@ -1,5 +1,5 @@
+import { getSession } from "@/services/service";
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "./services/service";
 
 enum Roles {
   Admin = "Admin",
@@ -98,7 +98,7 @@ async function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 export const config = {
-  matcher: ['/profile', '/admin-dashboard/:path*', '/dashboard', '/provider-dashboard/:path*', '/provider/:path*', '/cart', '/checkout', '/orders/:path*', '/profile', '/admin/:path*']
+  matcher: ['/profile', '/admin-dashboard/:path*', '/dashboard', '/provider-dashboard/:path*', '/provider/:path*', '/cart', '/checkout', '/orders/:path*', '/admin/:path*']
 }
 
 export default proxy

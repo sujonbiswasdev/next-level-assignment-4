@@ -5,6 +5,7 @@ import React from 'react'
 const OrderHistory = async() => {
 
     const res = await getownorder();
+         console.log(res.data,res.error,'jsdfkjsdf')
       if (!res.data || res.error) {
     return (
       <div className="p-4 text-red-500">
@@ -12,7 +13,7 @@ const OrderHistory = async() => {
       </div>
     );
   }
-      const orders = res.data.result.result || [];
+      const orders = res.data
   return (
     <div>
       <OrderTable initialorder={orders}/>

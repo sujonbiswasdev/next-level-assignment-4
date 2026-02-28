@@ -1,17 +1,19 @@
 'use client'
-import React, { useState, useEffect } from 'react';
 import {
-  MapPin, Clock, Phone, Star, Truck, DollarSign, Heart, Share2,
-  ShoppingCart, ChevronLeft, ChevronRight, Utensils, Award
+  MapPin, Clock, Truck,
+  ShoppingCart,
+  Star,
+  StarHalf,
 } from 'lucide-react';
 import { manageCartStore } from '@/store/CartStore';
-import { toast } from 'react-toastify';
-import Image from 'next/image';
+import ShareProviderProfileButton from './providerprofileshare';
+import { ProviderProfile } from '@/types/user/user';
 
-const ProviderPage = ({ data }: { data: any }) => {
-  const { cart, getSubtotal, getTotal, addToCart, removeFromCart, clearCart } =
+const ProviderPage = ({ data }: { data: ProviderProfile }) => {
+  const { cart, addToCart } =
     manageCartStore()
-  console.log(data, 'datajdjjsdjfdsfdsf')
+  const fullStars = Math.floor(Number(data.averageRating));
+  const hasHalfStar = Number(data.averageRating) % 1 >= 0.5;
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Bar */}
@@ -20,23 +22,54 @@ const ProviderPage = ({ data }: { data: any }) => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex items-center gap-4 flex-1">
               <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
-                <img src={data.result.user.image} alt={data.result.user.name} className="w-12 h-12 rounded-full object-cover" />
+                <img src={data.user.image} alt={data.user.name} className="w-12 h-12 rounded-full object-cover" />
               </div>
               <div>
                 <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
-                  {data.result.restaurantName}
+                  {data.restaurantName}
+                  <div className='flex items-center gap-2.5'>
+                    {Array.from({ length: 5 }).map((_, i) => {
+                      if (i < fullStars) {
+                        return (
+                          <Star
+                            key={i}
+                            className="w-[14px] text-amber-400 fill-amber-400"
+                          />
+                        );
+                      }
+
+                      if (i === fullStars && hasHalfStar) {
+                        return (
+                          <StarHalf
+                            key={i}
+                            className="w-[14px] text-amber-400 fill-amber-400"
+                          />
+                        );
+                      }
+
+                      return (
+                        <Star
+                          key={i}
+                          className="w-[14px] text-gray-300"
+                        />
+                      );
+                    })}
+                     <span className='text-sm text-gray-500 gap-2'>({data.totalReview}reviews)</span>
+
+                  </div>
                 </h1>
                 <p className="text-sm text-gray-600 flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
-                  {data.result.address}
+                  {data.address}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="text-sm text-gray-600 hidden sm:block">25-35 mins • Free delivery</div>
-              <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">
-                Call
-              </button>
+              <a href="https://wa.me/01804935939" target="_blank">
+                <img src="/whatsapp.png" className='w-[40px]' alt="" />
+              </a>
+
             </div>
           </div>
         </div>
@@ -74,35 +107,33 @@ const ProviderPage = ({ data }: { data: any }) => {
                 <div className='space-y-4 '>
                   <div className='flex flex-wrap items-center gap-2'>
                     <h4 className="text-sm font-medium text-gray-700">Name :</h4>
-                    <p className="text-lg font-semibold text-gray-600">{data.result.user.name}</p>
+                    <p className="text-lg font-semibold text-gray-600">{data.user.name}</p>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2">
                     <h4 className="text-sm font-medium text-gray-700">email :</h4>
-                    <p className="text-sm text-gray-600">{data.result.user.email}</p>
+                    <p className="text-sm text-gray-600">{data.user.email}</p>
                   </div>
                   <div className='flex flex-wrap items-center gap-2'>
                     <h4 className="text-sm font-medium text-gray-700">Phone :</h4>
-                    <p className="text-sm text-gray-600">{data.result.user.phone || "Not available"}</p>
+                    <p className="text-sm text-gray-600">{data.user.phone || "Not available"}</p>
                   </div>
 
                   <div className='flex flex-wrap items-center gap-2'>
                     <h4 className="text-sm font-medium text-gray-700">isActive :</h4>
-                    <p className="text-sm text-gray-600">{data.result.user.isActive ? "Yes" : "No"}</p>
+                    <p className="text-sm text-gray-600">{data.user.isActive ? "Yes" : "No"}</p>
                   </div>
                   <div className='flex flex-wrap items-center gap-2'>
                     <h4 className="text-sm font-medium text-gray-700">role :</h4>
-                    <p className="text-sm text-gray-600">{data.result.user.role}</p>
+                    <p className="text-sm text-gray-600">{data.user.role}</p>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="space-y-3 mt-2">
-                <button className="w-full bg-white border-2 border-gray-200 hover:border-orange-400 text-gray-900 py-4 px-6 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3">
-                  <Share2 className="w-5 h-5" />
-                  Share
-                </button>
+                <ShareProviderProfileButton userId={data.id} userName={data.restaurantName} />
+
               </div>
             </div>
           </div>
@@ -117,7 +148,7 @@ const ProviderPage = ({ data }: { data: any }) => {
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {data.result.meals.map((meal: any) => (
+                {data.meals.map((meal: any) => (
                   <MealCard key={meal.id} meal={meal} onAddToCart={addToCart} cartItems={cart} />
                 ))}
               </div>
@@ -129,7 +160,7 @@ const ProviderPage = ({ data }: { data: any }) => {
         <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-10 lg:p-16 mt-12">
           <h3 className="text-3xl font-bold text-gray-900 mb-6">About Restaurant</h3>
           <p className="text-xl text-gray-700 leading-relaxed">
-            {data.result.description}
+            {data.description}
           </p>
         </div>
       </div>
@@ -179,7 +210,7 @@ const MealCard = ({ meal, onAddToCart, cartItems }: any) => {
         <p className="text-gray-600 text-base line-clamp-2 leading-relaxed">{meal.description}</p>
 
         <div className="flex items-center justify-between pt-6 border-t border-gray-200">
-          <div className="text-3xl font-black text-gray-900">৳{meal.price}</div>
+          <div className="text-3xl font-black text-gray-900">${meal.price}</div>
           <button
             disabled={!meal.isAvailable}
             onClick={() =>

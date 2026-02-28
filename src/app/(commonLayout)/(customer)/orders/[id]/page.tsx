@@ -4,6 +4,14 @@ import { OrderService } from '@/services/order/order';
 
 export async function generateStaticParams() {
   const  data  = await OrderService.getownorder();
+      if (!data.data || data.error) {
+    return (
+      <div className="p-4 text-red-500">
+        Failed to load own order
+      </div>
+    );
+  }
+  
   if(!Array.isArray(data)){
     return []
   }

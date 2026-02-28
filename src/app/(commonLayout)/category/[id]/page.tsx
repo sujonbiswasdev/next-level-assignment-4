@@ -4,10 +4,10 @@ import Singlecategory from "@/components/category/singlecategory";
 const SingleCategoryPage = async({params}:{params:Promise<{id:string}>}) => {
     const {id}=await params
     const singledata=await singlecategory(id)
- if (!singledata || !singledata.result.meals) {
+ if (!singledata || singledata.success==false) {
     return (
       <div className="p-4 text-red-500">
-        Failed to load category
+        {singledata.error}
       </div>
     );
   }

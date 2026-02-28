@@ -17,7 +17,7 @@ export const mealsService={
       console.log(JSON.stringify(mealsdata),'dlkjdksjfjsdatatata')
       const cookieStore = await cookies()
      try {
-      const res = await fetch(`${api_url}/provider/meals`, {
+      const res = await fetch(`${api_url}/api/provider/meals`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export const mealsService={
 },
 getmeals:async(params?:any,options?:ServiceOptionds)=>{
  try {
-  const url = new URL(`${api_url}/meals`);
+  const url = new URL(`${api_url}/api/meals`);
 
    if (params) {
         Object.entries(params).forEach(([key, value]) => {
@@ -63,8 +63,9 @@ getmeals:async(params?:any,options?:ServiceOptionds)=>{
 
          
       const data = await res.json();
+      console.log(data,'data')
 
-       return safeData(data,[])
+       return safeData(data,{})
  } catch (error) {
   
  }
@@ -75,7 +76,7 @@ getmealsforadmin:async(params?:any)=>{
 
    try {
               const cookieStore = await cookies()
-              const url = new URL(`${api_url}/admin/meals`);
+              const url = new URL(`${api_url}/api/admin/meals`);
               if (params) {
                   Object.entries(params).forEach(([key, value]) => {
                       if (value !== undefined && value !== null && value !== "") {
@@ -112,7 +113,7 @@ getmealsforadmin:async(params?:any)=>{
 getmealsown:async()=>{
  try {
   const cookieStore = await cookies()
-      const res = await fetch(`${api_url}/provider/meals/own`,
+      const res = await fetch(`${api_url}/api/provider/meals/own`,
         {credentials:"include",
           next:{tags:["mealsPost"]},
           headers:{
@@ -128,7 +129,7 @@ getmealsown:async()=>{
 MealStatusUpdate:async(id:string,mealsdata:string)=>{
  try {
   const cookieStore = await cookies()
-      const res = await fetch(`${api_url}/admin/meals/${id}`,
+      const res = await fetch(`${api_url}/api/admin/meals/${id}`,
         {credentials:"include",
           next:{tags:["mealsPost"]},
           headers:{
@@ -147,7 +148,7 @@ MealStatusUpdate:async(id:string,mealsdata:string)=>{
 
 getmealsbyid:async(id:string)=>{
   try {
-      const res=await fetch(`${api_url}/meals/${id}`)
+      const res=await fetch(`${api_url}/api/meals/${id}`)
       const body= await res.json()
       return safeData(body,{})
   } catch (error:any) {
@@ -161,7 +162,7 @@ getmealsbyid:async(id:string)=>{
 
 handleDelete:async (id: string) => {
   try {
-    const res = await fetch(`${api_url}/meals/${id}`, { method: "DELETE" });
+    const res = await fetch(`${api_url}/api/meals/${id}`, { method: "DELETE" });
     const data = await res.json();
 
     if (!res.ok) {
@@ -176,7 +177,7 @@ handleDelete:async (id: string) => {
 updateMeals:async(id:string,mealsdata:UpdateMealsData)=>{  
   try {
     const cookieStore = await cookies()
-    const res = await fetch(`${api_url}/provider/meals/${id}`, {
+    const res = await fetch(`${api_url}/api/provider/meals/${id}`, {
       method: "PUT",
       credentials:"include",
       headers: {

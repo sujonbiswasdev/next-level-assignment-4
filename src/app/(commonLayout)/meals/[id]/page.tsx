@@ -1,8 +1,7 @@
 import SignleMealByid from "@/components/meals/singleMeal";
 import { mealsService } from "@/services/meals";
-type PageProps = {
-  params: { id: string };
-};
+import { getSession } from "@/services/service";
+import { MealData } from "@/types/meals/mealstype";
 
 export default async function SingleMealPage({
   params,
@@ -22,7 +21,7 @@ export default async function SingleMealPage({
   return (
     <>
       <div className="p-4">
-        <SignleMealByid meal={res.data} />
+        <SignleMealByid meal={res.data as MealData}/>
       </div>
     </>
   );

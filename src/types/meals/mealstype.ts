@@ -1,3 +1,6 @@
+import { Category } from "../category";
+import { User } from "../user/user";
+
 export const cuisines = [
   "BANGLEDESHI",
   "ITALIAN",
@@ -38,10 +41,15 @@ export interface ReviewCustomer {
 }
 
 export interface MealReview {
-  customer: ReviewCustomer;
-  comment: string;
-  rating: number;
+  id: string
+  comment: string
+  rating: number
+  parentId: string | null
+  customer?: ReviewCustomer
+  status:"APPROVED" | "REJECTED"
+  replies: MealReview[] 
 }
+
 
 
 export interface MealProvider {
@@ -50,6 +58,7 @@ export interface MealProvider {
   restaurantName: string;
   address: string;
   description: string;
+  user:User;
   image: string | null;
   createdAt: string;
   updatedAt: string;
@@ -72,7 +81,19 @@ export interface MealData {
   updatedAt: string;
   provider: MealProvider;
   reviews: MealReview[];
+  providerRating:{
+    averageRating:number
+    totalReview:number
+  };
+  category:Category
 }
+
+ export interface providerRating{
+    averageRating:number
+    totalReview:number
+  };
+
+
 
 
 export type UpdateMealsData = {

@@ -4,14 +4,15 @@ import { Icategory } from "@/services/categories/category";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import z from "zod";
+import { FieldError } from "../ui/field";
 const allowedDomains = [
   "res.cloudinary.com",
   "images.pexels.com",
 ];
 
-const categoryschema=z.object({
-   name: z.string().optional(),
-   image: z.string().url("Invalid image URL").refine((url) => {
+const categoryschema = z.object({
+  name: z.string().optional(),
+  image: z.string().url("Invalid image URL").refine((url) => {
     try {
       const parsed = new URL(url as any);
       return allowedDomains.includes(parsed.hostname);
@@ -25,14 +26,12 @@ const categoryschema=z.object({
 
 const Categoryupdate = ({ categoryid }: { categoryid: string }) => {
   const [categorydata, setcategorydata] = useState<Icategory>({});
-    const parsedata = categoryschema.safeParse(categorydata);
+  const parsedata = categoryschema.safeParse(categorydata);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const data = await updatecategory(categoryid, parsedata.data!)
-    console.log(data,'dat')
-    console.log(parsedata.error?.message)
     if (!data || data === undefined || data.error || data === null) {
-      toast.error(data?.message||"Failed to update category");
+      toast.error(data?.message || "Failed to update category");
     } else {
       toast.success("category updated successfully");
       setcategorydata({})
@@ -56,6 +55,7 @@ const Categoryupdate = ({ categoryid }: { categoryid: string }) => {
               onChange={(e) => setcategorydata({ ...categorydata, name: e.target.value })}
               className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
             />
+
           </div>
 
           <div className="flex flex-col space-y-2">
@@ -66,6 +66,10 @@ const Categoryupdate = ({ categoryid }: { categoryid: string }) => {
               onChange={(e) => setcategorydata({ ...categorydata, image: e.target.value })}
               className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
             />
+
+            {!parsedata.success && parsedata.error && (
+              <FieldError errors={parsedata.error.issues} />
+            )}
           </div>
         </div>
 

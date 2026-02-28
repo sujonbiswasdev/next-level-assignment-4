@@ -1,18 +1,19 @@
+'use client'
 import { MealData } from '@/types/meals/mealstype'
 import React, { Suspense } from 'react'
 import Skeletonmeals from '../ui/skeletonmeals';
 import { CardHoverLift } from '../hover-lift';
-import { Link, StarIcon } from 'lucide-react';
+import { Link, Star, StarHalf, StarIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import { manageCartStore } from '@/store/CartStore';
 import { useRouter } from 'next/navigation';
 
 const MealCard = ({ filterData }: { filterData: MealData[] }) => {
-       const { addToCart} =
-          manageCartStore()
-          const router=useRouter()
-      const defaultIamge = 'https://res.cloudinary.com/drmeagmkl/image/upload/v1771962102/default_meal_kgc6mv.png'
-      
+    const { addToCart } =
+        manageCartStore()
+    const router = useRouter()
+    const defaultIamge = 'https://res.cloudinary.com/drmeagmkl/image/upload/v1771962102/default_meal_kgc6mv.png'
+
     return (
         <div>
 
@@ -33,7 +34,8 @@ const MealCard = ({ filterData }: { filterData: MealData[] }) => {
                             totalReviews > 0
                                 ? (mainReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews).toFixed(1)
                                 : "No rating";
-                        const fullStars = Math.floor(totalReviews);
+                        const fullStars = Math.floor(Number(avgRating));
+                        const hasHalfStar = Number(avgRating) % 1 >= 0.5;
                         return <div key={index}>
                             <Suspense fallback={<Skeletonmeals />}>
                                 <CardHoverLift>
@@ -57,17 +59,40 @@ const MealCard = ({ filterData }: { filterData: MealData[] }) => {
                                     <div className="p-6 space-y-3">
                                         <div className="flex items-center justify-between">
                                             <h2 className="text-xl font-bold text-gray-900">
-                                                {meal.meals_name.length > 20 ? `${meal.meals_name.slice(0, 20)}...` : meal.meals_name}
+                                                {meal.meals_name.length > 5 ? `${meal.meals_name.slice(0, 5)}...` : meal.meals_name}
                                             </h2>
                                             <div className="flex items-center gap-0.5">
-                                                {
-                                                    Array.from({ length: fullStars }).map((_, i) => (
-                                                        <div key={i} className="flex items-center">
-                                                            <StarIcon className="w-[20px] bg-amber-400" />
-                                                        </div>
-                                                    ))
-                                                }
-                                                ({totalReviews} Reviews)
+                                                {Array.from({ length: 5 }).map((_, i) => {
+                                                    if (i < fullStars) {
+                                                        return (
+                                                            <Star
+                                                                key={i}
+                                                                className="w-[14px] text-amber-400 fill-amber-400"
+                                                            />
+                                                        );
+                                                    }
+
+                                                    if (i === fullStars && hasHalfStar) {
+                                                        return (
+                                                            <StarHalf
+                                                                key={i}
+                                                                className="w-[14px] text-amber-400 fill-amber-400"
+                                                            />
+                                                        );
+                                                    }
+
+                                                    return (
+                                                        <Star
+                                                            key={i}
+                                                            className="w-[14px] text-gray-300"
+                                                        />
+                                                    );
+                                                })}
+
+                                                <span className="text-xs text-gray-600 ml-1">
+                                                    ({Number(avgRating).toFixed(1)})
+                                                </span>
+                                                <span>({totalReviews}reviews)</span>
                                             </div>
                                         </div>
                                         <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
@@ -84,7 +109,7 @@ const MealCard = ({ filterData }: { filterData: MealData[] }) => {
                                     </div>
 
                                     <div className="flex justify-between meals-center ">
-                                        <Button onClick={()=>router.push(`/meals/${meal.id}`)} className="px-4 bg-gradient-to-r from-gray-900 to-black text-white py-1.5 rounded-md font-semibold hover:from-gray-800 hover:shadow-2xl transition-all cursor-pointer mb-2 ml-3">
+                                        <Button onClick={() => router.push(`/meals/${meal.id}`)} className="px-4 bg-gradient-to-r from-gray-900 to-black text-white py-1.5 rounded-md font-semibold hover:from-gray-800 hover:shadow-2xl transition-all cursor-pointer mb-2 ml-3">
                                             View Details →
                                         </Button>
                                         <Button

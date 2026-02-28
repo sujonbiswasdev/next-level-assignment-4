@@ -4,6 +4,7 @@ import React from 'react'
 
 const MyOrders =async () => {
      const res = await getownorder();
+
        if (!res.data ||res.error) {
     return (
       <div className="p-4 text-red-500">
@@ -11,7 +12,7 @@ const MyOrders =async () => {
       </div>
     );
   }
-          const orders = res.data.result.result || [];
+  const orders = res.data.result.result || [];
   return (
     <div className=''>
      <CustomerOrderTable initialorder={orders}/>

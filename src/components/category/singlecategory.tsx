@@ -1,23 +1,22 @@
 'use client'
 import React, { useMemo, useState } from 'react';
-import { Filter, X, ChevronDown, Star } from 'lucide-react';
+import { Filter, X, ChevronDown, Star, StarIcon } from 'lucide-react';
 import MealCard from '../meals/MealCard';
 import MealsCard from '../meals/get-meals';
 import { cuisines, dietaryPreferences } from '@/types/meals/mealstype';
+import { useRouter } from 'next/navigation';
 
 const Singlecategory = ({ meal }: { meal: any }) => {
+  const router = useRouter()
   console.log(meal, 'mealsdata')
   const [isOpen, setIsOpen] = useState(false);
-  const [priceRange, setPriceRange] = useState([10, 100]);
-
+  const [priceRange, setPriceRange] = useState([1, 1000]);
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const categories = {
     cuisines,
     dietaryPreferences,
-    rating: [4, 3, 2]
+    rating: [5, 4, 3, 2, 1]
   };
-
- 
-
   const [selectedCuisine, setSelectedCuisine] = useState<string[]>([])
   const [selectedDietary, setSelectedDietary] = useState<string[]>([])
 
@@ -27,13 +26,13 @@ const Singlecategory = ({ meal }: { meal: any }) => {
     setSelectedCuisine(prev => prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value])
   }
 
-  // const handleDietaryChange = (value: string) => {
-  //   setSelectedDietary(prev =>
-  //     prev.includes(value)
-  //       ? prev.filter(item => item !== value)
-  //       : [...prev, value]
-  //   )
-  // }
+  const handleDietaryChange = (value: string) => {
+    setSelectedDietary(prev =>
+      prev.includes(value)
+        ? prev.filter(item => item !== value)
+        : [...prev, value]
+    )
+  }
 
   const filteredMeals = useMemo(() => {
     return meals.filter(meal => {
@@ -42,15 +41,22 @@ const Singlecategory = ({ meal }: { meal: any }) => {
         selectedCuisine.length === 0 ||
         selectedCuisine.includes(meal.cuisine)
 
-      // const dietaryMatch =
-      //   selectedDietary.length === 0 ||
-      //   selectedDietary.every(d =>
-      //     meal.dietary.includes(d)
-      //   )
+      const dietaryMatch =
+        selectedDietary.length === 0 ||
+        selectedDietary.every((d) =>
+          meal.dietaryPreference === d
+        )
 
-      return cuisineMatch
+      const priceMatch =
+        meal.price >= priceRange[0] &&
+        meal.price <= priceRange[1]
+
+      const ratingMatch =
+        selectedRating === null || meal.rating >= selectedRating;
+
+      return cuisineMatch && dietaryMatch && priceMatch && ratingMatch
     })
-  }, [selectedCuisine, selectedDietary, meals])
+  }, [selectedCuisine, selectedDietary, priceRange, selectedRating, meals])
 
 
   if (!filteredMeals) {
@@ -81,24 +87,6 @@ const Singlecategory = ({ meal }: { meal: any }) => {
       )}
 
       <div className='max-w-[1440px] flex flex-col mx-auto gap-2 md:flex-row space-y-8'>
-        {/* <label className="flex items-center gap-2">
-  <input
-    type="checkbox"
-    onChange={() => handleCuisineChange("Inddian")}
-  />
-  Indiand
-</label> */}
-
-        {/* <button
-  onClick={() => handleDietaryChange("Gluten-Free")}
-  className={`px-3 py-1 rounded-full border
-    ${selectedDietary.includes("Gluten-Free")
-      ? "bg-black text-white"
-      : "bg-white text-black"
-    }`}
->
-  Gluten-Free
-</button> */}
         {/* Sidebar Container */}
         <aside className={`
         fixed top-0 left-0 w-80 bg-white z-50 p-6 shadow-2xl transition-transform duration-300 ease-in-out
@@ -117,27 +105,26 @@ const Singlecategory = ({ meal }: { meal: any }) => {
           <div className="space-y-8 overflow-y-auto max-h-[calc(100vh-120px)] pr-2">
 
             {/* 1. Price Range */}
-            <section>
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-4">Price Range</h3>
-              <input
-                type="range"
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
-                min="5" max="150"
-              />
-              <div className="flex justify-between mt-2 text-sm font-medium text-slate-600">
-                <span>$5</span>
-                <span>$150</span>
-              </div>
-            </section>
+            <input
+              type="range"
+              min="1"
+              max="1000"
+              value={priceRange[1]}
+              onChange={(e) => setPriceRange([5, Number(e.target.value)])}
+              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+            />
 
+            <div className="text-sm mt-0.5 text-emerald-600 font-medium">
+              Up to ${priceRange[1]}
+            </div>
             {/* 2. Cuisine Section */}
             <section>
               <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-4">Cuisine</h3>
               <div className="grid grid-cols-1 gap-3">
                 {categories.cuisines.map((item) => (
                   <label key={item} className="flex items-center group cursor-pointer">
-                    <input type="checkbox" onChange={() => handleCuisineChange(item)} className="w-5 h-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
-                    <span className="ml-3 text-slate-700 group-hover:text-emerald-700 transition-colors">{item}</span>
+                    <input type="checkbox" onChange={() => handleCuisineChange(item)} className="w-2.5 h-2.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
+                    <span className="ml-3 text-slate-700 text-[14px] group-hover:text-emerald-700 transition-colors">{item}</span>
                   </label>
                 ))}
               </div>
@@ -147,37 +134,50 @@ const Singlecategory = ({ meal }: { meal: any }) => {
             <section>
               <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-4">Dietary</h3>
               <div className="flex w-auto md:w-40 flex-wrap gap-2">
-                {categories.dietaryPreferences.map((item) => (
-                  <button key={item} className="px-3 py-1.5 border border-slate-200 rounded-full text-xs font-medium hover:border-emerald-500 hover:text-emerald-600 transition-all">
-                    {item}
-                  </button>
-                ))}
+                {categories?.dietaryPreferences?.map((item) => {
+                  const isActive = selectedDietary.includes(item)
+                  return (
+                    <button onClick={() => handleDietaryChange(item)} key={item} className={`${isActive ? "border-blue-700 bg-amber-300" : "border-black"} px-2.5 py-1 border border-slate-200 rounded-full text-xs font-medium hover:border-emerald-500 hover:text-emerald-600 text-[14px] transition-all`}>
+                      {item}
+                    </button>
+                  )
+                })}
               </div>
             </section>
 
             {/* 4. Provider Rating */}
-            <section>
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-4">Provider Rating</h3>
-              {categories.rating.map((stars) => (
-                <label key={stars} className="flex items-center mb-2 cursor-pointer">
-                  <input type="radio" name="rating" className="w-4 h-4 text-emerald-600 focus:ring-emerald-500" />
-                  <div className="ml-3 flex text-amber-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={14} fill={i < stars ? "currentColor" : "none"} />
-                    ))}
-                    <span className="ml-2 text-xs text-slate-500">& Up</span>
-                  </div>
+            <div className="gap-2 mb-6 ">
+              {[5, 4, 3, 2, 1].map(r => {
+                console.log(r,'rr')
+                return <label key={r} className="flex items-center gap-1 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="rating"
+                    value={r}
+                    checked={selectedRating === r}
+                    onChange={() => setSelectedRating(r)}
+                    className="w-4 h-4 text-emerald-600 focus:ring-emerald-500"
+                  />
+                  {Array.from({length:r}).map((_,i)=>(
+                     <Star className='w-[20px] bg-amber-300 mt-0.5' key={10} />
+                  ))}
                 </label>
-              ))}
-            </section>
+              })}
+
+            </div>
           </div>
 
           {/* Footer Actions */}
           <div className="absolute bottom-0 left-0 w-full p-6 bg-white border-t border-slate-100 lg:static lg:p-0 lg:border-none lg:mt-8">
-            <button className="w-full py-3 bg-slate-900 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors">
-              Apply Filters
-            </button>
-            <button className="w-full mt-2 py-2 text-sm text-slate-500 font-medium hover:underline">
+            <button
+              onClick={() => {
+                setSelectedCuisine([])
+                setSelectedDietary([])
+                setSelectedRating(null)
+                setPriceRange([1, 1000])
+              }}
+              className="bg-blue-700 text-white ml-2 px-4 py-2 rounded-md cursor-pointer mt-2 py-2 text-sm text-slate-500 font-medium hover:underline"
+            >
               Reset All
             </button>
           </div>

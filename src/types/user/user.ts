@@ -1,4 +1,5 @@
 import z from "zod"
+import { Cuisine, DietaryPreference, MealData } from "../meals/mealstype"
 const usersData = z.object({
   name: z.string().optional(),
   image: z.string().optional(),
@@ -11,9 +12,9 @@ export type UsersData = z.infer<typeof usersData>
 
 
 export const Updateuserschema = z.object({
-   role: z.string().optional(),
-   status:z.string().optional(),
-   email:z.string()
+  role: z.string().optional(),
+  status: z.string().optional(),
+  email: z.string()
 }).strict()
 
 export type Updateuserdata = z.infer<typeof Updateuserschema>
@@ -30,10 +31,19 @@ export interface ProviderProfile {
   address: string
   description: string
   image: string | null
+  totalReview: number,
+  averageRating: number
+  user: User
+  providerRating?: {
+    averageRating?: number
+    totalReview?: number
+  };
+  meals: MealData[]
   createdAt: string
   updatedAt: string
 }
-export interface ProviderUser {
+export interface User {
+  user: any
   id: string
   name: string
   email: string
@@ -47,23 +57,7 @@ export interface ProviderUser {
   createdAt: string
   updatedAt: string
   provider: ProviderProfile
-}
-
-
-
-export type User = {
-  id: string
-  name: string
-  email: string
-  emailVerified: boolean
-  bgimage?: string
-  image: string
-  phone: string | null
-  role: string
-  status: string
-  isActive: boolean
-  createdAt: Date
-  updatedAt: Date
+  meals: MealData[]
 }
 
 

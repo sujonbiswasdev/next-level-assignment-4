@@ -40,4 +40,15 @@ export const adminRoutes: Route[] = [
             },
         ],
     },
+    {
+        title: "reviews Management",
+        icon: "string",
+        isActive: true,
+        items: [
+            {
+                title: "revies",
+                url: "/admin/review",
+            },
+        ],
+    },
 ];

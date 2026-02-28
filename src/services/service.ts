@@ -56,7 +56,7 @@ export async function loginUser(userdata: any) {
 export async function getuserProvider() {
   try {
     const cookieStore = await cookies();
-    const res = await fetch(`${api_url}/provider/own`, {
+    const res = await fetch(`${api_url}/api/provider/own`, {
       credentials: 'include',
       headers: { Cookie: cookieStore.toString(), }
     })

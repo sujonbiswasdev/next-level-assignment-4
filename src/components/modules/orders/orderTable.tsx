@@ -81,7 +81,7 @@ const OrderTable = ({ initialorder }: { initialorder: any[] }) => {
                                     </td>
 
                                     <td className="px-4 py-2">
-                                        <Link href={`/meals/${item.orderitem[0].mealId}`}>{item.orderitem[0].mealId.slice(0, 10) + '....'}</Link>
+                                        {/* <Link href={`/meals/${item.orderitem[0].mealId}`}>{item.orderitem[0].mealId.slice(0, 10) + '....'}</Link> */}
                                     </td>
                                     <td className="px-4 py-0.5">
                                         <span

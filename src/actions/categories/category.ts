@@ -1,7 +1,7 @@
 'use server'
 import { CategoriesService, Icategory } from "@/services/categories/category";
 
-export const createCategory = async (data: any) => {
+export const categoryCreate = async (data: any) => {
   try {
     const res = await CategoriesService.createCategory(data);
     return res;

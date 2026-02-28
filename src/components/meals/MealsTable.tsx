@@ -45,6 +45,11 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
     }
   };
 
+  
+
+
+    const filterData = initialmeals.filter((meal: any) => (meal.meals_name.includes(search.toLowerCase()) || meal.description.includes(search.toLowerCase()) || meal.category_name.includes(search.toLowerCase()) || meal.cuisine.includes(search.toLowerCase())))
+
   return (
     <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 py-8">
 
@@ -93,7 +98,7 @@ const MealTable = ({ initialmeals }: { initialmeals: any[] }) => {
             {/* Table Body */}
             <tbody className="divide-y divide-gray-100">
               {meals.length > 0 ? (
-                meals.map((meal: any, index: number) => (
+                filterData.map((meal: any, index: number) => (
                   <tr
                     key={meal.id}
                     className="hover:bg-indigo-50 transition duration-200"

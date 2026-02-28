@@ -1,5 +1,5 @@
 'use client'
-import { ProviderProfile, ProviderUser } from '@/types/user/user'
+import { ProviderProfile } from '@/types/user/user'
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Label } from './ui/label'

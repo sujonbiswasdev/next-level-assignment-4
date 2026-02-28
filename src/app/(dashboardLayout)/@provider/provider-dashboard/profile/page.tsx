@@ -4,6 +4,7 @@ import React from 'react'
 
 const ProviderProfile = async () => {
     const user=await getSession()
+    console.log(user,"data")
       if (!user || user.error) {
     return (
       <div className="p-4 text-red-500">

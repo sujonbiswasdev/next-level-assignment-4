@@ -11,7 +11,7 @@ export const AdminService = {
     updateuserdata: async (id:string,updateUser: Updateuserdata) => {
         try {
             const cookieStore = await cookies()
-            const res = await fetch(`${api_url}/admin/profile/${id}`, {
+            const res = await fetch(`${api_url}/api/admin/profile/${id}`, {
                 method: "PUT",
                 credentials: "include",
                 headers: {
@@ -33,7 +33,7 @@ export const AdminService = {
      userrolechange: async (id:string,updateUser: UsersData) => {
         try {
             const cookieStore = await cookies()
-            const res = await fetch(`${api_url}/admin/profile/${id}/role`, {
+            const res = await fetch(`${api_url}/api/admin/profile/${id}/role`, {
                 method: "PUT",
                 credentials: "include",
                 headers: {
@@ -57,7 +57,7 @@ export const AdminService = {
     getAllusers: async (params?: any) => {
         try {
             const cookieStore = await cookies()
-            const url = new URL(`${api_url}/admin/users`);
+            const url = new URL(`${api_url}/api/admin/users`);
             if (params) {
                 Object.entries(params).forEach(([key, value]) => {
                     if (value !== undefined && value !== null && value !== "") {
@@ -93,7 +93,7 @@ export const AdminService = {
     getuserbyid: async (id: string) => {
         try {
             const cookieStore = await cookies()
-            const res = await fetch(`${api_url}/user/profile/${id}`, {
+            const res = await fetch(`${api_url}/api/user/profile/${id}`, {
                 credentials: "include",
                 headers: {
                     Cookie: cookieStore.toString()
@@ -115,7 +115,7 @@ export const AdminService = {
     DeleteUser: async (id: string) => {
         try {
             const cookieStore = await cookies()
-            const res = await fetch(`${api_url}/users/profile/${id}`, {
+            const res = await fetch(`${api_url}/api/users/profile/${id}`, {
                 method:"DELETE",
                 credentials: "include",
                 headers: {

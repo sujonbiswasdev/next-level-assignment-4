@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Menu, Bell, Edit2, Pencil, Save } from "lucide-react"
 import Image from "next/image"
-import { ProviderUser, UpdateUserInput, updateUserSchema, User } from "@/types/user/user"
+import { ProviderProfile, UpdateUserInput, updateUserSchema, User } from "@/types/user/user"
 import { Status, StatusIndicator, StatusLabel } from "../ui/status"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
@@ -12,8 +12,8 @@ import { Label } from "../ui/label"
 import InfoRow from "../infoRow"
 import Resturantinfo from "../resturant"
 
-export default function ProviderProfilePage({ userdata }: { userdata: ProviderUser }) {
-    const [userinfo, setuserinfo] = useState<ProviderUser>({ ...userdata })
+export default function ProviderProfilePage({ userdata }: { userdata: User }) {
+    const [userinfo, setuserinfo] = useState<User>({ ...userdata })
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const router = useRouter()
     const [access, setaccess] = useState<string>("profile")
@@ -63,7 +63,7 @@ export default function ProviderProfilePage({ userdata }: { userdata: ProviderUs
             }
             toast.dismiss(toastid)
             toast.success(`"user ${field} update successfully"`, { theme: "dark", position: "bottom-right", autoClose: 2000 })
-            setuserinfo((prev) => ({ ...prev, [field]: value }))
+            setuserinfo((prev:any) => ({ ...prev, [field]: value }))
         } catch (error: any) {
             toast.error(`someting went wrong please try again`)
         }
@@ -325,7 +325,7 @@ export default function ProviderProfilePage({ userdata }: { userdata: ProviderUs
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-50 p-4 rounded-lg">
                                     <div>
                                         <p className="text-sm font-medium">
-                                            {userdata.email}
+                                            {userinfo.email}
                                         </p>
                                         <span className="text-xs text-gray-500">
                                             {year}-{month}-{day}

@@ -7,7 +7,7 @@ export const providerServiceStats={
     getrenuestats:async()=>{
         try {
             const cookiestore=await cookies()
-            const response = await fetch(`${api_url}/provider/revenue/stats`,
+            const response = await fetch(`${api_url}/api/provider/revenue/stats`,
                 {
                  headers:{
                          Cookie: cookiestore.toString(),
@@ -36,7 +36,7 @@ export const providerServiceStats={
 
          try {
             const cookiestore=await cookies()
-            const response = await fetch(`${api_url}/provider/meals/stats`,
+            const response = await fetch(`${api_url}/api/provider/meals/stats`,
                 {
                  headers:{
                          Cookie: cookiestore.toString(),
@@ -65,7 +65,7 @@ export const providerServiceStats={
     getownorderstats:async()=>{
           try {
             const cookiestore=await cookies()
-            const response = await fetch(`${api_url}/provider/orders/stats`,
+            const response = await fetch(`${api_url}/api/provider/orders/stats`,
                 {
                  headers:{
                          Cookie: cookiestore.toString(),

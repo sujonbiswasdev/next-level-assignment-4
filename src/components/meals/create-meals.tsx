@@ -19,7 +19,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation"
 import { Textarea } from "@/components/ui/textarea";
-import { getuserProvider } from "@/services/service";
 import { createmeals } from "@/actions/blog.meals";
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
@@ -81,12 +80,13 @@ export function MealsForm() {
         image: value.image,
         price: value.price,
         isAvailable: value.isAvailable,
-        dietaryPreference: value.dietaryPreference as "HALAL" | "VEGAN" | "VEGETARIAN" | "ANY",
+        dietaryPreference: value.dietaryPreference,
         category_name: value.category_name,
-        cuisine: value.cuisine,
+        cuisine: value.cuisine
       }
       try {
-        const res = await createmeals(mealsdData)
+        const res = await createmeals(mealsdData as any)
+        console.log(res.error,'djfsjfkjsldf')
         if (res.error) {
           toast.dismiss(toastid)
           toast.error(res.error)
