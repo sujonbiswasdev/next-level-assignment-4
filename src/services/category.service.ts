@@ -19,16 +19,16 @@ export const CategoriesService = {
           Cookie: cookieStore.toString()
         },
         next: {
-          tags: ['categorydata']
+          tags: ['category']
         }
       })
       const data = await res.json()
-      const result =data as ApiResponse<TGetCategory>
+      const result =data as ApiResponse<any>
       if(!result.data){
         const error=data as ApiErrorResponse
         return {success:error.success,message:error.message || "categories retrive failed"}
       }
-      return {success:result.success,message:result.message,data}
+      return {success:result.success,message:result.message,data:result.data}
     } catch (error) {
       return {message:"something went wrong,please try again"}
     }
@@ -47,7 +47,7 @@ export const CategoriesService = {
         },
         body: JSON.stringify(value)
       })
-      revalidateTag('categorydata', 'max')
+      revalidateTag('category', 'max')
       const data = await response.json()
         const result =data as ApiResponse<ICreateCategory> 
           if (!result.data) {
@@ -77,7 +77,7 @@ export const CategoriesService = {
         },
         body: JSON.stringify(updateUser),
       });
-      revalidateTag('categorydata', 'max')
+      revalidateTag('category', 'max')
       const data = await res.json();
       const result = data as ApiResponse<TGetCategory>
       if (!res.ok) {
@@ -101,7 +101,7 @@ export const CategoriesService = {
           Cookie: cookieStore.toString(),
         },
       });
-      revalidateTag("categorydata", 'max')
+      revalidateTag("category", 'max')
       const data = await res.json();
       const result = data as ApiResponse<TGetCategory>
       if (!res.ok) {
@@ -123,7 +123,7 @@ export const CategoriesService = {
           Cookie: cookieStore.toString(),
         },
         next: {
-          tags: ['categorydata']
+          tags: ['category']
         }
       })
       const data = await res.json();

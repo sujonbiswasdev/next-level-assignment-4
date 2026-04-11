@@ -34,7 +34,7 @@ const DashboardLayout = async ({ admin, provider, children }: { admin: React.Rea
         <AppSidebar />
         <SidebarInset className="flex min-h-svh min-w-0 flex-1 flex-col border-l border-border/70 bg-background">
           <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 shadow-sm backdrop-blur-md dark:bg-background/80">
-            <div className="flex h-14 w-full items-center gap-3 px-4 sm:px-5 lg:px-8">
+            <div className="flex h-14 w-full items-center gap-3 ">
               <SidebarTrigger className="-ml-1 shrink-0" />
               <div className="flex min-w-0 flex-1 justify-center">
                 <div className="relative w-full max-w-md">
@@ -68,7 +68,7 @@ const DashboardLayout = async ({ admin, provider, children }: { admin: React.Rea
           </header>
 
           <div className="flex min-h-0 flex-1 flex-col overflow-auto">
-            <div className="flex w-full flex-1 flex-col items-stretch px-4 py-5 sm:px-5 sm:py-6 lg:px-8">
+            <div className="flex w-full flex-1 flex-col items-stretch">
               <ErrorBoundary
                 fallback={
                   <ErrorFallback

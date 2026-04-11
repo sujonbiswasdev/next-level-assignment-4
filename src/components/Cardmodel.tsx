@@ -94,12 +94,12 @@ export function CartModal() {
                 </div>
               </SheetDescription>
             </SheetHeader>
-            <div className="no-scrollbar overflow-y-auto px-4">
+            <div className="no-scrollbar overflow-y-auto ">
             </div>
             <SheetFooter>
               <button
                 onClick={() => clearCart()}
-                className="w-full px-2 py-1 rounded-md ml-auto bg-black text-white"
+                className="w-full py-1 rounded-md ml-auto bg-black text-white"
               >
                 clear chat
               </button>

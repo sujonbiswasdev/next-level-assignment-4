@@ -8,7 +8,7 @@ const CommonLayout = async ({ children }: { children: React.ReactNode }) => {
   const result = userinfo?.data;
 
   return (
-    <div className="max-w-[1480px] mx-auto px-2 sm:px-4 lg:px-8">
+    <div className="max-w-[1480px] mx-auto">
       <Navbar user={result as TUser} className="flex mx-auto" />
       {children}
       <Footer />

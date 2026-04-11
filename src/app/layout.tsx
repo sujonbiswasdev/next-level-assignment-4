@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { ToastContainer } from 'react-toastify';
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
 
 export const metadata: Metadata = {
   title: "Foodhub",
@@ -25,7 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+    suppressHydrationWarning
+    data-scroll-behavior="smooth"
+    lang="en"
+    className={`font-${inter} font-${mono} font-sans h-full antialiased `}>
       <body
         className={`w-full overflow-x-hidden min-h-screen font-sans antialiased bg-background`}
       >

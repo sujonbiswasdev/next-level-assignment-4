@@ -38,7 +38,7 @@ export default function ProductCard({ meal }: any) {
 
               })
             }
-            className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800"
+            className="bg-black text-white  py-2 rounded-lg hover:bg-gray-800"
           >
             Add to cart
           </button>

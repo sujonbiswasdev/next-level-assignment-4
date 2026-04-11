@@ -69,7 +69,7 @@ export default function HeroSlider() {
 
           {/* Content */}
           <div className="relative z-30 h-full flex items-center">
-            <div className="max-w-[1440px] mx-auto px-6 lg:px-12 w-full">
+            <div className="max-w-[1440px] mx-auto  w-full">
               <div className="max-w-2xl text-white space-y-6">
 
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
@@ -82,11 +82,11 @@ export default function HeroSlider() {
 
                 <div className="flex flex-wrap gap-4">
 
-                  <button onClick={()=>router.push('/cart')} className="px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-full text-white font-semibold shadow-xl hover:scale-105 transition">
+                  <button onClick={()=>router.push('/cart')} className=" py-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-full text-white font-semibold shadow-xl hover:scale-105 transition">
                     Order Now
                   </button>
 
-                  <button onClick={()=>router.push('/meals')} className="px-8 py-3 border border-white rounded-full backdrop-blur-md hover:bg-white hover:text-black transition">
+                  <button onClick={()=>router.push('/meals')} className=" py-3 border border-white rounded-full backdrop-blur-md hover:bg-white hover:text-black transition">
                     View Menu
                   </button>
 

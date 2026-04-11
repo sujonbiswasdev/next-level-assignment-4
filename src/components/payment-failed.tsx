@@ -14,7 +14,7 @@ export default function PaymentFailed({
   const router = useRouter();
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-gray-100 px-4 py-10">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-gray-100  py-10">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center animate-fadeIn">
 
         {/* Error Icon */}

@@ -5,6 +5,7 @@ export type TFilterField =
       type: "text" | "email" | "password" | "search" | "url" | "tel";
       name: string;
       placeholder?: string;
+      label?:string,
       value: string;
       onChange: (val: string) => void;
     }
@@ -12,6 +13,7 @@ export type TFilterField =
       type: "number";
       name: string;
       label?: string;
+      placeholder?:string,
       value: number;
       onChange: (val: number) => void;
     }
@@ -19,6 +21,7 @@ export type TFilterField =
       type: "date" | "time" | "datetime-local" | "month" | "week";
       name: string;
       label?: string;
+      placeholder?:string,
       value: string;
       onChange: (val: string) => void;
     }
@@ -26,6 +29,7 @@ export type TFilterField =
       type: "checkbox";
       name: string;
       label?: string;
+      placeholder?:string,
       value: boolean;
       onChange: (val: boolean) => void;
     }
@@ -33,6 +37,7 @@ export type TFilterField =
       type: "select";
       name: string;
       label: string;
+      placeholder?:string,
       value: string;
       options: { label: string; value: string }[];
       onChange: (val: string) => void;
@@ -41,6 +46,7 @@ export type TFilterField =
       type: "range";
       name: string;
       label: string;
+      placeholder?:string,
       min: number;
       max: number;
       value: number;

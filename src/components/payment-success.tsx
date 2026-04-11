@@ -11,7 +11,7 @@ export default function PaymentSuccess({
   amount,
 }: PaymentSuccessProps) {
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-10">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100  py-10">
       <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-6 sm:p-8 transition-all duration-500 animate-fadeIn">
         
         {/* Success Icon */}

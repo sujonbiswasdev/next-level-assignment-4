@@ -89,11 +89,11 @@ const Navbar = ({
 }: Navbar1Props) => {
   const userinfo=user as TUser
   return (
-    <section className={cn("py-4", className)} >
+    <section className={cn("fixed max-w-[1480px] mx-auto top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border-b border-border", className)} >
       <div className="container">
         {/* Desktop Menu */}
         <nav className="flex justify-between">
-          <div className="flex items-center gap-12">
+          <div className="flex items-center gap-0">
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-2">
               <img
