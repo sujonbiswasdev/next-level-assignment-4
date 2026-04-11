@@ -8,10 +8,10 @@ import { Input } from "../../ui/input"
 import { Label } from "../../ui/label"
 import InfoRow from "../../infoRow"
 import Resturantinfo from "../../resturant"
-import { TUpdateUserInput, TUser } from "@/types/user/user"
+import { TUpdateUserInput, TUser } from "@/types/user.type"
 import { updateUserSchema } from "@/validations/auth.validation"
 import { IProviderInfo } from "@/types/provider.type"
-import { updateUser } from "@/actions/user/user"
+import { updateUser } from "@/actions/user.actions"
 
 export default function ProviderProfilePage({ userdata }: { userdata: TUser }) {
     const [userinfo, setuserinfo] = useState<TUser>({ ...userdata })

@@ -3,9 +3,9 @@ import {
   reviewUpdate,
 } from "@/actions/reviews.order";
 import ReviewForm from "@/components/modules/review/reviewform";
-import { IGetMealData, MealReview } from "@/types/meals/mealstype";
+import { IGetMealData, MealReview } from "@/types/meals.type";
 import { IUpdatereviewData } from "@/types/reviews.type";
-import { TUser } from "@/types/user/user";
+import { TUser } from "@/types/user.type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { use, useState } from "react";

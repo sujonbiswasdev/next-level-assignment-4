@@ -1,6 +1,6 @@
 'use server'
 import { IMealStatus, mealsService } from "@/services/meals.service";
-import {  ICreateMealsData, IUpdateMealsData, UpdateMealsData } from "@/types/meals/mealstype";
+import {  ICreateMealsData, IUpdateMealsData, UpdateMealsData } from "@/types/meals.type";
 import { updateTag } from "next/cache";
 
 export const createmeals = async (data:ICreateMealsData) => {

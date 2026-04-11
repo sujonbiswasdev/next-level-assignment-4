@@ -4,8 +4,8 @@ import ProfileCard from '@/components/shared/ProfileCard'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { getSession } from '@/services/users/auth.service'
-import { TUser } from '@/types/user/user'
+import { getSession } from '@/services/auth.service'
+import { TUser } from '@/types/user.type'
 import React from 'react'
 
 const DashboardLayout = async ({ admin, provider, children }: { admin: React.ReactNode, provider: React.ReactNode, children: React.ReactNode }) => {

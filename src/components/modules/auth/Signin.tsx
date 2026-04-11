@@ -20,7 +20,7 @@ import { authClient } from "@/lib/authClient";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { LoginSchema } from "@/validations/auth.validation";
-import { userLogin } from "@/actions/user/auth.actions";
+import { userLogin } from "@/actions/auth.actions";
 import { createAuthClient } from "better-auth/react";
 export function SigninForm() {
   const authClient = createAuthClient();
@@ -42,14 +42,15 @@ export function SigninForm() {
       const toastId = toast.loading("user signning.......");
       try {
         const loginuser = await userLogin(value);
-        if (loginuser.error) {
+        console.log(loginuser,'loinuser')
+        if (!loginuser || !loginuser.success) {
           toast.dismiss(toastId);
-          toast.error(loginuser.error, { theme: "dark", autoClose: 1000 });
+          toast.error(loginuser.message || "login failed", { theme: "dark" });
           return;
         }
         localStorage.removeItem("foodhub-cart");
         toast.dismiss(toastId);
-        toast.success(loginuser.data?.message || 'user login successfully', { theme: "dark", autoClose: 1000 });
+        toast.success(loginuser.message || 'user login successfully', { theme: "dark" });
         router.push("/profile");
       } catch (error) {
         toast.dismiss(toastId);
@@ -68,7 +69,7 @@ export function SigninForm() {
       </CardHeader>
       <CardContent>
         <form
-          id="bug-report-form"
+          id="login-form"
           onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();
@@ -144,7 +145,7 @@ export function SigninForm() {
           <Button type="button" variant="outline" onClick={() => form.reset()}>
             Reset
           </Button>
-          <Button type="submit" form="bug-report-form">
+          <Button type="submit" form="login-form">
             Submit
           </Button>
         </Field>

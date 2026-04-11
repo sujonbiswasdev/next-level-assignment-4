@@ -1,6 +1,6 @@
 import { getmealsforadmin } from "@/actions/meals.action"
 import AdminMealsTable from "@/components/modules/meals/adminmealsTable"
-import { IGetMealData } from "@/types/meals/mealstype"
+import { IGetMealData } from "@/types/meals.type"
 
 interface PageProps {
   searchParams: {

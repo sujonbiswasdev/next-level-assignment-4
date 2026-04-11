@@ -11,7 +11,7 @@ import { manageCartStore } from "@/store/CartStore";
 import ShareProviderProfileButton from "./providerprofileshare";
 import { TGetProviderProfileWithMeals } from "@/types/provider.type";
 import Link from "next/link";
-import { IGetMealData } from "@/types/meals/mealstype";
+import { IGetMealData } from "@/types/meals.type";
 
 const ProviderPage = ({ data }: { data: TGetProviderProfileWithMeals }) => {
   const { cart, addToCart } = manageCartStore();

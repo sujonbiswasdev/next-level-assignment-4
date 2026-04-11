@@ -8,8 +8,8 @@ import { Status, StatusIndicator, StatusLabel } from "./ui/status";
 import { use, useState } from "react";
 import { Input } from "./ui/input";
 import ShareProfileButton from "./profileshare";
-import { deleteuserown, updateUser } from "@/actions/user/user";
-import { TUpdateUserInput, TUser } from "@/types/user/user";
+import { deleteuserown, updateUser } from "@/actions/user.actions";
+import { TUpdateUserInput, TUser } from "@/types/user.type";
 import { updateUserSchema } from "@/validations/auth.validation";
 
 function ProfileModal({ user }: { user:TUser}) {

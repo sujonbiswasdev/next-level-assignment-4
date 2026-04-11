@@ -1,5 +1,5 @@
 'use client'
-import { userLogout } from '@/actions/user/auth.actions';
+import { userLogout } from '@/actions/auth.actions';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { authClient } from '@/lib/authClient';
-import { TUser } from '@/types/user/user';
+import { TUser } from '@/types/user.type';
 import {
   Bug,
   FileText,

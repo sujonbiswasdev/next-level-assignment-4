@@ -1,5 +1,5 @@
 'use client'
-import { TUser } from "@/types/user/user";
+import { TUser } from "@/types/user.type";
 import Image from "next/image";
 import InfoRow from "./infoRow";
 import { Status, StatusIndicator, StatusLabel } from "./ui/status";

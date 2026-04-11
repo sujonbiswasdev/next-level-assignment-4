@@ -1,6 +1,6 @@
 import ProfileModal from "@/components/profilemodel";
-import { getSession } from "@/services/users/auth.service";
-import { TUser } from "@/types/user/user";
+import { getSession } from "@/services/auth.service";
+import { TUser } from "@/types/user.type";
 
 export default async function ProfilePage() {
   const session = await getSession();

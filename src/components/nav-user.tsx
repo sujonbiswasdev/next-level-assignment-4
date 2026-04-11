@@ -27,9 +27,9 @@ import {
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/authClient";
 import { useRouter } from "next/navigation";
-import { TUser } from "@/types/user/user";
+import { TUser } from "@/types/user.type";
 import { toast } from "react-toastify";
-import { userLogout } from "@/actions/user/auth.actions";
+import { userLogout } from "@/actions/auth.actions";
 
 export function NavUser({ user }: { user: TUser }) {
   const { isMobile } = useSidebar();

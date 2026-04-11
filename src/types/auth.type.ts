@@ -1,4 +1,4 @@
-import { TUser } from "./user";
+import { TUser } from "./user.type";
 
 // login data
 export type Ilogin = {

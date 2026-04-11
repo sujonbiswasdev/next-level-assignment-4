@@ -30,7 +30,7 @@ import ProfileCard from "./ProfileCard";
 import { CartModal } from "../Cardmodel";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { TUser } from "@/types/user/user";
+import { TUser } from "@/types/user.type";
 
 interface MenuItem {
   title: string;

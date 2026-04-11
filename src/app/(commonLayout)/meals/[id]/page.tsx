@@ -1,8 +1,8 @@
 import SignleMealByid from "@/components/modules/meals/singleMeal";
 import { mealsService } from "@/services/meals.service";
-import { getSession } from "@/services/users/auth.service";
-import { IGetMealData } from "@/types/meals/mealstype";
-import { TUser } from "@/types/user/user";
+import { getSession } from "@/services/auth.service";
+import { IGetMealData } from "@/types/meals.type";
+import { TUser } from "@/types/user.type";
 
 export default async function SingleMealPage({
   params,

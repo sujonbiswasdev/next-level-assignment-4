@@ -1,5 +1,5 @@
 import { CreateorderData } from "@/validations/order.validation";
-import { IGetMealData} from "../meals/mealstype";
+import { IGetMealData} from "../meals.type";
 import z from "zod";
 import { IProviderInfo } from "../provider.type";
 

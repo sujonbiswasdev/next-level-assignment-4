@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { Filter, X, ChevronDown, Star, StarIcon } from 'lucide-react';
 import MealCard from '../meals/MealCard';
 import MealsCard from '../meals/get-meals';
-import { cuisines, dietaryPreferences } from '@/types/meals/mealstype';
+import { cuisines, dietaryPreferences } from '@/types/meals.type';
 import { useRouter } from 'next/navigation';
 import { TGetCategory } from '@/types/category';
 

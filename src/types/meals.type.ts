@@ -1,10 +1,9 @@
 import z from "zod";
-import { TGetCategory } from "../category";
-import { TUser } from "../user/user";
-import { Ipagination } from "./pagination";
+import { TGetCategory } from "./category";
+import { TUser } from "./user.type";
+import { Ipagination } from "./pagination.type";
 import { CreateMealData, UpdatemealData } from "@/validations/meal.validations";
-import { IProviderInfo, TGetProviderProfileWithMeals } from "../provider.type";
-import { IgetReviewData } from "../reviews.type";
+import { IgetReviewData } from "./reviews.type";
 export const cuisines = [
   "BANGLEDESHI",
   "ITALIAN",
@@ -77,16 +76,12 @@ export interface IGetMealData {
   status: "PENDING" | "APPROVED" | "REJECTED";
   createdAt: string;
   updatedAt: string;
-  provider: IProviderInfo;
-  reviews: MealReview[];
-  providerRating?:{
-    averageRating:number
-    totalReview:number
-  };
+
   averageRating?:number
   totalReview?:number
-  category:TGetCategory
 }
+
+export type TResponseMeals<T = unknown> = IGetMealData & T;
 
  export interface providerRating{
     averageRating:number

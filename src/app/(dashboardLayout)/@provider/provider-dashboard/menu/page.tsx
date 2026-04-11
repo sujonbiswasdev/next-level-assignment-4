@@ -1,6 +1,6 @@
 import { getmealsown } from "@/actions/meals.action"
 import MealTable from "@/components/modules/meals/MealsTable"
-import { IGetMealData } from "@/types/meals/mealstype"
+import { IGetMealData } from "@/types/meals.type"
 interface PageProps {
   searchParams: {
     category_name?: string

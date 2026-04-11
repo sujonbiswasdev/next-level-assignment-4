@@ -5,9 +5,9 @@ import PaginationPage from "./Pagination"
 import { manageCartStore } from "@/store/CartStore"
 import { toast } from "sonner"
 import MealCard from "./MealCard"
-import { Ipagination } from "@/types/meals/pagination"
+import { Ipagination } from "@/types/pagination.type"
 import { TGetCategory } from "@/types/category"
-import { cuisines, dietaryPreferences, IGetMealData } from "@/types/meals/mealstype"
+import { cuisines, dietaryPreferences, IGetMealData } from "@/types/meals.type"
 const MIN_PRICE_LIMIT = 0;
 const MAX_PRICE_LIMIT = 1000;
 export default function MealsCard({ initialMeals, initialcategory, pagination }: { initialMeals: IGetMealData[], initialcategory: TGetCategory[], pagination: Ipagination }) {

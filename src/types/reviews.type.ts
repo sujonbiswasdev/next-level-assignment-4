@@ -1,7 +1,7 @@
 import { createReviewsData, moderateData, updateReviewsData } from "@/validations/review.validation";
 import z from "zod";
-import { TUser } from "./user/user";
-import { IGetMealData } from "./meals/mealstype";
+import { TUser } from "./user.type";
+import { IGetMealData } from "./meals.type";
 
 // create reviews type
 export type ICreatereviewData=z.infer<typeof createReviewsData>
@@ -25,7 +25,7 @@ export interface IgetReviewData{
     comment: string,
     createdAt: string,
     updatedAt: string,
-    customer?:TUser,
-    meal:IGetMealData,
-    replies:IgetReviewData[]
+    customer?:TUser
 }
+
+export type TResponseReviewData<T = unknown> = IgetReviewData & T;

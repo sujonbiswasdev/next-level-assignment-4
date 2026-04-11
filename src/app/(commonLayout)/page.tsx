@@ -7,7 +7,7 @@ import MealCard from "@/components/modules/meals/MealCard";
 import Notfounddata from "@/components/Notfounddata";
 import TestimonialSection from "@/components/TestimonialSection";
 import { TGetCategory } from "@/types/category";
-import { IGetMealData } from "@/types/meals/mealstype";
+import { IGetMealData } from "@/types/meals.type";
 import { IProviderInfo } from "@/types/provider.type";
 import Link from "next/link";
 export default async function HomePage() {

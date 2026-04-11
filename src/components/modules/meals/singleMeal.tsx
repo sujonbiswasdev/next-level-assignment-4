@@ -10,8 +10,8 @@ import { Star, StarHalf } from 'lucide-react'
 import { MealsForm } from './create-meals'
 import ReviewForm from '../review/reviewform'
 import { ReviewItem } from '../review/reviewitem'
-import { IGetMealData } from '@/types/meals/mealstype'
-import { TUser } from '@/types/user/user'
+import { IGetMealData } from '@/types/meals.type'
+import { TUser } from '@/types/user.type'
 
 const SignleMealByid = ({ meal,userinfo }: { meal: IGetMealData,userinfo:TUser}) => {
   const addToCart = manageCartStore((state) => state.addToCart)

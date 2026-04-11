@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { Status, StatusIndicator, StatusLabel } from "../../ui/status";
 import { DeleteMeals } from "@/actions/meals.action";
-import { IGetMealData } from "@/types/meals/mealstype";
+import { IGetMealData } from "@/types/meals.type";
 
 const columns = [
   { key: "id", label: "ID" },

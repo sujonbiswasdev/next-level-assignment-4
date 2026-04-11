@@ -24,7 +24,7 @@ import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import { TGetCategory } from "@/types/category"
 import { getCategory } from "@/actions/category"
-import { cuisines, dietaryPreferences, ICreateMealsData } from "@/types/meals/mealstype"
+import { cuisines, dietaryPreferences, ICreateMealsData } from "@/types/meals.type"
 import { CreateMealData } from "@/validations/meal.validations"
 export function MealsForm() {
   const [category, setcategory] = useState<TGetCategory[] | undefined>()

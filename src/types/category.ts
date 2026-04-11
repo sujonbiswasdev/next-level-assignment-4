@@ -1,4 +1,4 @@
-import { IGetMealData } from "./meals/mealstype";
+import { IGetMealData } from "./meals.type";
 
 // category create
 export interface ICreateCategory {
@@ -19,19 +19,5 @@ export type TGetCategory = {
   image: string
   adminId:string
   createdAt:string
-  meals: IGetMealData[]
-  user: {
-    id: string
-    name: string
-    email: string
-    emailVerified: boolean
-    image: string | null
-    bgimage: string
-    phone: string | null
-    role: string
-    status: string
-    isActive: boolean
-    createdAt: string
-    updatedAt: string
-  }
 }
+export type TResponseCategoryData<T = unknown> = TGetCategory & T;

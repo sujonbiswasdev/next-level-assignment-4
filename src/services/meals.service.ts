@@ -6,7 +6,7 @@ import {
   IGetAllmeals,
   IGetMealData,
   IUpdateMealsData
-} from "@/types/meals/mealstype";
+} from "@/types/meals.type";
 import { ApiErrorResponse, ApiResponse } from "@/types/response.type";
 import { success } from "zod";
 const api_url = env.API_URL;

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 import { z } from "zod";
 import { Label } from "../../ui/label";
-import { cuisines, dietaryPreferences, IUpdateMealsData, UpdateMealsData } from "@/types/meals/mealstype";
+import { cuisines, dietaryPreferences, IUpdateMealsData, UpdateMealsData } from "@/types/meals.type";
 
 const allowedDomains = [
   "res.cloudinary.com",

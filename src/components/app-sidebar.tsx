@@ -30,7 +30,7 @@ import { adminRoutes } from "@/routes/adminRoute"
 import { ProviderRoutes } from "@/routes/providerRoute"
 import { Route } from "@/types"
 import { ApiResponse } from "@/types/response.type"
-import { TUser } from "@/types/user/user"
+import { TUser } from "@/types/user.type"
 
 // This is sample data.
 const data = {

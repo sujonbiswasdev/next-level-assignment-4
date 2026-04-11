@@ -3,20 +3,7 @@ import z from "zod";
 
 export const CreateCategory = z.object({
   name: z.string().min(1, "Name is required"),
-  image: z
-    .string()
-    .min(1, "Image URL is required")
-    .url("Invalid URL format")
-    .refine((url) => {
-      try {
-        const parsed = new URL(url);
-        return allowedDomains.includes(parsed.hostname);
-      } catch {
-        return false;
-      }
-    }, {
-      message: "Only Cloudinary and Pexels images are allowed",
-    }),
+  image: z.string()
 });
 export const UpdateCategory = z.object({
   name: z.string().optional(),

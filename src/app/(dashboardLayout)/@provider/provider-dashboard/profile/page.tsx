@@ -1,6 +1,6 @@
 import ProviderProfilePage from '@/components/modules/provider/profileCard'
-import { getSession } from '@/services/users/auth.service';
-import { TUser } from '@/types/user/user';
+import { getSession } from '@/services/auth.service';
+import { TUser } from '@/types/user.type';
 const ProviderProfile = async () => {
     const user=await getSession()
       if (!user || user.error || !user.success) {

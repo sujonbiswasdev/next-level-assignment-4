@@ -1,5 +1,5 @@
 import { env } from "@/env"
-import { IProviderInfo, TGetProviderProfileWithMeals } from "@/types/provider.type";
+import { IProviderInfo } from "@/types/provider.type";
 import { ApiErrorResponse, ApiResponse } from "@/types/response.type";
 
 const api_url=env.API_URL
@@ -9,11 +9,11 @@ export const providerService = {
   getprovidermeals: async (id: string) => {
     try {
       const response = await fetch(
-        `${api_url}/api/providers/${id}`
+        `${api_url}/api/v1/providers/${id}`
       );
 
       const body = await response.json();
-      const result = body as ApiResponse<TGetProviderProfileWithMeals>
+      const result = body as ApiResponse<any>
       if(!response.ok){
         const error=body as ApiErrorResponse
         return {success:error.success,message:error.message || "retrieve provider profile with meal Failed"}

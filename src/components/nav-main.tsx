@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { Roles } from "@/constants/Roles"
-import { TUser } from "@/types/user/user"
+import { TUser } from "@/types/user.type"
 export function NavMain({
   items,
   user

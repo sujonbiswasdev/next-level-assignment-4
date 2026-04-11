@@ -5,7 +5,7 @@ import { BadgePlus, Eye, Pen, Trash } from "lucide-react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { Status, StatusIndicator, StatusLabel } from "../../ui/status";
-import { IGetMealData } from "@/types/meals/mealstype";
+import { IGetMealData } from "@/types/meals.type";
 import { DeleteMeals } from "@/actions/meals.action";
 
 const columns = [

@@ -3,8 +3,8 @@ import { getCategory } from '@/actions/category'
 import MealsCard from '@/components/modules/meals/get-meals'
 import Notfounddata from '@/components/Notfounddata'
 import { TGetCategory } from '@/types/category'
-import { IGetMealData } from '@/types/meals/mealstype'
-import { Ipagination } from '@/types/meals/pagination'
+import { IGetMealData } from '@/types/meals.type'
+import { Ipagination } from '@/types/pagination.type'
 interface PageProps {
   searchParams: {
     category_name?: string

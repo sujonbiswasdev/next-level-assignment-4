@@ -1,6 +1,6 @@
 import SingleProfile from '@/components/singleprofile'
 import { AdminService } from '@/services/users/admin'
-import { TUser } from '@/types/user/user'
+import { TUser } from '@/types/user.type'
 import React from 'react'
 
 const UserProfile = async ({ params }: { params: Promise<{ id: string }> }) => {

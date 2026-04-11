@@ -1,5 +1,5 @@
 "use client";
-import { IGetMealData } from "@/types/meals/mealstype";
+import { IGetMealData } from "@/types/meals.type";
 import React, { Suspense } from "react";
 import Skeletonmeals from "../../ui/skeletonmeals";
 import { CardHoverLift } from "../../hover-lift";

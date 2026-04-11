@@ -4,8 +4,8 @@ import { env } from "@/env";
 import { deleteCookie } from "@/lib/cookieUtils";
 import { setTokenInCookies } from "@/lib/tokenUtils";
 import { ApiErrorResponse, ApiResponse } from "@/types/response.type";
-import { Ilogin, TAuthData } from "@/types/user/auth.type";
-import { TUser } from "@/types/user/user";
+import { Ilogin, TAuthData } from "@/types/auth.type";
+import { TUser } from "@/types/user.type";
 import { cookies } from "next/headers";
 const api_url = env.API_URL;
 
@@ -58,7 +58,7 @@ export async function getSession() {
     if (!cookieHeader) {
       return null;
     }
-    const res = await fetch(`${api_url}/api/auth/me`, {
+    const res = await fetch(`${api_url}/api/v1/auth/me`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -67,7 +67,8 @@ export async function getSession() {
       },
       cache: "no-store",
     });
-    const session: ApiResponse<TUser> = await res.json();
+    const session = await res.json();
+    console.log(session,'data')
     if (!session) {
       return { data: null, error: "No session" };
     }
@@ -76,11 +77,43 @@ export async function getSession() {
     return { data: null, error: "server error" };
   }
 }
+export async function registerUser(registerData: any) {
+  const formData = new FormData();
+
+        const { image, ...rest } = registerData;
+    
+        formData.append("data", JSON.stringify(rest));
+        if (image) {
+          formData.append("file", image);
+        }
+        console.log(formData,'fd')
+  try {
+    const response = await fetch(`${api_url}/api/v1/auth/register`, {
+      method: "POST",
+      cache: "no-store",
+      body: formData,
+    });
+
+    const body= await response.json();
+    console.log(body,'s')
+    if (!response.ok || !body.success) {
+      const data = body as ApiErrorResponse;
+      return {
+       success:data.success,
+       message:data.message
+      };
+    }
+    return { success:body.success,message:body.message,data:body.data };
+  } catch (error) {
+    return { data: null, error: "server error" };
+  }
+}
+
 
 export async function loginUser(logindata: Ilogin) {
   try {
     const storeCookies = await cookies();
-    const response = await fetch(`${api_url}/api/auth/login`, {
+    const response = await fetch(`${api_url}/api/v1/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -89,12 +122,15 @@ export async function loginUser(logindata: Ilogin) {
       cache: "no-store",
       body: JSON.stringify(logindata),
     });
-    const body: ApiResponse<TAuthData> = await response.json();
+    const body = await response.json();
+    console.log(body,'dsfd')
+    const result =body as ApiResponse<TAuthData>
     if (!response.ok || !body.success) {
-      const data = body as ApiErrorResponse;
+      const error = body as ApiErrorResponse;
+      console.log(error,'sdf')
       return {
-        data: null,
-        error: data.message || "Login failed",
+        success:error.success,
+        message: error.message || "Login failed",
       };
     }
 
@@ -111,7 +147,7 @@ export async function loginUser(logindata: Ilogin) {
     if (token) {
       await setTokenInCookies("better-auth.session_token", token, 24 * 60 * 60); // 1 day in seconds
     }
-    return { data: body, error: null };
+    return { success:result.success, message:result.message,data:result.data };
   } catch (error) {
     return { data: null, error: "server error" };
   }
@@ -119,7 +155,7 @@ export async function loginUser(logindata: Ilogin) {
 
 export async function Logout() {
   const storeCookies = await cookies();
-  const response = await fetch(`${api_url}/api/auth/logout`, {
+  const response = await fetch(`${api_url}/api/v1/auth/logout`, {
     method: "POST",
     credentials: "include",
     headers: {

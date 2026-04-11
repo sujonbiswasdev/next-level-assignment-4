@@ -1,5 +1,5 @@
 import { allowedDomains } from "@/lib/domain";
-import { cuisines, dietaryPreferences } from "@/types/meals/mealstype";
+import { cuisines, dietaryPreferences } from "@/types/meals.type";
 import z from "zod";
 
 export const CreateMealData = z.object({
