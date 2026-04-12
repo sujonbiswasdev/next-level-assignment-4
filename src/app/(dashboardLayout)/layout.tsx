@@ -13,7 +13,6 @@ import React from 'react'
 
 const DashboardLayout = async ({ admin, provider, children }: { admin: React.ReactNode, provider: React.ReactNode, children: React.ReactNode }) => {
   const userinfo = await getSession()
-  console.log(userinfo,'usrinfor')
   if (!userinfo || !userinfo.success || !userinfo.data) {
 
     return <Notfounddata content="You must be logged in to access the dashboard." emoji="🔒" />

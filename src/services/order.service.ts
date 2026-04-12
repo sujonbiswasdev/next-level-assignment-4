@@ -9,7 +9,7 @@ export const OrderService = {
     getownorder: async () => {
         try {
             const cookiestore = await cookies()
-            const response = await fetch(`${api_url}/api/orders`,
+            const response = await fetch(`${api_url}/api/v1/orders`,
                 {
                     headers: {
                         Cookie: cookiestore.toString(),
@@ -37,7 +37,7 @@ export const OrderService = {
     updateOrderStatus: async (id: string, orderdata: IOrderUpdateStatus) => {
         try {
             const cookieStore = await cookies()
-            const res = await fetch(`${api_url}/api/provider/orders/${id}`, {
+            const res = await fetch(`${api_url}/api/v1/provider/orders/${id}`, {
                 method: "PATCH",
                 credentials: "include",
                 headers: {
@@ -62,7 +62,7 @@ export const OrderService = {
     createorder: async (orderData: ICreateorderData) => {
         const cookieStore = await cookies()
         try {
-            const res = await fetch(`${api_url}/api/orders`, {
+            const res = await fetch(`${api_url}/api/v1/orders`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -86,7 +86,7 @@ export const OrderService = {
     getorderbyid: async (id: string) => {
         try {
             const cookiestore = await cookies()
-            const res = await fetch(`${api_url}/api/orders/${id}`, {
+            const res = await fetch(`${api_url}/api/v1/orders/${id}`, {
                 headers: {
                     Cookie: cookiestore.toString(),
                 },

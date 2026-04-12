@@ -5,12 +5,14 @@ import { manageCartStore } from "@/store/CartStore";
 import { useRouter } from "next/navigation";
 import { TResponseproviderData } from "@/types/provider.type";
 import AdvancedImageSkeleton from "@/components/shared/ImageCardSkeleton";
+import ImageCard from "@/components/shared/ImageCardSkeleton";
 
 const MealCard = ({ meal }: { meal: TResponseMeals<{provider:TResponseproviderData}> }) => {
+  console.log(meal,'meas')
   const { addToCart } = manageCartStore();
   const router = useRouter();
-  const fullStars = Math.floor(Number(meal.averageRating));
-  const hasHalfStar = Number(meal.averageRating) % 1 >= 0.5;
+  const fullStars = Math.floor(Number(meal.avgRating));
+  const hasHalfStar = Number(meal.avgRating) % 1 >= 0.5;
 
   return (
     <div className="w-full mx-auto p-4">
@@ -19,7 +21,7 @@ const MealCard = ({ meal }: { meal: TResponseMeals<{provider:TResponseproviderDa
           {/* Image Section */}
           <div className="relative w-full h-60 overflow-hidden">
           {meal.image ? (
-          <AdvancedImageSkeleton src={meal.image} alt={meal.meals_name} />
+          <ImageCard src={meal.image} alt={meal.meals_name} />
         ) : (
           <div className="flex items-center justify-center h-full w-full bg-gray-200 dark:bg-gray-800">
             <span className="text-sm text-gray-500">No Image</span>
@@ -30,7 +32,6 @@ const MealCard = ({ meal }: { meal: TResponseMeals<{provider:TResponseproviderDa
             <span className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-gray-800 text-xs font-bold px-4 py-2 rounded-full shadow-lg">
               {meal.category_name}
             </span>
-
             {/* Availability */}
             <span
               className={`absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full shadow-lg ${
@@ -70,7 +71,7 @@ const MealCard = ({ meal }: { meal: TResponseMeals<{provider:TResponseproviderDa
                   );
                 })}
                 <span className="text-[10px] text-gray-500 ml-2">
-                  ({meal.totalReview || 0} reviews)
+                  ({meal.totalReviews || 0} reviews)
                 </span>
               </div>
             </div>

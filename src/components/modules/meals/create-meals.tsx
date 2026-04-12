@@ -22,11 +22,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { createmeals } from "@/actions/meals.action";
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
-import { TGetCategory } from "@/types/category"
+import { TGetCategory, TResponseCategoryData } from "@/types/category"
 import { getCategory } from "@/actions/category"
-import { cuisines, dietaryPreferences, TCreateMealsData } from "@/types/meals.type"
+import { cuisines, dietaryPreferences, IGetMealData, TCreateMealsData } from "@/types/meals.type"
 import { CreateMealData } from "@/validations/meal.validations"
-export function MealsForm() {
+import { TUser } from "@/types/user.type"
+export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData,user:TUser}>[]}) {
   const [category, setcategory] = useState<TGetCategory[] | undefined>()
   const router = useRouter()
   const form = useForm({
@@ -61,14 +62,6 @@ export function MealsForm() {
       }
     },
   })
-
-  useEffect(() => {
-    const fetchCategory = async () => {
-      const categorydata = await getCategory()
-      setcategory(categorydata?.data.data)
-    }
-    fetchCategory()
-  }, [])
 
 
   return (
@@ -216,7 +209,7 @@ export function MealsForm() {
                       aria-invalid={isInvalid}
                     >
                       <option value="">Select a category</option>
-                      {category?.map((item: any, index: number) => <option key={index}>{item.name}</option>)}
+                      {data.map((item: any, index: number) => <option key={index}>{item.name}</option>)}
                     </select>
 
                     {isInvalid && (

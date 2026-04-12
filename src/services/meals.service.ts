@@ -78,7 +78,6 @@ export const mealsService = {
       const res = await fetch(url.toString(), config);
 
       const data = await res.json();
-      console.log(data.data.data,'dataforbuseinse')
       const result = data.data.data as TResponseMeals<{provider:IProviderInfo,reviews:IgetReviewData}>[]
       if (!res.ok) {
         const error = data as ApiErrorResponse;
@@ -100,7 +99,7 @@ export const mealsService = {
   getmealsown: async () => {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/provider/meals/own`, {
+      const res = await fetch(`${api_url}/api/v1/provider/meals/own`, {
         credentials: "include",
         next: { tags: ["mealsPost"] },
         headers: {
@@ -121,7 +120,7 @@ export const mealsService = {
   MealStatusUpdate: async (id: string, mealsdata: IMealStatus) => {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/admin/meal/${id}`, {
+      const res = await fetch(`${api_url}/api/v1/admin/meal/${id}`, {
         method:"PUT",
         credentials: "include",
         headers: {
@@ -143,7 +142,7 @@ export const mealsService = {
 
   getmealsbyid: async (id: string) => {
     try {
-      const res = await fetch(`${api_url}/api/meal/${id}`);
+      const res = await fetch(`${api_url}/api/v1/meal/${id}`);
       const body = await res.json();
       const result = body as ApiResponse<TResponseMeals>
       if(!res.ok){
@@ -162,7 +161,7 @@ export const mealsService = {
   handleDelete: async (id: string) => {
     try {
        const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/provider/meal/${id}`, {
+      const res = await fetch(`${api_url}/api/v1/provider/meal/${id}`, {
         method: "DELETE",
         credentials:"include",
         headers:{
@@ -184,7 +183,7 @@ export const mealsService = {
   updateMeals: async (id: string, mealsdata: TUpdateMealsData) => {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/provider/meal/${id}`, {
+      const res = await fetch(`${api_url}/api/v1/provider/meal/${id}`, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -213,7 +212,7 @@ export const mealsService = {
   getmealsforadmin: async (params?: any) => {
     try {
       const cookieStore = await cookies();
-      const url = new URL(`${api_url}/api/admin/meals`);
+      const url = new URL(`${api_url}/api/v1/admin/meals`);
       if (params) {
         Object.entries(params).forEach(([key, value]) => {
           if (value !== undefined && value !== null && value !== "") {

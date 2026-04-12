@@ -15,7 +15,7 @@ export const reviewService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${api_url}/api/meal/${mealid}/review`, {
+      const res = await fetch(`${api_url}/api/v1/meal/${mealid}/review`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -44,7 +44,7 @@ export const reviewService = {
   deleteReview: async (reviewid: string) => {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/review/${reviewid}`, {
+      const res = await fetch(`${api_url}/api/v1/review/${reviewid}`, {
         method: "DELETE",
         credentials: "include",
         headers: { Cookie: cookieStore.toString() },
@@ -70,7 +70,7 @@ export const reviewService = {
   moderateReview: async (reviewId: string, data: IModerateData) => {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/review/${reviewId}/moderate`, {
+      const res = await fetch(`${api_url}/api/v1/review/${reviewId}/moderate`, {
         method: "PATCH",
         credentials: "include",
         headers: {
@@ -100,7 +100,7 @@ export const reviewService = {
   reviewUpdate: async (reviewId: string, data: IUpdatereviewData) => {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/review/${reviewId}`, {
+      const res = await fetch(`${api_url}/api/v1/review/${reviewId}`, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -123,7 +123,7 @@ export const reviewService = {
 
   getAllReviews: async () => {
     try {
-      const res = await fetch(`${api_url}/api/reviews`, {
+      const res = await fetch(`${api_url}/api/v1/reviews`, {
         method: "GET",
         cache: "no-store",
       });

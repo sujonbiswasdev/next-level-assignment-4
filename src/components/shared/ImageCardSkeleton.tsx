@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function AdvancedImageSkeleton({
+export default function ImageCard({
   src,
   alt,
 }: {

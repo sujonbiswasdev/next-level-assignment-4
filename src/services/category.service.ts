@@ -1,6 +1,8 @@
 import { env } from "@/env";
-import {ICreateCategory, IUpdateCategory, TGetCategory } from "@/types/category";
+import {ICreateCategory, IUpdateCategory, TGetCategory, TResponseCategoryData } from "@/types/category";
+import { IGetMealData } from "@/types/meals.type";
 import { ApiErrorResponse, ApiResponse } from "@/types/response.type";
+import { TUser } from "@/types/user.type";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 const api_url = env.API_URL
@@ -13,7 +15,7 @@ export const CategoriesService = {
   getcategory: async () => {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/v1/category`, {
+      const res = await fetch(`${api_url}/api/v1/categorys`, {
         credentials: "include",
         headers: {
           Cookie: cookieStore.toString()
@@ -23,7 +25,7 @@ export const CategoriesService = {
         }
       })
       const data = await res.json()
-      const result =data as ApiResponse<any>
+      const result =data as ApiResponse<TResponseCategoryData<{meals:IGetMealData,user:TUser}>[]>
       if(!result.data){
         const error=data as ApiErrorResponse
         return {success:error.success,message:error.message || "categories retrive failed"}

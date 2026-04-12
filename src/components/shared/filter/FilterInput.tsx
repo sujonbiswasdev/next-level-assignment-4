@@ -10,17 +10,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 export const FilterPanel = ({
   fields,
   onReset,
   onApply,
-  isPending
+  isPending,
+  className,
+  classRoot,
+  buttonClassName
 }: {
   fields: TFilterField[];
   onReset?: () => void;
   onApply?: () => void;
   isPending?: boolean;
+  className?:string
+  classRoot?:string
+  buttonClassName?:string
 }) => {
   const [isApplySpinning, setIsApplySpinning] = useState(false);
   const [isResetSpinning, setIsResetSpinning] = useState(false);
@@ -49,15 +56,13 @@ export const FilterPanel = ({
   };
 
   return (
-    <section className="relative isolate w-full overflow-hidden p-4 sm:p-6 md:p-8 rounded-[28px] border border-white/20 dark:border-white/10 backdrop-blur-2xl bg-white/60 dark:bg-gray-900/60 shadow-lg transition-all duration-300">
+    <section className={cn("relative isolate w-full overflow-hidden p-4 sm:p-6 md:p-8 rounded-[28px] border border-white/20 dark:border-white/10 backdrop-blur-2xl bg-white/60 dark:bg-gray-900/60 shadow-lg transition-all duration-300",classRoot)}>
       <div
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-tr from-indigo-100/70 via-blue-100/70 to-transparent dark:from-blue-950/30 dark:via-slate-950/30 dark:to-transparent blur-2xl opacity-50"
+        className={cn("pointer-events-none absolute inset-0 -z-10 bg-gradient-to-tr from-indigo-100/70 via-blue-100/70 to-transparent dark:from-blue-950/30 dark:via-slate-950/30 dark:to-transparent blur-2xl opacity-50",classRoot)}
         aria-hidden
       />
       <form
-        className="
-          grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6
-        "
+        className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6",className)}
         style={{ position: "relative", zIndex: 1 }}
         autoComplete="off"
         onSubmit={(e) => { e.preventDefault(); onApply?.(); }}
@@ -226,11 +231,11 @@ export const FilterPanel = ({
           return null;
         })}
       </form>
-      <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+      <div className={cn("mt-10 flex flex-wrap justify-center gap-4")}>
         <button
           onClick={handleApplyClick}
           disabled={isPending}
-          className="flex items-center justify-center gap-2 px-10 py-3 rounded-lg text-white font-semibold shadow-lg bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 disabled:opacity-50 transition-all text-base tracking-wide outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+          className={cn("flex items-center justify-center gap-2 px-10 py-3 rounded-lg text-white font-semibold shadow-lg bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 disabled:opacity-50 transition-all text-base tracking-wide outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2",buttonClassName)}
           type="button"
         >
           {isApplySpinning && isPending && onApply
@@ -244,7 +249,7 @@ export const FilterPanel = ({
         <button
           onClick={handleResetClick}
           disabled={isPending}
-          className="flex items-center justify-center gap-2 px-10 py-3 rounded-lg text-gray-700 dark:text-gray-300 font-semibold shadow border border-gray-300 dark:border-gray-700 bg-white/70 dark:bg-gray-900/60 hover:bg-gray-100 dark:hover:bg-gray-800/90 hover:shadow-xl transition-all disabled:opacity-50 text-base tracking-wide outline-none focus:ring-2 focus:ring-blue-400"
+          className={cn("flex items-center justify-center gap-2 px-10 py-3 rounded-lg text-gray-700 dark:text-gray-300 font-semibold shadow border border-gray-300 dark:border-gray-700 bg-white/70 dark:bg-gray-900/60 hover:bg-gray-100 dark:hover:bg-gray-800/90 hover:shadow-xl transition-all disabled:opacity-50 text-base tracking-wide outline-none focus:ring-2 focus:ring-blue-400",buttonClassName)}
           type="button"
         >
           {isResetSpinning && isPending && onReset

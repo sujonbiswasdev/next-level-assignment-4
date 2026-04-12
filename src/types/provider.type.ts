@@ -10,6 +10,8 @@ import { TUser } from "./user.type"
   user:TUser;
   meals?:IGetMealData[]
   rating?:{totalReview: number, averageRating: number};
+  totalReview?: number, 
+  averageRating?: number
   image: string | null;
   createdAt: string;
   updatedAt: string;

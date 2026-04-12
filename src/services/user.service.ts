@@ -1,7 +1,7 @@
 import { revalidateTag } from 'next/cache';
 import { env } from "@/env"
 import { cookies } from "next/headers"
-import { TResponseUserData, TUpdateUserCommonData, TUpdateUserInput, TUser } from '@/types/user.type';
+import { TResponseUserData, TUpdateuserbyAdmin, TUpdateUserInput, TUser } from '@/types/user.type';
 import { ApiErrorResponse, ApiResponse } from '@/types/response.type';
 import { IProviderInfo } from '@/types/provider.type';
 
@@ -64,7 +64,7 @@ export const userService={
     
         },
 
-        updateuserdata: async (id: string, updateUser: TUpdateUserCommonData) => {
+        updateuserdata: async (id: string, updateUser: TUpdateuserbyAdmin) => {
           try {
             const cookieStore = await cookies();
             const res = await fetch(`${api_url}/api/v1/admin/profile/${id}`, {
@@ -185,48 +185,6 @@ export const userService={
             return {
               data: null,
               error: error.message,
-            };
-          }
-        },
-
-        getprovidermeals: async (id: string) => {
-          try {
-            const response = await fetch(
-              `${api_url}/api/providers/${id}`
-            );
-      
-            const body = await response.json();
-            const result = body as ApiResponse<any>
-            if(!response.ok){
-              const error=body as ApiErrorResponse
-              return {success:error.success,message:error.message || "retrieve provider profile with meal Failed"}
-            }
-            return {success:result.success,message:result.message || "retrieve provider profile with meal successfully",data:result.data
-            }
-          } catch (error) {
-            return {
-              data: null,
-              error: error instanceof Error ? error.message : "Unknown error",
-            };
-          }
-        },
-        getAllProviderUser: async () => {
-          try {
-            const response = await fetch(`${api_url}/api/providers`);
-      
-            const data = await response.json();
-            const result = data as ApiResponse<IProviderInfo[]>
-      
-            if (!response.ok) {
-              const error=data as ApiErrorResponse
-              return {success:error.success,message:error.message || "retrieve all provider user failed"}
-            }
-      
-            return result
-          } catch (error) {
-            return {
-              data: null,
-              error: error instanceof Error ? error.message : "Unknown error",
             };
           }
         },

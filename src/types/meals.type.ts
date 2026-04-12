@@ -76,8 +76,8 @@ export interface IGetMealData {
   status: "PENDING" | "APPROVED" | "REJECTED";
   createdAt: string;
   updatedAt: string;
-  averageRating?:number
-  totalReview?:number
+  avgRating?:number
+  totalReviews?:number
 }
 
 export type TResponseMeals<T = unknown> = IGetMealData & T;
