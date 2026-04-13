@@ -12,7 +12,6 @@ type Props = {
 };
 
 const ProviderCard: React.FC<Props> = ({ data }) => {
-  console.log(data,'data')
     const router=useRouter()
   const {
     restaurantName,

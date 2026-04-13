@@ -4,17 +4,20 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { cn } from "@/lib/utils";
 
 interface Props {
   id: string;
   href?: string;
   showShort?: boolean;
+  className?:string;
 }
 
 const CopyableId: React.FC<Props> = ({
   id,
   href,
   showShort = true,
+  className
 }) => {
   const router = useRouter();
 
@@ -43,7 +46,7 @@ const CopyableId: React.FC<Props> = ({
   return (
     <span
       onClick={handleClick}
-      className="group inline-flex items-center gap-1 cursor-pointer text-blue-600 hover:text-blue-700 transition-all"
+      className={cn("group inline-flex items-center gap-1 cursor-pointer text-blue-600 hover:text-blue-700 transition-all",className)}
       title="Click → View | Alt + Click → Copy"
     >
       <span className="hover:underline">

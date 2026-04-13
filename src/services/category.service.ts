@@ -15,7 +15,7 @@ export const CategoriesService = {
   getcategory: async () => {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/v1/categorys`, {
+      const res = await fetch(`${api_url}/api/v1/category`, {
         credentials: "include",
         headers: {
           Cookie: cookieStore.toString()

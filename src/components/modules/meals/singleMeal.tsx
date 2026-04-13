@@ -18,7 +18,6 @@ import { IgetReviewData } from '@/types/reviews.type'
 import ImageCard from '@/components/shared/ImageCardSkeleton'
 
 const SignleMealByid = ({ meal,userinfo }: { meal:TResponseMeals<{category:TGetCategory,provider:IProviderInfo,reviews:IgetReviewData[],providerRating:any}>,userinfo:TUser}) => {
-  console.log(meal,'me1')
   const addToCart = manageCartStore((state) => state.addToCart)
   const router = useRouter()
   const defaultIamge = 'https://res.cloudinary.com/drmeagmkl/image/upload/v1771962102/default_meal_kgc6mv.png'

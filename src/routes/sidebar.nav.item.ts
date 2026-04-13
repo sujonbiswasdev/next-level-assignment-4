@@ -37,8 +37,8 @@ export const providerNavItem: NavSection[] = [
                 icon: "PlusSquare"
             },
             {
-                title: "menu",
-                href: "/provider/dashboard/menu",
+                title: "my-menu",
+                href: "/provider/dashboard/my-menu",
                 icon: "List"
             }
         ]

@@ -7,9 +7,10 @@ import { revalidateTag } from "next/cache";
 import { IProviderInfo } from "@/types/provider.type";
 import { IgetReviewData } from "@/types/reviews.type";
 import { Ipagination } from "@/types/pagination.type";
+import { TGetCategory } from "@/types/category";
 const api_url = env.API_URL;
 
-interface ServiceOptionds {
+export interface ServiceOptionds {
   cache?: RequestCache;
   revalidate?: number;
 }
@@ -96,23 +97,44 @@ export const mealsService = {
       return { message: "something went wrong please try again" };
     }
   },
-  getmealsown: async () => {
+  getmealsown: async (params?: Record<string, any>, options?: ServiceOptionds) => {
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/v1/provider/meals/own`, {
-        credentials: "include",
-        next: { tags: ["mealsPost"] },
-        headers: {
-          Cookie: cookieStore.toString(),
-        },
-      });
-      const data = await res.json();
-      const result =data as ApiResponse<TResponseMeals[]>
-      if(!res.ok){
-        const error =data as ApiErrorResponse
-        return {success:error.success,message:error.message || "retrieve own meals failed"}
+      const url = new URL(`${api_url}/api/v1/provider/meals/own`);
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            url.searchParams.append(key, String(value));
+          }
+        });
       }
-      return result;
+      const config: RequestInit & { next?: any } = {
+        credentials: "include",
+        headers: { Cookie: cookieStore.toString() },
+      };
+
+      if (options?.cache) {
+        config.cache = options.cache;
+      }
+      if (options?.revalidate) {
+        config.next = { ...config.next, revalidate: options.revalidate };
+      }
+      config.next = { ...config.next, tags: ["meal","meals"] };
+
+      const res = await fetch(url.toString(), config);
+      const data = await res.json()
+      if (!res.ok) {
+        const error = data as ApiErrorResponse;
+        return { success: error.success, message: error.message || "retrieve own meals failed" };
+      }
+
+      return {
+        success: data.success,
+        message: data.message || "retrieve own meals successfully",
+        data: data.data.mealsData,
+        pagination:data.data.pagination as Ipagination
+      };
+ 
     } catch (error) {
       return { data: null, error: { message: "Something Went Wrong" } };
     }

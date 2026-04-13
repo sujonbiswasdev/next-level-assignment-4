@@ -1,3 +1,5 @@
+import LoadingContent from "@/components/LoadingContent";
+
 export default function GlobalLoading() {
-  return <p>Loading...</p>
+  return <LoadingContent data="Loading, please wait while we fetch your content..." />
 }

@@ -1,3 +1,6 @@
+import LoadingContent from "@/components/LoadingContent";
+
 export default function DashboardLoading() {
-  return <p>Loading...</p>
+  return <LoadingContent data="Loading dashboard..." />
 }
+    

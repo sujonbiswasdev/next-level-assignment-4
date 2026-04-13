@@ -16,7 +16,6 @@ const MealCard = ({
 }) => {
   const { addToCart } = manageCartStore();
   const router = useRouter();
-  // console.log(meal.avgRating, "mealdata");
   const fullStars = Math.floor(Number(meal.avgRating));
   const hasHalfStar = Number(meal.avgRating) % 1 >= 0.5;
 

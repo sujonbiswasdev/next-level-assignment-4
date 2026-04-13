@@ -1,5 +1,5 @@
 'use server'
-import { IMealStatus, mealsService } from "@/services/meals.service";
+import { IMealStatus, mealsService, ServiceOptionds } from "@/services/meals.service";
 import {  TCreateMealsData, TUpdateMealsData, UpdateMealsData } from "@/types/meals.type";
 import { updateTag } from "next/cache";
 
@@ -13,11 +13,11 @@ export const getAllMeals=async(params?:any,config?:any)=>{
   return await mealsService.getAllmeals(params,config)
 }
 
-export const getmealsown=async()=>{
-  return await mealsService.getmealsown()
-}
+export const getmealsown = async (params?: any) => {
+  return await mealsService.getmealsown(params);
+};
 
-export const getmealsforadmin=async(params:any)=>{
+export const getmealsforadmin=async(params?: Record<string, any>, options?: ServiceOptionds)=>{
   return await mealsService.getmealsforadmin(params)
 }
 

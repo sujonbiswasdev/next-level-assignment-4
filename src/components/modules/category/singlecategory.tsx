@@ -8,8 +8,7 @@ import { TGetCategory, TResponseCategoryData } from '@/types/category';
 import { TUser } from '@/types/user.type';
 
 const Singlecategory = ({ category }: { category:TResponseCategoryData<{user:TUser,meals:IGetMealData[]}> }) => {
-  console.log(category,'categories')
-
+  
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false);
   const [priceRange, setPriceRange] = useState([1, 1000]);

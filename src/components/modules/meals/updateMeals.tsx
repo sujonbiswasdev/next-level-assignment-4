@@ -1,172 +1,205 @@
 "use client";
 
 import { updateMeal } from "@/actions/meals.action";
-
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
-
 import { z } from "zod";
 import { Label } from "../../ui/label";
-import { cuisines, dietaryPreferences, IUpdateMealsData, UpdateMealsData } from "@/types/meals.type";
-
-const allowedDomains = [
-  "res.cloudinary.com",
-  "images.pexels.com",
-];
-
-export const updateMealSchema = z.object({
-  meals_name: z.string().optional(),
-  description: z.string().optional(),
-  image: z.string().url("Invalid image URL").refine((url) => {
-    try {
-      const parsed = new URL(url as any);
-      return allowedDomains.includes(parsed.hostname);
-    } catch {
-      return false;
-    }
-  }, {
-    message: "Only Cloudinary and Pexels images allowed",
-  }).optional(),
-  price: z.number().positive('Price must be a positive number').optional(),
-  isAvailable: z.boolean().optional(),
-  category_name: z.string().optional(),
-  dietaryPreference: z.enum(dietaryPreferences).optional(),
-  cuisine: z.enum(cuisines).optional()
-});
-
+import {
+  cuisines,
+  dietaryPreferences,
+  UpdateMealsData
+} from "@/types/meals.type";
+import { UpdatemealData } from "@/validations/meal.validations";
 
 const UpdateMeal = ({ mealId }: { mealId: string }) => {
-  const [mealData, setMealData] = React.useState<IUpdateMealsData>({});
-  const parsedata = updateMealSchema.safeParse(mealData);
+  const [mealData, setMealData] = useState<UpdateMealsData>({});
+  const parsedata = UpdatemealData.safeParse(mealData);
+  const [loading, setLoading] = useState(false);
+
+  const handleInput = (
+    field: keyof UpdateMealsData,
+    value: any
+  ) => setMealData((prev) => ({ ...prev, [field]: value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const data = await updateMeal(mealId, parsedata.data!)
+    if (!parsedata.success) {
+      toast.error(parsedata.error.issues[0]?.message || "Please check the fields");
+      return;
+    }
+    setLoading(true);
+    const data = await updateMeal(mealId, parsedata.data!);
+    setLoading(false);
     if (!data) {
       toast.error("Failed to update meal");
     } else {
       toast.success("Meal updated successfully");
-      setMealData({})
+      setMealData({});
     }
   };
 
   return (
-
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-green-50 to-blue-50 p-6">
-      <form onSubmit={handleSubmit} className={` w-full max-w-4xl shadow-2xl rounded-3xl p-8 md:p-12 space-y-6`}>
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
+    <div className="flex items-center justify-center min-h-[70vh] px-2 py-8 bg-gradient-to-tr from-green-50 to-blue-50">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-2xl bg-white dark:bg-gray-950 rounded-2xl shadow-xl p-6 md:p-10 space-y-7 transition"
+        autoComplete="off"
+      >
+        <h2 className="text-2xl md:text-3xl font-bold text-center text-indigo-900 dark:text-indigo-100 mb-4">
           Update Meal
         </h2>
 
-        {/* Name & Price */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col space-y-2">
-            <label htmlFor="mealName" className="font-medium ml-2 ">Meal name</label>
+        {/* Name & Price Row */}
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1 flex flex-col gap-1.5">
+            <Label htmlFor="mealName" className="font-medium">
+              Meal Name
+            </Label>
             <input
+              id="mealName"
               type="text"
-              placeholder="Meal Name"
-              value={mealData?.meals_name ?? ""}
-              onChange={(e) => setMealData({ ...mealData, meals_name: e.target.value })}
-              className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-
+              placeholder="Meal name"
+              value={mealData.meals_name ?? ""}
+              onChange={(e) => handleInput("meals_name", e.target.value)}
+              className="w-full border border-gray-300 dark:border-gray-800 p-3 rounded-lg focus:ring-2 focus:ring-green-400 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition"
+              autoComplete="off"
             />
           </div>
-          <div className="flex flex-col space-y-2">
-            <label htmlFor="price" className="font-medium ml-2 ">Price ($)</label>
-            <input className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-              type={mealData.price === 0 ? "text" : "number"}
+          <div className="flex-1 flex flex-col gap-1.5">
+            <Label htmlFor="price" className="font-medium">
+              Price ($)
+            </Label>
+            <input
+              id="price"
+              type="number"
               min={0}
-              placeholder="Price ($)"
+              step="0.01"
+              placeholder="Price"
               value={mealData.price ?? ""}
-              onChange={(e) => setMealData({
-                ...mealData,
-                price: e.target.value === "" ? 0 : Math.max(0, Number(e.target.value))
-              })}
+              onChange={(e) =>
+                handleInput(
+                  "price",
+                  e.target.value === ""
+                    ? undefined
+                    : Math.max(0, Number(e.target.value))
+                )
+              }
+              className="w-full border border-gray-300 dark:border-gray-800 p-3 rounded-lg focus:ring-2 focus:ring-green-400 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition"
+              autoComplete="off"
             />
-
-            <p className={`${parsedata.success ? "hidden" : "error"}`}>{parsedata.error?.issues[0]?.path == 'price' as any ? parsedata.error?.issues[0]?.message : null}</p>
+            {parsedata.error?.issues.find((i) => i.path[0] === "price") && (
+              <span className="text-xs text-red-600 block">
+                {parsedata.error.issues.find((i) => i.path[0] === "price")?.message}
+              </span>
+            )}
           </div>
-
         </div>
-        <div className="flex flex-col space-y-2">
-          <Label htmlFor="image" className="font-medium ml-2 ">Image URL</Label>
+
+        {/* Image URL Field */}
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="image" className="font-medium">
+            Image URL
+          </Label>
           <input
+            id="image"
             type="url"
-            placeholder="Image URL"
+            placeholder="Paste Cloudinary or Pexels image URL..."
             value={mealData.image ?? ""}
-            onChange={(e) =>
-              setMealData({ ...mealData, image: e.target.value })
-            }
-
-            className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+            onChange={(e) => handleInput("image", e.target.value)}
+            className="w-full border border-gray-300 dark:border-gray-800 p-3 rounded-lg focus:ring-2 focus:ring-green-400 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition"
+            autoComplete="off"
           />
-          <p className={`${parsedata.success ? "hidden" : "error"}`}>{parsedata.error?.issues[1]?.path[0] === 'image' ? parsedata.error?.issues[1]?.message : null}</p>
-
+          {parsedata.error?.issues.find((i) => i.path[0] === "image") && (
+            <span className="text-xs text-red-600 block">
+              {parsedata.error.issues.find((i) => i.path[0] === "image")?.message}
+            </span>
+          )}
         </div>
 
-        {/* description */}
-        <div className="flex flex-col space-y-2">
-          <Label htmlFor="description" className="font-medium ml-2 ">Description</Label>
+        {/* Description */}
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="description" className="font-medium">
+            Description
+          </Label>
           <textarea
-            placeholder="Description"
-            value={mealData.description}
-            onChange={(e) =>
-              setMealData({ ...mealData, description: e.target.value })
-            }
-            className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+            id="description"
+            rows={3}
+            placeholder="Describe this meal"
+            value={mealData.description ?? ""}
+            onChange={(e) => handleInput("description", e.target.value)}
+            className="w-full border border-gray-300 dark:border-gray-800 p-3 rounded-lg focus:ring-2 focus:ring-green-400 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition resize-none"
+            autoComplete="off"
           />
         </div>
 
-
-
-        <div className="flex flex-wrap justify-between">
-          <div className="flex items-center space-x-2">
-            <Label htmlFor="cuisines" className="font-medium ml-2 ">cuisines :</Label>
+        {/* Dropdowns: Cuisine / Dietary */}
+        <div className="flex flex-col sm:flex-row gap-6">
+          <div className="flex-1 flex flex-col gap-1.5">
+            <Label htmlFor="cuisine" className="font-medium">
+              Cuisine
+            </Label>
             <select
-              className="border-amber-50 shadow-sm px-2 py-2.5"
+              id="cuisine"
+              value={mealData.cuisine ?? ""}
               onChange={(e) =>
-                setMealData({ ...mealData, cuisine: e.target.value as typeof cuisines[number] | undefined })
+                handleInput("cuisine", e.target.value as typeof cuisines[number] || undefined)
               }
+              className="w-full border border-gray-300 dark:border-gray-800 p-3 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition"
             >
-              <option value="">Select a cuisines</option>
-              {cuisines?.map((item: any, index: number) => <option value={item} key={index}>{item}</option>)}
+              <option value="">Select a cuisine</option>
+              {cuisines.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
             </select>
           </div>
-
-          <div className="flex items-center space-x-2">
-            <Label htmlFor="dietaryPreference" className="font-medium ml-2 ">dietaryPreference :</Label>
+          <div className="flex-1 flex flex-col gap-1.5">
+            <Label htmlFor="dietaryPreference" className="font-medium">
+              Dietary Preference
+            </Label>
             <select
-              className="border-amber-50 shadow-sm px-2 py-2.5"
+              id="dietaryPreference"
+              value={mealData.dietaryPreference ?? ""}
               onChange={(e) =>
-                setMealData({ ...mealData, dietaryPreference: e.target.value as typeof dietaryPreferences[number] | undefined })
+                handleInput(
+                  "dietaryPreference",
+                  e.target.value as typeof dietaryPreferences[number] || undefined
+                )
               }
+              className="w-full border border-gray-300 dark:border-gray-800 p-3 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition"
             >
-              <option value="">Select a cuisines</option>
-              {dietaryPreferences?.map((item: any, index: number) => <option value={item} key={index}>{item}</option>)}
+              <option value="">Select dietary preference</option>
+              {dietaryPreferences.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
             </select>
           </div>
         </div>
 
-
-
-        <div className="flex items-center space-x-2">
-          <Label htmlFor="isAvailable" className="font-medium ml-2 ">Available</Label>
+        {/* Availability Switch */}
+        <div className="flex items-center gap-3 mt-1">
           <input
+            id="isAvailable"
             type="checkbox"
-            checked={mealData.isAvailable}
-            onChange={(e) =>
-              setMealData({ ...mealData, isAvailable: e.target.checked })
-            }
+            checked={!!mealData.isAvailable}
+            onChange={(e) => handleInput("isAvailable", e.target.checked)}
+            className="accent-green-500 w-5 h-5 rounded"
           />
+          <Label htmlFor="isAvailable" className="font-medium select-none">
+            Available
+          </Label>
         </div>
-
 
         <button
-
           type="submit"
-          className={`bg-black text-white p-2 w-full`}
+          disabled={loading}
+          className="w-full px-5 py-3 rounded-lg font-semibold bg-gradient-to-r from-green-500 to-blue-600 text-white shadow-lg hover:from-green-600 hover:to-blue-700 transition disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          Update
+          {loading ? "Updating..." : "Update"}
         </button>
       </form>
     </div>
