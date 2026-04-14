@@ -77,7 +77,8 @@ export interface IGetMealData {
   createdAt: string;
   updatedAt: string;
   avgRating?:number
-  totalReviews?:number
+  totalReviews?:number,
+  deliverycharge?:number
 }
 
 export type TResponseMeals<T = unknown> = IGetMealData & T;

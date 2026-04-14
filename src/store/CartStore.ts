@@ -10,7 +10,9 @@ export interface CartItem {
   mealid:string
   image: string
   isAvailable:boolean
-  quantity: number
+  quantity: number,
+  deliverycharge:number,
+  restaurantName:string
 }
 
 interface CartState {
@@ -21,7 +23,7 @@ interface CartState {
   decrease: (id: string) => void
   clearCart: () => void
   getSubtotal: () => number,
-  getTotal: () => number
+  getDeliveryCharge: () => any
 }
 
 export const manageCartStore = create<CartState>()(
@@ -85,12 +87,11 @@ export const manageCartStore = create<CartState>()(
           0
         ),
 
-      getTotal: () => {
-        const subtotal = get().getSubtotal()
-        const tax = subtotal * 0.1
-        const delivery = subtotal > 0 ? 5 : 0
-
-        return subtotal + tax + delivery
+        getDeliveryCharge: () => {
+        const cart = get().cart;
+        const deliceryCharge = cart.reduce((acc, item) => acc + item.deliverycharge, 0);
+        const deliveryCharge = deliceryCharge === 0 ? 0 : 120;
+        return deliveryCharge;
       }
 
     }),

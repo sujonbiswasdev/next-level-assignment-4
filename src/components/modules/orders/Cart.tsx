@@ -5,10 +5,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function CartComponent() {
-    const {removeFromCart, cart, clearCart, getSubtotal, getTotal ,increase,decrease} = manageCartStore()
+    const {removeFromCart, cart, clearCart, getSubtotal, getDeliveryCharge, increase, decrease} = manageCartStore()
     const router=useRouter()
-    const subtotal=getSubtotal()
-    const tax=subtotal*0.5
+    const subtotal = getSubtotal()
+    const deliveryCharge = getDeliveryCharge()
+    const total = subtotal + deliveryCharge
     return (
         <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-10 px-4 md:px-10">
             {/* Main Grid */}
@@ -29,6 +30,7 @@ export default function CartComponent() {
                                 increase={increase}
                                 decrease={decrease}
                                 removechat={removeFromCart}
+                                deliverycharge={item.deliverycharge ?? 0}
                                 quantity={item.id}
                                 clearchat={clearCart}
                                 price={item.price}
@@ -48,18 +50,19 @@ export default function CartComponent() {
                     </h3>
                        <div className="flex justify-between font-semibold text-lg text-gray-800">
                         <span>subtotal</span>
-                        <span>${getSubtotal()}</span>
+                        <span>${subtotal}</span>
                     </div>
                       <div className="flex justify-between font-semibold text-lg text-gray-800">
-                        <span>Tax</span>
-                        <span>${tax}</span>
+                        <span>delivery charge</span>
+                        <span>৳{deliveryCharge}</span>
+                   
                     </div>
 
                     <div className="border-t my-4" />
 
                     <div className="flex justify-between font-semibold text-lg text-gray-800">
                         <span>Total</span>
-                        <span>${getTotal()}</span>
+                        <span>${total}</span>
                     </div>
 
                     <button onClick={()=>router.push("/checkout")} className="mt-6 w-full bg-black text-white py-3 rounded-xl font-medium hover:bg-gray-900 transition-all duration-300 active:scale-95">
@@ -76,6 +79,7 @@ function CartItem({
     image,
     value,
     clearchat,
+    deliverycharge,
     increase,
     decrease,
     removechat,
@@ -85,6 +89,7 @@ function CartItem({
     title: string;
     image:string;
     clearchat:any;
+    deliverycharge:number;
     increase:any;
     decrease:any;
     removechat:any;
@@ -111,6 +116,15 @@ function CartItem({
                     <h3 className="font-semibold text-gray-800">
                         {title}
                     </h3>
+
+                    {/* Delivery Charge */}
+                    <div className="text-sm text-gray-600">
+                        Delivery Charge: 
+                        <span className="font-semibold ml-1 text-amber-700">
+                            ${deliverycharge?.toFixed ? deliverycharge.toFixed(2) : deliverycharge}
+                        </span>
+                    </div>
+               
                    
                     {/* Quantity */}
                     <div className="flex items-center space-x-3">

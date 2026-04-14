@@ -27,3 +27,8 @@ export const getsingleorder=async(params?:any)=>{
   return res
   
 }
+
+export const getOwnPaymentActions = async (id:string) => {
+  const response = await OrderService.getOwnPayment(id);
+  return response;
+};

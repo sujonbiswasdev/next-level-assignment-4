@@ -5,6 +5,7 @@ import z from "zod";
 export const CreateMealData = z.object({
   meals_name: z.string().min(1, "meals name is required"),
   description: z.string().min(5, "description atleast 5 character"),
+  deliverycharge:z.number().optional(),
   image: z
     .string()
     .min(1, "Image is required")
@@ -22,7 +23,7 @@ export const CreateMealData = z.object({
         message: "Only Cloudinary and Pexels images allowed",
       },
     ),
-  price: z.int().min(1, "price is required").max(1000, "max price only 1000"),
+  price: z.int().min(1, "price is required").max(5000, "max price only 1000"),
   isAvailable: z.boolean(),
   dietaryPreference: z.enum(dietaryPreferences),
   category_name: z.string().min(1, "category name is required"),

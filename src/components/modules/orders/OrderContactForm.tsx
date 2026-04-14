@@ -9,6 +9,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { manageCartStore } from "@/store/CartStore"
 import { ICreateorderData, IOrderItem } from "@/types/order/order.type"
+import { useRouter } from "next/navigation"
 import { FormEvent, useState } from "react"
 import { toast } from "react-toastify"
 
@@ -17,8 +18,9 @@ export function OrderForm({
 }: {
     setactiveButton: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+    const router=useRouter()
     const [orderdata, setorderdata] = useState<ICreateorderData | {}>({})
-    const { removeFromCart, cart, clearCart, getSubtotal, getTotal, increase, decrease } = manageCartStore()
+    const { removeFromCart, cart, clearCart, getSubtotal, increase, decrease } = manageCartStore()
 
     const items:IOrderItem[] = cart.map(item => ({
         mealId: item.mealid,
@@ -34,14 +36,16 @@ export function OrderForm({
         e.preventDefault()
         const toastid = toast.loading("order creating.....")
         const response = await CreateOrder(formData as ICreateorderData)
+        router.push(response.paymentUrl)
         if (response.error || !response.success) {
             toast.dismiss(toastid)
             toast.error(response.message)
            return
         }
         toast.dismiss(toastid)
-        toast.success(response.data?.message || 'order created successfully')
+        toast.success(response.message || 'order created successfully')
         setactiveButton(true)
+
     }
     return (
         <form className="w-full max-w-sm" onSubmit={handleSubmit}>

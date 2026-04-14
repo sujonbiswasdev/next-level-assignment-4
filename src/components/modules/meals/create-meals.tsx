@@ -33,6 +33,7 @@ export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData
   const form = useForm({
     defaultValues: {
       meals_name: "",
+      deliverycharge:0,
       description: "",
       image: "",
       price: 0,
@@ -159,6 +160,32 @@ export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData
               }}
             />
 
+<form.Field
+              name="deliverycharge"
+                  validators={{ onChange: CreateMealData.shape.deliverycharge }}
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>price</FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(Number(e.target.value))}
+                      aria-invalid={isInvalid}
+                      placeholder="please enter your price"
+                      autoComplete="off"
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                )
+              }}
+            />
             <form.Field
               name="cuisine"
                   validators={{ onChange: CreateMealData.shape.cuisine}}

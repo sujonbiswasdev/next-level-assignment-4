@@ -37,7 +37,7 @@ export function UpdateOrderStatusForm({
       status: initialStatus || "",
     },
     onSubmit: async ({ value }) => {
-        console.log(value,'value')
+
       const toastId = toast.loading("Updating order status... Please wait.");
       try {
         const res = await updateorderstatus(id, { status: value.status });

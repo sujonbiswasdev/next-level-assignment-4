@@ -41,7 +41,7 @@ export const OrderService = {
     },
 
     updateOrderStatus: async (id: string, orderdata: IOrderUpdateStatus) => {
-        console.log(orderdata,'sss')
+
         try {
             const cookieStore = await cookies()
             const res = await fetch(`${api_url}/api/v1/provider/orders/${id}`, {
@@ -80,12 +80,13 @@ export const OrderService = {
             });
 
             const data = await res.json();
-            const result = data as ApiResponse<IGetOrderData>
+        
             if (!res.ok) {
                 const error=data as ApiErrorResponse
                 return { success:error.success, message:error.message || "meals create failed" }
             }
-            return { success:result.success,message:result.message,data:result }
+            console.log(data.data.paymentUrl,'ss')
+            return { success:data.success,message:data.message,data:data.data.order as TResponseOrderData,paymentUrl:data.data.paymentUrl }
         } catch (error) {
             return { data: null, error: { message: `${error} Something Went Wrong` } };
         }
@@ -115,6 +116,37 @@ export const OrderService = {
         }
 
     },
+    getOwnPayment: async (id:string) => {
+        try {
+          const cookieStore = await cookies();
+          const res = await fetch(`${api_url}/api/v1/order/${id}/own-payment`, {
+            method: "GET",
+            headers: {
+              Cookie: cookieStore.toString(),
+            },
+          });
+    
+          if (!res.ok) {
+            const error = await res.json();
+            return {
+              success: false,
+              message: error.message || "Failed to fetch payment information",
+            };
+          }
+    
+          const data = await res.json();
+          return {
+            success: true,
+            data: data.data,
+            message: data.message || "Fetched payment information successfully",
+          };
+        } catch (err: any) {
+          return {
+            success: false,
+            message: err?.message || "Something went wrong while fetching payment info",
+          };
+        }
+      },
 
 
 }

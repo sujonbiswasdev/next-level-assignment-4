@@ -31,6 +31,8 @@ export default function ProductCard({ meal }: any) {
                 mealid: meal.id as string,
                 name: meal.meals_name as string,
                 price: meal.price,
+                restaurantName:meal.provider.restaurantName,
+                deliverycharge: meal.deliverycharge ?? 0,
                 image: meal.image || defaultIamge,
                 isAvailable: meal.isAvailable,
                 quantity: 1,

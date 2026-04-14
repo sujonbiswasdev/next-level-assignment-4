@@ -22,7 +22,6 @@ const SignleMealByid = ({ meal,userinfo }: { meal:TResponseMeals<{category:TGetC
   const router = useRouter()
   const defaultIamge = 'https://res.cloudinary.com/drmeagmkl/image/upload/v1771962102/default_meal_kgc6mv.png'
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null)
-
   const starCounts = [5, 4, 3, 2, 1].map(star => ({
     star,
     count: meal.reviews.filter(r => Math.floor(r.rating) === star).length
@@ -245,6 +244,8 @@ const SignleMealByid = ({ meal,userinfo }: { meal:TResponseMeals<{category:TGetC
                         mealid: meal.id as string,
                         name: meal.meals_name as string,
                         price: meal.price,
+                        restaurantName:meal.provider.restaurantName,
+                        deliverycharge: meal.deliverycharge ?? 0,
                         image: meal.image || defaultIamge,
                         isAvailable: meal.isAvailable,
                         quantity: 1,
