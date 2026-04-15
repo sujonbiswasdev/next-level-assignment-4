@@ -6,7 +6,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export default function OrderDetails({ orderdetails }: { orderdetails: IGetOrderData }) {
-    const { getSubtotal, getTotal, removeFromCart, increase, decrease, addToCart } = manageCartStore()
     const order = orderdetails;
     const defaultProfile = 'https://res.cloudinary.com/drmeagmkl/image/upload/v1766941482/chatgpt_m8tmep.png'
     const orderdata = orderdetails

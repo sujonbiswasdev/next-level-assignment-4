@@ -26,6 +26,15 @@ const HistoryMeals = async ({
   try {
 
   const userinfo=await getSession()
+    if (!userinfo || !userinfo.data || !userinfo.data.role) {
+      return (
+        <ErrorBoundary>
+          <Notfounddata content="You must be logged in to view this page." />
+        </ErrorBoundary>
+      );
+    }
+    const role = userinfo.data.role;
+
     const res = await getmealsown(search);
  
     const categories=await getCategory()
@@ -54,7 +63,7 @@ const HistoryMeals = async ({
         }
       >
         <div>
-          <MealTable pagination={res.pagination as Ipagination} categories={categories.data as TResponseCategoryData<{user:TUser}>[]} initialmeals={res.data} />
+          <MealTable role={role} pagination={res.pagination as Ipagination} categories={categories.data as TResponseCategoryData<{user:TUser}>[]} initialmeals={res.data} />
         </div>
       </ErrorBoundary>
 

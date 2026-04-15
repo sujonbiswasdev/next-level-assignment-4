@@ -20,7 +20,7 @@ import PaginationPage from "../meals/Pagination";
 import { UpdateOrderStatusForm } from "./UpdateOrderFrom";
 
 
-const OrderTable = ({ pagination,initialorder }: {pagination:Ipagination, initialorder: TResponseOrderData[] }) => {
+const OrderTable = ({ role,pagination,initialorder }: {role:string,pagination:Ipagination, initialorder: TResponseOrderData[] }) => {
     const router = useRouter();
     const [orders, setOrders] = useState(initialorder);
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -35,15 +35,12 @@ const OrderTable = ({ pagination,initialorder }: {pagination:Ipagination, initia
 
   const [viewMode, setViewMode] = useState(false);
     const [form, setForm] = useState({
-        search: "",
-        status: "",
-        customerId: "",
-        phone: "",
-        totalprice: null,
-        createdAt: "",
-        price: null,
-        quantity: null,
-        paymentStatus:""
+      search: "",
+      status: "",
+      phone: "",
+      paymentStatus:'',
+      totalprice: null,
+      createdAt: "",
    
       });
     
@@ -67,13 +64,10 @@ const OrderTable = ({ pagination,initialorder }: {pagination:Ipagination, initia
         const defaultForm = {
             search: "",
             status: "",
-            customerId: "",
             phone: "",
             paymentStatus:'',
             totalprice: null,
             createdAt: "",
-            price: null,
-            quantity: null,
      
         };
         setForm(defaultForm);
@@ -118,14 +112,6 @@ const OrderTable = ({ pagination,initialorder }: {pagination:Ipagination, initia
         },
         {
           type: "text",
-          name: "customerId",
-          label: "Customer ID",
-          placeholder: "Search by customer ID",
-          value: form.customerId,
-          onChange: (val: string) => handleChange("customerId", val),
-        },
-        {
-          type: "text",
           name: "phone",
           label: "Phone",
           placeholder: "Search by phone",
@@ -140,15 +126,7 @@ const OrderTable = ({ pagination,initialorder }: {pagination:Ipagination, initia
           value: form.createdAt,
           onChange: (val: string) => handleChange("createdAt", val),
         },
-        {
-          type: "number",
-          name: "price",
-          label: "Price",
-          placeholder: "Min price",
-          value: typeof form.price === "number" ? form.price : 0,
-          onChange: (val: number) => handleChange("price", val),
-        },
-   
+     
         {
           type: "number",
           name: "totalprice",
@@ -157,16 +135,7 @@ const OrderTable = ({ pagination,initialorder }: {pagination:Ipagination, initia
           value: typeof form.totalprice === "number" ? form.totalprice : 0,
           onChange: (val: number) => handleChange("totalprice", val),
         },
-   
-        {
-          type: "number",
-          name: "quantity",
-          label: "Quantity",
-          placeholder: "Min quantity",
-          value: typeof form.quantity === "number" ? form.quantity : 0,
-          onChange: (val: number) => handleChange("quantity", val),
-        }
-   
+ 
    
       ];
 
@@ -274,7 +243,7 @@ const OrderTable = ({ pagination,initialorder }: {pagination:Ipagination, initia
 
             {!viewMode && selectedorderid && (
               <div className="mt-6">
-              <UpdateOrderStatusForm initialStatus={status as any} id={selectedorderid}/>
+              <UpdateOrderStatusForm role={role as string} initialStatus={status as any} id={selectedorderid}/>
               </div>
             )}
           </div>

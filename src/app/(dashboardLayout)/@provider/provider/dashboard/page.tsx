@@ -1,5 +1,6 @@
 import { getStatsAction } from "@/actions/stats.actions";
 import DashboardContent from "@/components/dashboard/DashboardContent";
+import Notfounddata from "@/components/Notfounddata";
 import ErrorBoundary from "@/components/shared/ErrorBoundary";
 import ErrorFallback from "@/components/shared/ErrorFallback";
 import { getSession } from "@/services/auth.service";
@@ -9,6 +10,18 @@ const ProviderStats = async () => {
   const statsData=await getStatsAction()
   const userinfo=await getSession()
   const role=userinfo?.data.role
+  if (!userinfo || role==null || !userinfo.success) {
+    return (
+      <Notfounddata
+        content="You must be logged in as an admin to view the dashboard."
+        btntext="Go to Login"
+        emoji="🔒"
+        filter=""
+        path="/login"
+        key="no-session-admin-dashboard"
+      />
+    );
+  }
 
   return (
     <div className="w-full overflow-hidden">

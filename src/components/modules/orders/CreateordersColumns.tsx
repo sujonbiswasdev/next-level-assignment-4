@@ -8,7 +8,7 @@ export const createOrderColumns = () => [
     render: (row: any) => (
      <CopyableId 
        id={row.id}
-       href={`/provider/dashboard/orders/${row.id}`} 
+       href={`/orders/${row.id}`} 
        className="" 
        showShort={row.id.slice(0,10)?"...":row.id} 
        key={row.id}
@@ -21,10 +21,24 @@ export const createOrderColumns = () => [
     render: (row: any) => (
         <CopyableId 
           id={row.customerId}
-          href={`/provider/dashboard/customers/${row.customerId}`} 
+          href={`/profile/${row.customerId}`} 
           className="" 
           showShort={row.customerId.slice(0,10)?"...":row.customerId} 
           key={row.customerId}
+        />
+
+    ),
+  },
+  {
+    key: "providerId",
+    label: "provider Id",
+    render: (row: any) => (
+        <CopyableId 
+          id={row.providerId}
+          href={`/providers/${row.providerId}`} 
+          className="" 
+          showShort={row.customerId.slice(0,10)?"...":row.providerId} 
+          key={row.providerId}
         />
 
     ),
@@ -35,6 +49,29 @@ export const createOrderColumns = () => [
     render: (row: any) => (
       <span className="text-gray-700">{row.phone}</span>
     ),
+  },
+  {
+    key: "paymentStatus",
+    label: "Payment Status",
+    render: (row: any) => {
+      const isPaid = row.paymentStatus === "PAID";
+      const label = isPaid ? "Paid" : "Unpaid";
+      const bgColor = isPaid ? "bg-green-100" : "bg-red-100";
+      const textColor = isPaid ? "text-green-800" : "text-red-800";
+      const borderColor = isPaid ? "border-green-200" : "border-red-200";
+
+      return (
+        <span
+          className={`
+            px-3 py-1 rounded-lg text-xs font-semibold
+            ${bgColor} ${textColor} border ${borderColor} min-w-[100px] text-center inline-block
+            tracking-wide shadow-sm transition
+          `}
+        >
+          {label}
+        </span>
+      );
+    },
   },
   {
     key: "status",
@@ -71,7 +108,7 @@ export const createOrderColumns = () => [
     label: "totalPrice",
     render: (row: any) => (
       <span className="font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
-        ${Number(row.totalPrice).toFixed(2)}
+        ৳ {Number(row.totalPrice).toFixed(2)}
       </span>
     ),
   },

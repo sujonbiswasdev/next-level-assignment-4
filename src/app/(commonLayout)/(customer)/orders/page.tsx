@@ -3,13 +3,25 @@ import CustomerOrderTable from '@/components/modules/orders/customerordertable';
 import { IGetOrderData } from '@/types/order/order.type';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import ErrorFallback from '@/components/shared/ErrorFallback';
+import { getSession } from '@/services/auth.service';
 
 const MyOrders = async ({
   searchParams,
 }: {
   searchParams:Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
+  const res =await getSession()
+  const role =res?.data.role
+  if (role==null || !role) {
+    return (
+      <ErrorFallback
+        title="Access Denied"
+        message="You do not have permission to view this page."
+      />
+    );
+  }
   try {
+
     const search =await searchParams
     const res = await getownorder(search);
     if (!res.data || !res.success) {
@@ -31,7 +43,7 @@ const MyOrders = async ({
         }
       >
         <div>
-          <CustomerOrderTable initialorder={orders} />
+          <CustomerOrderTable role={role as string} initialorder={orders} />
         </div>
       </ErrorBoundary>
     );

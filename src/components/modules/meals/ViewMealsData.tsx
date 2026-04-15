@@ -19,6 +19,7 @@ const ViewMealsData = ({
 }: {
   viewMode: boolean;
   viewData?: TResponseMeals<{category:TGetCategory,provider:IProviderInfo,reviews:IgetReviewData}>;
+  
 }) => {
   if (!viewMode || !viewData) return null;
 

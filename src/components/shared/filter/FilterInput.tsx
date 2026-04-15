@@ -110,12 +110,20 @@ export const FilterPanel = ({
                 <label className="text-sm font-semibold text-gray-900 dark:text-gray-200 mb-1 tracking-wide">
                   {field.label}
                 </label>
+
                 <input
                   type="number"
-                  value={field.value??""}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  value={field.value ?? ""}
+                  onChange={(e) => {
+                    const newValue = Number(e.target.value);
+                    if (newValue <= 5000000) {
+                      field.onChange(newValue);
+                    }
+                  }}
                   className={base}
                 />
+          
+
               </div>
             );
           }
@@ -217,12 +225,12 @@ export const FilterPanel = ({
                     className="w-full accent-indigo-500 dark:accent-blue-600 h-2 rounded transition"
                   />
                   <span className="ml-2 text-base font-bold text-indigo-600 dark:text-blue-300">
-                    ${field.value}
+                  ৳{field.value}
                   </span>
                 </div>
                 <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 px-1">
-                  <span>${field.min}</span>
-                  <span>${field.max}</span>
+                  <span>৳{field.min}</span>
+                  <span>৳{field.max}</span>
                 </div>
               </div>
             );

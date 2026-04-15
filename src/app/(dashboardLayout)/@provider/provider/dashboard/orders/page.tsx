@@ -5,12 +5,22 @@ import { TResponseOrderData } from '@/types/order/order.type';
 import { Ipagination } from '@/types/pagination.type';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import React from 'react'
+import { getSession } from '@/services/auth.service';
 
 const OrderHistory = async ({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
+  const userinfo=await getSession()
+  if (!userinfo || !userinfo.data || !userinfo.data.role) {
+    return (
+      <ErrorBoundary>
+        <Notfounddata content="You must be logged in to view your orders." btntext="dashboard" path="/provider/dashboard" emoji="📦" />
+      </ErrorBoundary>
+    );
+  }
+  const role = userinfo.data.role;
   const search=await searchParams
   const res = await getownorder(search);
   if (!res.data || !res.success) {
@@ -25,7 +35,7 @@ const OrderHistory = async ({
     <div>
       <React.Suspense fallback={<div>Loading orders...</div>}>
         <ErrorBoundary fallback={<div>Something went wrong loading your orders.</div>}>
-          <OrderTable pagination={pagination} initialorder={orders} />
+          <OrderTable  role={role as string} pagination={pagination} initialorder={orders} />
         </ErrorBoundary>
       </React.Suspense>
     </div>

@@ -27,10 +27,12 @@ const ORDER_STATUSES = [
 
 export function UpdateOrderStatusForm({
   id,
-  initialStatus
+  initialStatus,
+  role
 }: {
   id: string;
   initialStatus: string;
+  role:string
 }) {
   const form = useForm({
     defaultValues: {
@@ -69,7 +71,8 @@ export function UpdateOrderStatusForm({
           }}
         >
           <FieldGroup>
-            <form.Field name="status">
+
+            {role==="Admin" && <form.Field name="status">
               {(field) => (
                 <Field>
                   <FieldLabel>Status</FieldLabel>
@@ -89,7 +92,49 @@ export function UpdateOrderStatusForm({
                   <FieldError errors={field.state.meta.errors} />
                 </Field>
               )}
+            </form.Field>}
+
+            {role==="Provider" && <form.Field name="status">
+              {(field) => (
+                <Field>
+                  <FieldLabel>Status</FieldLabel>
+                  <select
+                    value={field.state.value}
+                    onChange={e => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="">Select Status</option>
+                    {ORDER_STATUSES.map(status => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>}
+
+            {
+              role==="Customer" && <form.Field name="status">
+              {(field) => (
+                <Field>
+                  <FieldLabel>Status</FieldLabel>
+                  <select
+                    value={field.state.value}
+                    onChange={e => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="">Select Status</option>
+                    <option value="CANCELLED">CANCELLED</option>
+                  </select>
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
             </form.Field>
+            }
           </FieldGroup>
         </form>
       </CardContent>
