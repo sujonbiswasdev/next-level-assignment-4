@@ -51,7 +51,7 @@ export const UpdateuserschemabyAdmin = z
   .object({
     role: z.string().optional(),
     status: z.string().optional(),
-    email: z.string(),
+    email: z.string().optional(),
   })
   .strict();
 

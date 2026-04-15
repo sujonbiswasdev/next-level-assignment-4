@@ -89,7 +89,7 @@ export const adminNavItems: NavSection[] = [
         items: [
             {
                 title: "users",
-                href: "/admin/users",
+                href: "/admin/dashboard/users",
                 icon: "UserCog"
             },
         ]
@@ -99,7 +99,7 @@ export const adminNavItems: NavSection[] = [
         items: [
             {
                 title: "meals",
-                href: "/admin/meals",
+                href: "/admin/dashboard/meals",
                 icon: "Utensils"
             },
         ]
@@ -109,7 +109,7 @@ export const adminNavItems: NavSection[] = [
         items: [
             {
                 title: "reviews",
-                href: "/admin/reviews",
+                href: "/admin/dashboard/reviews",
                 icon: "Star"
             },
         ]
@@ -119,7 +119,7 @@ export const adminNavItems: NavSection[] = [
         items: [
             {
                 title: "setting",
-                href: "/provider/dashboard/setting",
+                href: "/admin/dashboard/settings",
                 icon: "Settings"
            
             }

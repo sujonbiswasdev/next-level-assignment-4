@@ -1,4 +1,7 @@
 import { getAllusers } from '@/actions/user.actions'
+import UserTable from '@/components/modules/users/usertable'
+import { Ipagination } from '@/types/pagination.type'
+import { TResponseUserData } from '@/types/user.type'
 import React from 'react'
 
 interface PageProps {
@@ -7,7 +10,11 @@ interface PageProps {
     isAvailable?: string
   }
 }
-const Userpage =async ({ searchParams }: PageProps) => {
+const Userpage =async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
   const search=await searchParams
   const res=await getAllusers(search)
 
@@ -18,11 +25,11 @@ const Userpage =async ({ searchParams }: PageProps) => {
       </div>
     );
   }
+  console.log(res,'res')
   
   return (
     <div>
-        {/* <UsersTable users={res.data as any} pagination={res as any}/> */}
-      
+        <UserTable users={res.data as TResponseUserData<{ accounts: { password: string; }}>[]} pagination={res.pagination as Ipagination}/>
     </div>
   )
 }

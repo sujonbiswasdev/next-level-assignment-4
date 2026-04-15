@@ -1,85 +1,154 @@
-// 'use client'
-// import { updateuserdata } from '@/actions/user/admin'
-// import { updateUser } from '@/actions/user.actions'
-// import { TUpdateUserCommonData, TUpdateUserInput, TUser, TUserRoleType, TUserStatusType } from '@/types/user.type'
-// import { UpdateUserCommonData, updateUserSchema } from '@/validations/auth.validation'
-// import { useState } from 'react'
-// import { toast } from 'react-toastify'
+"use client";
 
-// const UserUpdate = ({ userid }: { userid: string }) => {
-//     const [userdata, setuserdata] = useState<TUpdateUserCommonData>({});
-//       const parsedata = UpdateUserCommonData.safeParse(userdata);
-//      const handleSubmit = async (e: React.FormEvent) => {
-//        e.preventDefault();
-//        const data = await updateuserdata(userid,parsedata.data!)
-//        if (!data.success) {
-//          toast.error(data.message||"Failed to update meal");
-//          return
-//        } else {
-//          toast.success(data.message||"Meal updated successfully");
-//          setuserdata({})
-//        }
-//      };
-   
-//     return (
-//       <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-green-50 to-blue-50 p-6">
-//       <form onSubmit={handleSubmit} className={`w-full max-w-2xl shadow-2xl rounded-3xl p-8 md:p-12 space-y-6`}>
-//         <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">
-//           Update users
-//         </h2>
+import { useForm } from "@tanstack/react-form";
+import { toast } from "react-toastify";
 
-//         <div className="grid grid-cols-1  gap-6">
-//           <div className="flex flex-col space-y-2">
-//             <label htmlFor="role" className="font-medium ml-2 ">role</label>
-//             <input
-//               type="text"
-//               placeholder="please enter your role(Admin,Provider,Customer)"
-//               value={userdata.role}
-//               onChange={(e) => setuserdata({ ...updateUser, role: e.target.value as "Admin"||"Customer" || "Provider"})}
-//               className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
-//             />
-//           </div>
-//         </div>
+import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
+import { useRouter } from "next/navigation";
+import { TUpdateuserbyAdmin, TUser } from "@/types/user.type";
+import { updateuserdata } from "@/actions/user.actions";
 
-//          <div className="grid grid-cols-1 gap-6">
-//           <div className="flex flex-col space-y-2">
-//             <label htmlFor="status" className="font-medium ml-2 ">status</label>
-//             <input
-//               type="text"
-//               placeholder="please enter your status(activate,suspend)"
-//               value={userdata.status}
-//               onChange={(e) => setuserdata({ ...userdata, status: e.target.value as "suspend"||"activate"})}
-//               className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+export function UpdateUserForm({
+  id,
+  onSuccess,
+  defaultValues,
+}: {
+  id: string;
+  onSuccess:any,
+  defaultValues?: Partial<TUpdateuserbyAdmin>;
+}) {
+  const router=useRouter()
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      role: "",
+      status: "",
+      ...(defaultValues || {}),
+    },
+    onSubmit: async ({ value }) => {
+      const toastId = toast.loading("Updating user...");
+      try {
 
-//             />
-//           </div>
-//         </div>
-    
-//     <div className="grid grid-cols-1 gap-6">
-//           <div className="flex flex-col space-y-2">
-//             <label htmlFor="email" className="font-medium ml-2 ">email</label>
-//             <input
-//               type="text"
-//               placeholder="please enter your email"
-//               value={userdata.email}
-//               onChange={(e) => setuserdata({ ...userdata, email: e.target.value })}
-//               className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+        const filtered = Object.fromEntries(
+          Object.entries(value).filter(
+            ([, v]) =>
+              v !== undefined &&
+              v !== null &&
+              v !== "" 
+          )
+        );
+        const res = await updateuserdata(id, filtered);
 
-//             />
-//           </div>
-//         </div>
-    
-//         <button
-//           disabled={!parsedata.success}
-//           type="submit"
-//           className={`bg-black text-white p-2 w-full rounded-md ${!parsedata.success ? "opacity-50 cursor-not-allowed" : ""}`}
-//         >
-//           Update
-//         </button>
-//       </form>
-//     </div>
-//     )
-// }
+        toast.dismiss(toastId);
+        if (!res.success) {
+          toast.error(res.message || "Failed to update user. Please check your inputs and try again.");
+          return;
+        }
+        router.refresh()
+        onSuccess(false)
+        toast.success(res.message || "User updated successfully!");
+     
+      } catch (err) {
+        toast.dismiss(toastId);
+        toast.error("Something went wrong");
+      }
+    },
+  });
 
-// export default UserUpdate
+  return (
+    <Card className="w-full max-w-md mx-auto border-none shadow-none">
+      <CardHeader>
+        <CardTitle className="text-center">Update User</CardTitle>
+        <CardDescription className="text-center">Change user role, status, or email. All fields are optional.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form
+          id="update-user-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit();
+          }}
+        >
+          <FieldGroup>
+            <form.Field name="email">
+              {(field) => (
+                <Field>
+                  <FieldLabel>Email</FieldLabel>
+                  <input
+                    type="email"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    placeholder="Enter email"
+                    className="w-full border rounded p-2"
+                  />
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>
+
+            <form.Field name="role">
+              {(field) => (
+                <Field>
+                  <FieldLabel>Role</FieldLabel>
+                  <select
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="">Select Role (optional)</option>
+                    {['USER', 'ADMIN'].map((r: string) => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
+                  </select>
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>
+
+
+            <form.Field name="status">
+              {(field) => (
+                <Field>
+                  <FieldLabel>Status</FieldLabel>
+                  <select
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="">Select Status (optional)</option>
+                    {['ACTIVE', 'BLOCKED', 'DELETED', "INACTIVE"].map((s: string) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>
+          </FieldGroup>
+        </form>
+      </CardContent>
+
+      <CardFooter className="flex justify-end gap-2">
+        <Button type="button" variant="outline" onClick={() => form.reset()}>
+          Reset
+        </Button>
+        <Button type="submit" form="update-user-form">
+          Update
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}

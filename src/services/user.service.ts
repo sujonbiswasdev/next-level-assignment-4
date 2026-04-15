@@ -4,6 +4,7 @@ import { cookies } from "next/headers"
 import { TResponseUserData, TUpdateuserbyAdmin, TUpdateUserInput, TUser } from '@/types/user.type';
 import { ApiErrorResponse, ApiResponse } from '@/types/response.type';
 import { IProviderInfo } from '@/types/provider.type';
+import { Ipagination } from '@/types/pagination.type';
 
 const api_url=env.API_URL
 
@@ -64,34 +65,25 @@ export const userService={
     
         },
 
-        updateuserdata: async (id: string, updateUser: TUpdateuserbyAdmin) => {
+        updateUserByADmin: async (id: string, body: Partial<TUpdateuserbyAdmin>) => {
           try {
             const cookieStore = await cookies();
             const res = await fetch(`${api_url}/api/v1/admin/profile/${id}`, {
               method: "PUT",
-              credentials: "include",
               headers: {
                 "Content-Type": "application/json",
-                Cookie: cookieStore.toString(),
+                Cookie: cookieStore.toString()
               },
-              body: JSON.stringify(updateUser),
+              credentials: "include",
+              body: JSON.stringify(body)
             });
             const data = await res.json();
-            const result = data as ApiResponse<TUser>;
             if (!res.ok) {
-              const error = data as ApiErrorResponse;
-              return {
-                success: error.success,
-                message: error.message || "user updated failed",
-              };
+              return { success: false, message: data?.message || "Failed to update user", errors: data?.errors };
             }
-            return result;
+            return { success: data.success, message: data.message || "User updated successfully", user: data.data };
           } catch (error: any) {
-         
-            return {
-              success: false,
-              error: error.message || "something went wrong please  try again",
-            };
+            return { success: false, message: error.message || "An error occurred while updating user" };
           }
         },
         getAllusers: async (params?: any) => {
@@ -115,7 +107,6 @@ export const userService={
               },
             });
             const data = await res.json();
-            const result = data as ApiResponse<TResponseUserData>;
             if (!res.ok) {
               const error = data as ApiErrorResponse;
               return {
@@ -123,7 +114,7 @@ export const userService={
                 message: error.message || "retrieve all users successfully",
               };
             }
-            return result;
+            return {success:data.success,message:data.message,data:data.data.data as TResponseUserData<{ accounts: { password: string; }}>[],pagination:data.data.pagination as Ipagination};
           } catch (error: any) {
             return {
               data: null,

@@ -14,7 +14,7 @@ export const getAllusers=async(params:any)=>{
   return await userService.getAllusers(params)
 }
 export const updateuserdata=async(id:string,data:TUpdateuserbyAdmin)=>{
-  return await userService.updateuserdata(id,data)
+  return await userService.updateUserByADmin(id,data)
 }
 export const deleteUser=async(id:string)=>{
   return await userService.DeleteUser(id)

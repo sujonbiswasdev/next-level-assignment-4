@@ -1,186 +1,261 @@
-// "use client";
+"use client";
 
-// import Image from "next/image";
-// import { useEffect, useState } from "react";
-// import { Eye, Pen, Pencil, Search, Trash, Trash2 } from "lucide-react";
-// import Link from "next/link";
-// import PaginationPage from "@/components/modules/meals/Pagination";
-// import { usePathname, useRouter, useSearchParams } from "next/navigation";
-// import UserRoleChage from "./userprofilechange";
-// import { AdminService } from "@/services/users/admin";
-// import { toast } from "react-toastify";
-// import { deleteUser } from "@/actions/user/admin";
-// import { Ipagination } from "@/types/pagination.type";
-// import { TUser } from "@/types/user.type";
-// import { useFilter } from "@/components/shared/Filter";
-// import { createUserColumns } from "./CreateUserColums";
-// import { FilterPanel } from "@/components/shared/FilterPanel";
-// import { TFilterField } from "@/types/filter.types";
-// import { ReusableTable } from "@/components/shared/ReuseableTable";
+import { useCallback, useEffect, useState } from "react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
-// interface Props {
-//   users: TUser[];
-//   pagination: Ipagination;
-// }
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { TResponseUserData } from "@/types/user.type";
+import { IgetReviewData } from "@/types/reviews.type";
+import { TResponseMeals } from "@/types/meals.type";
+import { Ipagination } from "@/types/pagination.type";
+import { useFilter } from "@/components/shared/filter/ReuseableFilter";
+import { TFilterField } from "@/types/filter.types";
+import { deleteUser } from "@/actions/user.actions";
+import { createUserColumns } from "./CreateUserColums";
+import { FilterPanel } from "@/components/shared/filter/FilterInput";
+import { ReusableTable } from "@/components/shared/ReuseableTable";
+import PaginationPage from "@/components/shared/pagination";
+import ViewUserData from "./ViewUserData";
+import { UpdateUserForm } from "./userprofilechange";
 
-// export default function UsersTable({ users, pagination }: Props) {
-//   const { page, total, totalpage, limit } = pagination;
-//   const [tableData, setTableData] = useState(users);
-//   const [open, setOpen] = useState(false);
-//   const [viewMode, setViewMode] = useState(false);
-//   const [viewData, setViewData] = useState<any>(null);
-//   const router = useRouter();
-//   const { updateFilters, reset,isPending } = useFilter();
-//   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+export default function UserTable({
+  users,
+  pagination,
+}: {
+  users: TResponseUserData<{ accounts: { password: string; }}>[]; 
+  pagination?: Ipagination;
+}) {
+  const [tableData, setTableData] = useState(users);
+  const [open, setOpen] = useState(false);
+  const [viewMode, setViewMode] = useState(false);
+  const [viewData, setViewData] = useState<any>(null);
+  const router = useRouter();
+  const { updateFilters, reset ,isPending} = useFilter();
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    role: "",
+    status: "",
+    phone: "",
+    image: "",
+    isActive: false,
+    emailVerified: false,
+  });
 
-//   const [form, setForm] = useState({
-//     name: "",
-//     email: "",
-//     role: "",
-//     status: "",
-//     phone: "",
-//     image: "",
-//     isActive: false,
-//     emailVerified: false,
-//   });
+  useEffect(() => {
+    setTableData(users ?? []);
+  }, [users]);
 
-//   useEffect(() => {
-//     setTableData(users ?? []);
-//   }, [users]);
+  const handleChange = useCallback((key: keyof typeof form, value: string | number | boolean) => {
+    setForm(prev => ({ ...prev, [key]: value }));
+  }, []);
 
-//   const handleChange = (key: string, value: any) => {
-//     const updated = { ...form, [key]: value };
-//     setForm(updated);
-//     updateFilters(updated);
-//   };
+  const handleApply = () => {
+    updateFilters(form);
+  };
 
-//   const handleDelete = async (id: string) => {
-//     const toastid = toast.loading("user deleting........");
-//     const res = await deleteUser(id);
-//     if (!res.data) {
-//       toast.dismiss(toastid);
-//       toast.error(res.message || "user delete failed");
-//       return;
-//     }
-//     toast.dismiss(toastid);
-//     toast.success(res.message || "user deleted successfully");
-//   };
-//   const roles = ["Admin", "Provider", "Customer"];
-//   const status = ["activate", "suspend"];
+  console.log(users,'users')
 
-//   const fields = [
-//     {
-//       type: "text",
-//       name: "name",
-//       label: "Name",
-//       value: form.name,
-//       onChange: (val: string) => handleChange("name", val),
-//     },
-//     {
-//       type: "text",
-//       name: "email",
-//       label: "Email",
-//       value: form.email,
-//       onChange: (val: string) => handleChange("email", val),
-//     },
-//     {
-//       type: "text",
-//       name: "phone",
-//       label: "Phone",
-//       value: form.phone,
-//       onChange: (val: string) => handleChange("phone", val),
-//     },
-//     {
-//       type: "select",
-//       name: "role",
-//       label: "Role",
-//       value: form.role,
-//       onChange: (val: string) => handleChange("role", val),
-//       options: [
-//         { label: "Admin", value: "ADMIN" },
-//         { label: "User", value: "USER" },
-//       ],
-//     },
-//     {
-//       type: "select",
-//       name: "status",
-//       label: "Status",
-//       value: form.status,
-//       onChange: (val: string) => handleChange("status", val),
-//       options: [
-//         { label: "Active", value: "ACTIVE" },
-//         { label: "Inactive", value: "INACTIVE" },
-//         { label: "Blocked", value: "BLOCKED" },
-//         { label: "Deleted", value: "DELETED" },
-//       ],
-//     },
-//     {
-//       type: "select",
-//       name: "emailVerified",
-//       label: "Email Verified",
-//       value: form.emailVerified,
-//       onChange: (val: string) => handleChange("emailVerified", val),
-//       options: [
-//         { label: "No", value: "false" },
-//         { label: "Yes", value: "true" },
-//       ],
-//     },
-//   ];
+  const handleReset = () => {
+    const defaultForm = {
+      name: "",
+      email: "",
+      role: "",
+      status: "",
+      phone: "",
+      image: "",
+      isActive: false,
+      emailVerified: false,
+    };
+    setForm(defaultForm);
+    reset();
+  };
+  const fields:TFilterField[] = [
+    {
+      type: "text",
+      name: "name",
+      label: "Name",
+      value: form.name,
+      onChange: (val: string) => handleChange("name", val),
+    },
+    {
+      type: "text",
+      name: "email",
+      label: "Email",
+      value: form.email,
+      onChange: (val: string) => handleChange("email", val),
+    },
+    {
+      type: "text",
+      name: "phone",
+      label: "Phone",
+      value: form.phone,
+      onChange: (val: string) => handleChange("phone", val),
+    },
+    {
+      type: "select",
+      name: "role",
+      label: "Role",
+      value: form.role,
+      onChange: (val: string) => handleChange("role", val),
+      options: [
+        { label: "Admin", value: "ADMIN" },
+        { label: "User", value: "USER" },
+      ],
+    },
+    {
+      type: "select",
+      name: "status",
+      label: "Status",
+      value: form.status,
+      onChange: (val: string) => handleChange("status", val),
+      options: [
+        { label: "Active", value: "ACTIVE" },
+        { label: "Inactive", value: "INACTIVE" },
+        { label: "Blocked", value: "BLOCKED" },
+        { label: "Deleted", value: "DELETED" },
+      ],
+    },
+    {
+      type: "select",
+      name: "emailVerified",
+      label: "Email Verified",
+      value: String(form.emailVerified),
+      onChange: (val: string) => handleChange("emailVerified", val),
+      options: [
+        { label: "No", value: "false" },
+        { label: "Yes", value: "true" },
+      ],
+ 
+    },
+  ];
 
-//   const actions = [
-//     {
-//       icon: Eye,
-//       label: "View",
-//       onClick: (item: any) => {
-//         setViewData(item);
-//         setViewMode(true);
-//         setOpen(true);
-//       },
-//     },
-//     {
-//       icon: Pencil,
-//       label: "Edit",
-//       onClick: (item: any) => {
-//         setSelectedUserId(item.id);
-//         setViewMode(false);
-//         setOpen(true);
-//       },
-//       className: "text-blue-500",
-//     },
-//     {
-//       icon: Trash2,
-//       label: "Delete",
-//       onClick: (item: any) => handleDelete(item.id),
-//       className: "text-red-500",
-//     },
-//   ];
+  const handleDeleteUser = useCallback(async (id: string) => {
+    try {
+      if (!window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) return;
+      const toastId = toast.loading("Deleting user. Please wait...");
+      const resp = await deleteUser(id);
+      toast.dismiss(toastId);
 
-//   const columns = createUserColumns();
+      if (resp.success) {
+        setTableData((prev) => prev.filter((item) => item.id !== id));
+        router.refresh();
+        toast.success(resp.message || "Deleted successfully");
+      } else {
+        toast.error(resp.message || "Failed to delete. Please contact support.");
+      }
+    } catch (error: any) {
+      toast.dismiss();
+      toast.error("Something went wrong. " + (error?.message || ""));
+    }
+  }, []);
 
-//   return (
-//     <section className="px-1 sm:px-2 lg:px-3">
-//           <div className="mb-6 bg-white dark:bg-gray-950 p-4 sm:p-6 rounded-xl shadow border border-gray-100 dark:border-gray-800">
-//      <FilterPanel
-//           fields={fields as TFilterField[]}
-//           onReset={() => {
-//             setForm({
-//               name: "",
-//               email: "",
-//               role: "",
-//               status: "",
-//               phone: "",
-//               image: "",
-//               isActive: false,
-//               emailVerified: false,
-//             });
-//             reset();
-//           }}
-//         />
-//       </div>
-//       <div className="">
-//         <ReusableTable columns={columns as any} data={tableData} actions={actions as any} />
-//       </div>
+  const actions = [
+    {
+      icon: Eye,
+      label: "View",
+      onClick: (item: any) => {
+        setViewData(item);
+        setViewMode(true);
+        setOpen(true);
+      },
+    },
+    {
+      icon: Pencil,
+      label: "Edit",
+      onClick: (item: any) => {
+        setSelectedUserId(item.id);
+        setViewMode(false);
+        setOpen(true);
+      },
+      className: "text-blue-500",
+    },
+    {
+      icon: Trash2,
+      label: "Delete",
+      onClick: (item: any) => handleDeleteUser(item.id),
+      className: "text-red-500",
+    },
+  ];
 
-//     </section>
-//   );
-// }
+  const columns = createUserColumns();
+
+
+  return (
+    <div className="w-full">
+      <div className="mb-6 bg-white dark:bg-gray-950 p-4 sm:p-6 rounded-xl shadow border border-gray-100 dark:border-gray-800">
+      <section className="mb-8 w-full">
+        <FilterPanel
+          fields={fields}
+          onApply={handleApply}
+          onReset={handleReset}
+          isPending={isPending}
+        />
+      </section>
+      </div>
+
+      <div className="relative w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-950">
+       {isPending && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/50 dark:bg-black/50 backdrop-blur-sm">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mb-2"></div>
+            <p className="text-sm font-medium">Filtering data...</p>
+          </div>
+        )}
+
+      <div className="mb-6 overflow-x-auto rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950">
+        
+
+        {tableData && Array.isArray(tableData) && tableData.length > 0 ? (
+          <ReusableTable columns={columns as any} data={tableData} actions={actions} />
+        ) : (
+          <div className="p-8 text-center text-gray-400 dark:text-gray-500 text-base select-none">
+            No users data found.
+          </div>
+        )}
+      </div>
+      </div>
+
+      <Dialog
+        open={open}
+        onOpenChange={(val) => {
+          setOpen(val);
+          if (!val) setViewData(null);
+        }}
+      >
+        <DialogContent className="max-w-md w-full rounded-xl p-0 sm:p-0 bg-white dark:bg-gray-950">
+          <DialogHeader className="flex flex-col items-center justify-center px-6 pt-8 pb-4 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 rounded-t-xl shadow-none">
+            <DialogTitle className="text-[1.45rem] sm:text-2xl font-bold text-indigo-900 dark:text-indigo-100 mb-1 sm:mb-2 tracking-tight text-center">
+              {viewMode ? "Participant Details" : "Edit Participant"}
+            </DialogTitle>
+            <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mb-0 text-center">
+              {viewMode ? "Review participant information below." : "Update status or details as needed."}
+            </p>
+          </DialogHeader>
+
+          {!viewMode && !viewData && selectedUserId && (
+            <UpdateUserForm
+              id={selectedUserId}
+              onSuccess={(updated:any) => {
+                setOpen(updated);
+                setSelectedUserId(null);
+              }}
+            />
+          )}
+
+          
+
+          <div style={{ maxHeight:'70vh',overflowY:'auto' }} className="py-6 px-4 sm:px-8">
+            {viewData && viewMode==true? ( <ViewUserData viewData={viewData} viewMode={viewMode} />):null}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <div className="flex justify-center py-4">
+        {/* <PaginationPage pagination={pagination as TPagination} /> */}
+      </div>
+    </div>
+  );
+}
