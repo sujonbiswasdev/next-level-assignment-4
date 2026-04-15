@@ -14,7 +14,6 @@ export interface Icategory {
 }
 export const CategoriesService = {
   getcategory: async (params?: any) => {
-     console.log(params,'parmas')
     try {
       const cookieStore = await cookies();
       const url = new URL(`${api_url}/api/v1/category`);

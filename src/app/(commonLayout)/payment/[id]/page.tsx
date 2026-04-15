@@ -2,47 +2,9 @@ import React from "react";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { getOwnPaymentActions } from "@/actions/order.action";
+import ErrorBoundary from "@/components/shared/ErrorBoundary";
+import Notfounddata from "@/components/Notfounddata";
 
-// Simple ErrorBoundary component for async server components
-function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-neutral-100">
-      <section className="w-full max-w-xl relative">
-        <div className="relative z-10 bg-white rounded-2xl shadow-lg border border-gray-100 px-8 py-12 md:px-12 flex flex-col items-center">
-          <span className="rounded-full bg-red-50 p-3 mb-1 shadow-sm">
-            <svg className="text-red-500" height={44} width={44} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 8l8 8M16 8l-8 8" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-          </span>
-          <h1 className="text-2xl md:text-3xl font-bold text-red-600 mb-1">
-            Something went wrong
-          </h1>
-          <p className="text-sm text-gray-500 text-center max-w-sm">
-            Sorry, an unexpected error occurred while loading your payment details.
-          </p>
-          <div className="text-xs text-gray-400 pt-8 text-center w-full">
-            {error.message}
-          </div>
-          <div className="flex gap-2 mt-6">
-            <Link
-              href="/events"
-              className="inline-flex justify-center items-center rounded-md bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 shadow transition focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            >
-              Browse Events
-            </Link>
-            <Link
-              href="/"
-              className="inline-flex justify-center items-center rounded-md border border-gray-200 bg-white hover:bg-neutral-50 text-indigo-700 font-semibold py-2 px-4 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-100"
-            >
-              Home
-            </Link>
-          </div>
-        </div>
-      </section>
-    </main>
-  );
-}
 
 const InfoRow = ({
   label,
@@ -71,7 +33,6 @@ const InfoRow = ({
   </div>
 );
 
-// Async page-level error boundary logic
 const PaymentSuccessPage = async ({
   params,
   searchParams,
@@ -305,7 +266,15 @@ const PaymentSuccessPage = async ({
       </main>
     );
   } catch (error: any) {
-    return <ErrorBoundary error={error} />;
+    return (
+      <Notfounddata 
+        content="Sorry, something went wrong while loading your payment information." 
+        btntext="Go Home" 
+        path="/" 
+        emoji="😕"
+      />
+
+    );
   }
 };
 

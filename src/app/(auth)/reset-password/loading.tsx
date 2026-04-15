@@ -4,8 +4,9 @@ import React from 'react'
 const LoadingPage = () => {
   return (
     <div>
-      <LoadingContent data='Loading the page, please wait.....' />
- 
+        <LoadingContent data='Loading the page, please wait...' />
+   
+   
     </div>
   )
 }

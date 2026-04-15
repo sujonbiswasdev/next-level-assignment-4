@@ -1,22 +1,48 @@
 import { getownorder } from '@/actions/order.action';
-import CustomerOrderTable from '@/components/modules/orders/customerordertable'
+import CustomerOrderTable from '@/components/modules/orders/customerordertable';
 import { IGetOrderData } from '@/types/order/order.type';
+import ErrorBoundary from '@/components/shared/ErrorBoundary';
+import ErrorFallback from '@/components/shared/ErrorFallback';
 
-const MyOrders =async () => {
-     const res = await getownorder();
-       if (!res.data ||!res.success) {
+const MyOrders = async ({
+  searchParams,
+}: {
+  searchParams:Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
+  try {
+    const search =await searchParams
+    const res = await getownorder(search);
+    if (!res.data || !res.success) {
+      return (
+        <ErrorFallback
+          title="Unable to load your orders"
+          message="We couldn't retrieve your order history at the moment. Please refresh the page or try again later."
+        />
+      );
+    }
+    const orders = res.data as IGetOrderData[];
     return (
-      <div className="p-4 text-red-500">
-        Failed to load users
-      </div>
+      <ErrorBoundary
+        fallback={
+          <ErrorFallback
+            title="Error displaying your orders"
+            message="An unexpected issue occurred while showing your orders. Please try again in a few minutes."
+          />
+        }
+      >
+        <div>
+          <CustomerOrderTable initialorder={orders} />
+        </div>
+      </ErrorBoundary>
+    );
+  } catch (error) {
+    return (
+      <ErrorFallback
+        title="Unexpected error"
+        message="There was a problem loading your orders. Please try again later."
+      />
     );
   }
-  const orders = res.data as IGetOrderData[];
-  return (
-    <div className=''>
-     <CustomerOrderTable initialorder={orders}/>
-    </div>
-  )
-}
+};
 
-export default MyOrders
+export default MyOrders;

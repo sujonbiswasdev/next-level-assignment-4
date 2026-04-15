@@ -1,4 +1,6 @@
+import LoadingContent from "@/components/LoadingContent";
+
 export default function SingleMealsLoading() {
 
-  return <p>Loading...</p>
+  return <LoadingContent  data="Loading the page, please wait..."/>
 }
