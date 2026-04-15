@@ -21,6 +21,7 @@ import { createCategoryColumns } from "./CreateCategoriesColumn";
 import { toast } from "react-toastify";
 import { deleteCategory } from "@/actions/category";
 import ViewCategoryData from "./ViewCategory";
+import Categoryupdate from "./UpdateCategoryForm";
 
 const CategoryTable = ({pagination, category }: {pagination:Ipagination, category: TResponseCategoryData[] }) => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const CategoryTable = ({pagination, category }: {pagination:Ipagination, categor
   const { updateFilters, reset, isPending } = useFilter();
   const [open, setOpen] = useState(false);
 
-  const [selectedorderid, setSelectedorderId] = useState<string | null>(null);
+  const [selectedcategoryid, setselectedcategoryid] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -121,7 +122,7 @@ const CategoryTable = ({pagination, category }: {pagination:Ipagination, categor
       icon: Pencil,
       label: "Edit",
       onClick: (item: any) => {
-        setSelectedorderId(item.id);
+        setselectedcategoryid(item.id);
         setViewMode(false);
         setViewData(item);
         setstatus(item.status);
@@ -240,7 +241,7 @@ const CategoryTable = ({pagination, category }: {pagination:Ipagination, categor
             </div>
           ) : (
             <div className="p-8 text-center text-gray-400 dark:text-gray-500 text-base select-none">
-              No orders data found.
+              No category data found.
             </div>
           )}
         </div>
@@ -251,7 +252,7 @@ const CategoryTable = ({pagination, category }: {pagination:Ipagination, categor
         onOpenChange={(val) => {
           setOpen(val);
           if (!val) {
-            setSelectedorderId(null);
+            setselectedcategoryid(null);
             setViewData(null);
           }
         }}
@@ -259,15 +260,17 @@ const CategoryTable = ({pagination, category }: {pagination:Ipagination, categor
         <DialogContent className="max-w-md w-full rounded-xl p-0 sm:p-0 bg-white dark:bg-gray-950">
           <DialogHeader className="flex flex-col items-center justify-center px-6 pt-8 pb-4 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 rounded-t-xl shadow-none">
             <DialogTitle className="text-[1.45rem] sm:text-2xl font-bold text-indigo-900 dark:text-indigo-100 mb-1 sm:mb-2 tracking-tight text-center">
-              {viewMode ? "My Menu Details" : "Edit Meal"}
+              {viewMode ? "Category Details" : "Edit Category"}
+         
             </DialogTitle>
             <p
               id="dialog-description"
               className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mb-0 text-center"
             >
               {viewMode
-                ? "View all details about your order below."
-                : "Edit the details of your order below as needed."}
+                ? "Please review all the details of your selected category below."
+                : "You can update the details of your selected category in the form below."}
+           
             </p>
           </DialogHeader>
 
@@ -284,9 +287,9 @@ const CategoryTable = ({pagination, category }: {pagination:Ipagination, categor
               viewMode={viewMode}
             />
 
-            {!viewMode && selectedorderid && (
+            {!viewMode && selectedcategoryid && (
               <div className="mt-6">
-                {/* <UpdateOrderStatusForm initialStatus={status as any} id={selectedorderid}/> */}
+                <Categoryupdate categoryid={selectedcategoryid}/>
               </div>
             )}
           </div>
