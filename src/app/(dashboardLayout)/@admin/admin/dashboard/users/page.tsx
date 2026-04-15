@@ -25,7 +25,6 @@ const Userpage =async ({
       </div>
     );
   }
-  console.log(res,'res')
   
   return (
     <div>

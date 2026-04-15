@@ -17,8 +17,6 @@ const CreateCategory = async () => {
     );
   }
 
-  console.log(categories,'dss')
-
 
   return (
     <ErrorBoundary fallback={<ErrorFallback title="Failed to Load Categories" message="An error occurred while loading the categories. Please try again later."/>}>

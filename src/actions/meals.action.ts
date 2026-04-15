@@ -35,6 +35,6 @@ export const DeleteMeals = async (id:string) => {
 };
 export const MealStatusUpdate = async (id:string,data:IMealStatus) => {
   const res = await mealsService.MealStatusUpdate(id,data);
-  updateTag("mealsPost");
+  updateTag("meal");
   return res;
 };

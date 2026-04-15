@@ -16,7 +16,6 @@ const ReviewsPage = async({
 }) => {
   const search=await searchParams
   const reviews= await getAllreview()
-  console.log(reviews,'reviews')
   const userinfo = await getSession();
   if (!userinfo || !userinfo.data || !userinfo.success) {
     return (

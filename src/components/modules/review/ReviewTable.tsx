@@ -45,7 +45,6 @@ interface MyReviewsTableProps {
 export default function MyReviewsTable({ reviews, pagination, role }: MyReviewsTableProps) {
   const router = useRouter();
   const [tableReviews, setTableReviews] = useState<TResponseReviewData<any>[]>(reviews);
-  console.log(tableReviews,'tablereviws')
   const [loading] = useState(false);
   const [open, setOpen] = useState(false);
   const [viewData, setViewData] = useState<any>(null);

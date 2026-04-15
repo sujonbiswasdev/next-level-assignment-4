@@ -22,7 +22,6 @@ type ViewUserDataProps = {
 
 const ViewUserData: React.FC<ViewUserDataProps> = ({ viewMode, viewData }) => {
   if (!viewMode || !viewData) return null;
-  console.log(viewData,'viewdata')
 
   const statusStyle =
     USER_STATUS_STYLES[viewData.status as keyof typeof USER_STATUS_STYLES] ?? {

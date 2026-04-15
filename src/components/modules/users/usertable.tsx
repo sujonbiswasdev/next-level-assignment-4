@@ -57,8 +57,6 @@ export default function UserTable({
     updateFilters(form);
   };
 
-  console.log(users,'users')
-
   const handleReset = () => {
     const defaultForm = {
       name: "",

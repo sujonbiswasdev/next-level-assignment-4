@@ -140,21 +140,24 @@ export const mealsService = {
       return { data: null, error: { message: "Something Went Wrong" } };
     }
   },
-  MealStatusUpdate: async (id: string, mealsdata: IMealStatus) => {
+  MealStatusUpdate: async (id: string, data: IMealStatus) => {
+    console.log(id,'d')
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/v1/admin/meal/${id}`, {
-        method:"PUT",
+      const res = await fetch(`${api_url}/api/v1/meal/${id}`, {
+        method: "PATCH",
         credentials: "include",
         headers: {
+          "Content-Type": "application/json",
           Cookie: cookieStore.toString(),
         },
-        body: JSON.stringify({mealsdata}),
+        body: JSON.stringify(data),
+        cache: "no-store",
       });
-      const data = await res.json();
-       const result =data as ApiResponse<TResponseMeals>
+      const body = await res.json();
+       const result =body as ApiResponse<TResponseMeals>
       if(!res.ok){
-        const error =data as ApiErrorResponse
+        const error =body as ApiErrorResponse
         return {success:error.success,message:error.message || "meals status update failed"}
       }
       return result;
@@ -249,16 +252,24 @@ export const mealsService = {
           Cookie: cookieStore.toString(),
         },
         next: {
-          tags: ["mealsPost"],
+          tags: ["meals","meal"],
         },
       });
       const data = await res.json();
-       const result = data as ApiResponse<TResponseMeals[]>
+      const result = data.data.data as TResponseMeals<{provider:TResponseproviderData<{user:TUser}>,reviews:IgetReviewData}>[]
       if (!res.ok) {
-        const error =data as ApiErrorResponse
-        return {success:error.success,message:error.message ||"retrieve admin meal data failed"}
+        const error = data as ApiErrorResponse;
+        return {
+          success: error.success,
+          message: error.message || "retrieve all meals failed",
+        };
       }
-      return {success:result.success,message:result.message,data:result.data};
+      return {
+        success: data.success,
+        message: data.message || "retrieve all meals successfully",
+        data: result,
+        pagination:data.data.pagination as Ipagination
+      };
     } catch (error: any) {
       return {
         data: null,

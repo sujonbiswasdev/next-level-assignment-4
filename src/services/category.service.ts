@@ -26,7 +26,7 @@ export const CategoriesService = {
         }
       })
       const data = await res.json()
-      console.log(data,'d')
+
      
       if(!res.ok){
         const error=data as ApiErrorResponse

@@ -21,9 +21,10 @@ import { TUser } from "@/types/user.type";
 import UpdateMeal from "./updateMeals";
 import { Ipagination } from "@/types/pagination.type";
 import PaginationPage from "./Pagination";
+import AdminMealsUpdate from "./AdminUpdateMeals";
 
 
-const MealTable = ({pagination,categories, initialmeals }: {pagination:Ipagination,categories:TResponseCategoryData<{user:TUser}>[], initialmeals: TResponseMeals<{category:TGetCategory,provider:IProviderInfo,reviews:IgetReviewData}>[]}) => {
+const MealTable = ({role,pagination,categories, initialmeals }: {role?:string,pagination:Ipagination,categories:TResponseCategoryData<{user:TUser}>[], initialmeals: TResponseMeals<{category:TGetCategory,provider:IProviderInfo,reviews:IgetReviewData}>[]}) => {
   const router = useRouter();
   const [meals, setMeals] = useState(initialmeals);
   const [search, setSearch] = useState("");
@@ -262,7 +263,12 @@ const MealTable = ({pagination,categories, initialmeals }: {pagination:Ipaginati
 
             {!viewMode && selectedmealid && (
               <div className="mt-6">
-              <UpdateMeal mealId={selectedmealid}/>
+              
+              {role=="Admin"?(<div>
+                <AdminMealsUpdate id={selectedmealid}/>
+              </div>):(<div>
+                <UpdateMeal mealId={selectedmealid}/>
+              </div>)}
               </div>
             )}
           </div>
