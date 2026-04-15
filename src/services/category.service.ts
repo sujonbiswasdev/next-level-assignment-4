@@ -13,28 +13,48 @@ export interface Icategory {
   image?: string
 }
 export const CategoriesService = {
-  getcategory: async () => {
+  getcategory: async (params?: any) => {
+     console.log(params,'parmas')
     try {
       const cookieStore = await cookies();
-      const res = await fetch(`${api_url}/api/v1/category`, {
+      const url = new URL(`${api_url}/api/v1/category`);
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            url.searchParams.append(key, String(value));
+          }
+        });
+      }
+      const res = await fetch(url.toString(), {
         credentials: "include",
         headers: {
-          Cookie: cookieStore.toString()
+          Cookie: cookieStore.toString(),
         },
         next: {
-          tags: ['category']
-        }
-      })
-      const data = await res.json()
-
-     
-      if(!res.ok){
-        const error=data as ApiErrorResponse
-        return {success:error.success,message:error.message || "categories retrive failed"}
+          tags: ["category"]
+        },
+      });
+      const data = await res.json();
+      const result = data.data.result as TResponseCategoryData<{ meals: IGetMealData; user: TUser; }>[]
+      if (!res.ok) {
+        const error = data as ApiErrorResponse;
+        return {
+          success: error.success,
+          message: error.message || "categories retrieve failed",
+        };
       }
-      return {success:data.success,message:data.message,data:data.data.result as TResponseCategoryData<{meals:IGetMealData,user:TUser}>[],pagination:data.data.pagination as Ipagination}
-    } catch (error) {
-      return {message:"something went wrong,please try again"}
+      return {
+        success: data.success,
+        message: data.message || "categories retrieve successfully",
+        data: result,
+        pagination: data.data.pagination as Ipagination
+      };
+    } catch (error: any) {
+      return {
+        data: null,
+        error: error.message,
+        message: "something went wrong, please try again",
+      };
     }
   },
   createCategory: async (value: any) => {

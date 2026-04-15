@@ -11,9 +11,9 @@ export const categoryCreate = async (data:ICreateCategory) => {
   }
 }
 
-export const getCategory = async () => {
+export const getCategory = async (params?:any) => {
   try {
-    const res = await CategoriesService.getcategory();
+    const res = await CategoriesService.getcategory(params);
     return res;
   } catch (error) {
     return null;

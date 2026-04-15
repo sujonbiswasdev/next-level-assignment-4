@@ -5,10 +5,15 @@ import ErrorFallback from "@/components/shared/ErrorFallback";
 import { TGetCategory, TResponseCategoryData } from "@/types/category";
 import { Ipagination } from "@/types/pagination.type";
 
-const CreateCategory = async () => {
+const CreateCategory = async ({
+  searchParams,
+}: {
+  searchParams:Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
+  const search=await searchParams
   let categories;
   try {
-    categories = await getCategory();
+    categories = await getCategory(search);
   } catch (error) {
     return (
       <div className="p-4 text-red-500">
