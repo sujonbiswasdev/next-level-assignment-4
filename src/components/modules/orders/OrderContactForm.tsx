@@ -73,7 +73,18 @@ export function OrderForm({
                 </Field>
                 <Field>
                     <FieldLabel htmlFor="form-phone">Phone</FieldLabel>
-                    <Input id="form-phone" onChange={(e) => setorderdata({ ...orderdata, phone: e.target.value })} type="number"  placeholder="01*********" />
+                    <Input
+                        id="form-phone"
+                        type="tel"
+                        inputMode="numeric"
+                        pattern="^(\+?\d{1,3}[- ]?)?\d{11,12}$"
+                        maxLength={12}
+                        minLength={11}
+                        placeholder="01*********"
+                        required
+                        onChange={(e) => setorderdata({ ...orderdata, phone: e.target.value })}
+                    />
+              
                 </Field>
                 <Field>
                     <FieldLabel htmlFor="form-address">Address</FieldLabel>

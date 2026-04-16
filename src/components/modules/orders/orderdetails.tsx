@@ -23,7 +23,7 @@ export default function OrderDetails({ orderdetails }: { orderdetails: IGetOrder
 
                     <p className="text-gray-900"> <span className="font-semibold">phone :</span> {orderdata.phone}</p>
                     <p className="text-gray-900"> <span className="font-semibold">address :</span> {orderdata.address}</p>
-                    <p className="text-gray-900"> <span className="font-semibold">total price :</span> ${orderdata.totalPrice}</p>
+                    <p className="text-gray-900"> <span className="font-semibold">total price :</span> ৳{orderdata.totalPrice}</p>
                 </div>
                 <div className="mt-2 sm:mt-0">
                     <span>
@@ -74,12 +74,12 @@ export default function OrderDetails({ orderdetails }: { orderdetails: IGetOrder
                             </div>
 
                             <p className="text-gray-700 font-medium">
-                                price : ${item.price.toFixed(2)}
+                                price : ৳ {item.price.toFixed(2)}
                             </p>
                             {/* Total Price */}
                             <div className="mt-4 flex justify-end items-center">
                                 <span className="text-lg font-semibold text-gray-900">
-                                    Total price: ${ Number(item.price)*Number(item.quantity)}
+                                    Total price: ৳ { Number(item.price)*Number(item.quantity)}
                                 </span>
                             </div>
                         </div>

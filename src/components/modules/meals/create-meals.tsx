@@ -43,7 +43,7 @@ export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData
       cuisine: 'BANGLEDESHI',
     },
     validators: {
-      onSubmit: CreateMealData,
+      onSubmit: CreateMealData as any,
     },
     onSubmit: async ({ value }:{value:TCreateMealsData}) => {
       const toastid = toast.loading("meals creating.........")
@@ -135,7 +135,7 @@ export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData
 
             <form.Field
               name="price"
-                  validators={{ onChange: CreateMealData.shape.price }}
+                  validators={{ onChange: CreateMealData.shape.price as any }}
               children={(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid
@@ -162,13 +162,13 @@ export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData
 
 <form.Field
               name="deliverycharge"
-                  validators={{ onChange: CreateMealData.shape.deliverycharge }}
+                  validators={{ onChange: CreateMealData.shape.deliverycharge as any }}
               children={(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>price</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>deliverycharge</FieldLabel>
                     <Input
                       id={field.name}
                       name={field.name}

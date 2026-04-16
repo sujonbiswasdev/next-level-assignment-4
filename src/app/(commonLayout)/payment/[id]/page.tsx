@@ -33,7 +33,7 @@ const InfoRow = ({
   </div>
 );
 
-const PaymentSuccessPage = async ({
+ const PaymentSuccessPage = async ({
   params,
   searchParams,
 }: {
@@ -43,8 +43,8 @@ const PaymentSuccessPage = async ({
   try {
     const { id } = await params;
     const resolvedSearchParams = searchParams ? await searchParams : undefined;
-    const participantId =
-      (resolvedSearchParams?.participantId as string | undefined) ?? "-";
+    const orderId =
+      (resolvedSearchParams?.OrderId as string | undefined) ?? "-";
     const paymentId =
       (resolvedSearchParams?.paymentId as string | undefined) ?? "-";
 
@@ -124,7 +124,7 @@ const PaymentSuccessPage = async ({
                     />
 
 <InfoRow
-                      label="totalPrice"
+                      label="totalPrice (not paid) "
                       value={
                         <span className="inline-flex items-center text-base font-semibold text-emerald-700 bg-emerald-50 rounded px-2 py-0.5">
                           <span className="mr-1 text-lg font-bold">৳</span>
@@ -226,8 +226,7 @@ const PaymentSuccessPage = async ({
                         Show IDs
                       </summary>
                       <div className="mt-4 space-y-1">
-                        <InfoRow label="Event ID" value={id} mono />
-                        <InfoRow label="Participant ID" value={participantId} mono />
+                        <InfoRow label="Order ID" value={id} mono />
                         <InfoRow label="Payment ID" value={paymentId} mono />
                       </div>
                     </details>
@@ -240,10 +239,10 @@ const PaymentSuccessPage = async ({
             </div>
             <div className="flex flex-col md:flex-row gap-3 w-full mt-8">
               <Link
-                href="/events"
+                href="/Meals"
                 className="flex-1 inline-flex justify-center items-center rounded-md bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 shadow transition focus:outline-none focus:ring-2 focus:ring-indigo-400"
               >
-                Browse More Events
+                Browse More Meals
               </Link>
               <Link
                 href="/"
@@ -278,4 +277,4 @@ const PaymentSuccessPage = async ({
   }
 };
 
-export default PaymentSuccessPage;
+export default PaymentSuccessPage
