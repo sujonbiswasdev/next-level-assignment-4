@@ -21,6 +21,8 @@ import { createPaymentColumns } from "./CreateColumn";
 import { FilterPanel } from "@/components/shared/filter/FilterInput";
 import { ReusableTable } from "@/components/shared/ReuseableTable";
 import PaginationPage from "@/components/shared/pagination";
+import ViewPaymentData from "./ViewPaymentData";
+import { deletePayment } from "@/actions/payment.actions";
 
 export default function PaymentContent({
   payments,
@@ -57,6 +59,27 @@ export default function PaymentContent({
   const handleApply = () => {
     updateFilters(form);
   };
+
+
+  const handleDeletePayment = useCallback(async (id: string) => {
+    try {
+      if (!window.confirm("Are you sure you want to delete this payment?")) return;
+      const toastId = toast.loading("Deleting payment...");
+      const resp = await deletePayment(id);
+      toast.dismiss(toastId);
+
+      if (resp.success) {
+        setTableData((prev) => prev.filter((item) => item.id !== id));
+        router.refresh();
+        toast.success(resp.message || "Payment deleted successfully");
+      } else {
+        toast.error(resp.message || "Failed to delete payment.");
+      }
+    } catch (error: any) {
+      toast.dismiss();
+      toast.error("Something went wrong. " + (error?.message || ""));
+    }
+  }, [router]);
 
   const handleReset = () => {
     const defaultForm = {
@@ -125,7 +148,7 @@ export default function PaymentContent({
     {
       icon: Trash2,
       label: "Delete",
-      onClick: (item: any) => (<></>),
+      onClick: (item: any) => handleDeletePayment(item.id),
       className: "text-red-500",
     },
   ];
@@ -194,7 +217,7 @@ export default function PaymentContent({
               overflowY: 'auto',
             }}
           >
-            {/* {viewData && <ViewPaymentData viewData={viewData} />} */}
+            {viewData && <ViewPaymentData viewData={viewData} />}
 
             {/* {!viewMode && selectedPayment && (
               <div className="mt-6">
