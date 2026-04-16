@@ -22,7 +22,7 @@ export const createUserSchema = z.object({
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/,
     "Password must contain uppercase, lowercase, number, and special character"
   ),
-  image: z.any().optional(), // image URL noy, binary file ashbe tai any()
+  image: z.any(),
   phone: z.string().min(11, "Minimum 11 digits").max(14),
   role: z.enum(["Customer", "Provider"]),
   restaurantName: z.string().optional(),

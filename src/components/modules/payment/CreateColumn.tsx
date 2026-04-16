@@ -7,17 +7,17 @@ export const createPaymentColumns = () => [
     key: "id",
     label: "ID",
     render: (row: TResponsePayment<any>) => (
-      <CopyableId id={row.id} showShort={row.id?.slice(0, 8)} />
+      <CopyableId id={row.id} showShort={row.id} />
     ),
   },
   {
-    key: "eventId",
-    label: "Event",
+    key: "mealId",
+    label: "mealId",
     render: (row: TResponsePayment<any>) => (
       <CopyableId
-        id={row.eventId}
-        href={row.eventId ? `/events/${row.eventId}` : undefined}
-        showShort={row.eventId?.slice(0, 8)}
+        id={row.mealId}
+        href={row.mealId ? `/meals/${row.mealId}` : undefined}
+        showShort={row.mealId}
       />
     ),
   },
@@ -28,17 +28,17 @@ export const createPaymentColumns = () => [
       <CopyableId
         id={row.userId}
         href={row.userId ? `/profile/${row.userId}` : undefined}
-        showShort={row.userId?.slice(0, 8)}
+        showShort={row.userId}
       />
     ),
   },
   {
-    key: "participantId",
-    label: "Participant",
+    key: "orderId",
+    label: "orderId",
     render: (row: TResponsePayment<any>) => (
       <CopyableId
-        id={row.participantId}
-        showShort={row.participantId?.slice(0, 8)}
+        id={row.orderId}
+        showShort={row.orderId}
       />
     ),
   },

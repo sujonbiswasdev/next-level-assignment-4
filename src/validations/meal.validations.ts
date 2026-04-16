@@ -5,19 +5,7 @@ import z from "zod";
 export const CreateMealData = z.object({
   meals_name: z.string().min(1, "meals name is required"),
   description: z.string().min(5, "description atleast 5 character"),
-  deliverycharge: z.preprocess(
-    (val) => {
-      if (val === undefined || val === null || val === "") return 0;
-      return Number(val);
-    },
-    z
-      .number()
-      .refine(
-        (val) => val === 0 || val === 120,
-        { message: "deliverycharge must be either 0 or 120 Taka." }
-      )
-      .optional()
-  ),
+  deliverycharge: z.number(),
   image: z
     .string()
     .min(1, "Image is required")

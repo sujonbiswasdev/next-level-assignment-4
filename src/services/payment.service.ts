@@ -64,7 +64,7 @@ export const PaymentService = {
     try {
       const cookieStore = await cookies();
 
-      const res = await fetch(`${API_BASE_URL}/payments/${paymentId}/status`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/payments/${paymentId}/status`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +102,7 @@ export const PaymentService = {
     try {
         const cookieStore = await cookies();
 
-        const res = await fetch(`${API_BASE_URL}/payments/${paymentId}`, {
+        const res = await fetch(`${API_BASE_URL}/api/v1/payments/${paymentId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

@@ -23,6 +23,7 @@ import { ReusableTable } from "@/components/shared/ReuseableTable";
 import PaginationPage from "@/components/shared/pagination";
 import ViewPaymentData from "./ViewPaymentData";
 import { deletePayment } from "@/actions/payment.actions";
+import UpdatePaymentStatusForm from "./UpdatePayment";
 
 export default function PaymentContent({
   payments,
@@ -46,7 +47,7 @@ export default function PaymentContent({
     status: "",
     amount: "",
     userId: "",
-    eventId: "",
+    mealId: "",
   });
 
   useEffect(() => {
@@ -86,7 +87,7 @@ export default function PaymentContent({
       status: "",
     amount: "",
     userId: "",
-    eventId: ""
+    mealId: ""
     };
     setForm(defaultForm);
     reset();
@@ -101,8 +102,8 @@ export default function PaymentContent({
     {
       type: "text",
       name: "eventId",
-      value: form.eventId,
-      onChange: (val: string) => handleChange("eventId", val),
+      value: form.mealId,
+      onChange: (val: string) => handleChange("mealId", val),
     },
     {
       type: "text",
@@ -219,7 +220,7 @@ export default function PaymentContent({
           >
             {viewData && <ViewPaymentData viewData={viewData} />}
 
-            {/* {!viewMode && selectedPayment && (
+            {!viewMode && selectedPayment && (
               <div className="mt-6">
                 <UpdatePaymentStatusForm
                   id={selectedPayment}
@@ -234,7 +235,7 @@ export default function PaymentContent({
                   }}
                 />
               </div>
-            )} */}
+            )}
           </div>
         </DialogContent>
       </Dialog>

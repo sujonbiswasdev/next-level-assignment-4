@@ -77,13 +77,17 @@ export async function getSession() {
 }
 export async function registerUser(registerData: UserCreateInput) {
   try {
+    const formData = new FormData();
+
+    const { image, ...rest } = registerData;
+
+    formData.append("data", JSON.stringify(rest));
+    if (image) {
+      formData.append("file", image);
+    }
     const response = await fetch(`${api_url}/api/v1/auth/register`, {
       method: "POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      cache:"no-store",
-      body: JSON.stringify(registerData)
+      body: formData
     });
 
     const body= await response.json();

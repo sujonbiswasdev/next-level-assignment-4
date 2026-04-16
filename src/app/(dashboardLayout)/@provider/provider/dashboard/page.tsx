@@ -9,7 +9,7 @@ import { DashboardData } from "@/types/stats.type";
 const ProviderStats = async () => {
   const statsData=await getStatsAction()
   const userinfo=await getSession()
-  const role=userinfo?.data.role
+  const role=userinfo?.data?.role
   if (!userinfo || role==null || !userinfo.success) {
     return (
       <Notfounddata

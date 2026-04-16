@@ -226,10 +226,10 @@ export default function UserTable({
         <DialogContent className="max-w-md w-full rounded-xl p-0 sm:p-0 bg-white dark:bg-gray-950">
           <DialogHeader className="flex flex-col items-center justify-center px-6 pt-8 pb-4 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 rounded-t-xl shadow-none">
             <DialogTitle className="text-[1.45rem] sm:text-2xl font-bold text-indigo-900 dark:text-indigo-100 mb-1 sm:mb-2 tracking-tight text-center">
-              {viewMode ? "Participant Details" : "Edit Participant"}
+              {viewMode ? "user Details" : "Edit user"}
             </DialogTitle>
             <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mb-0 text-center">
-              {viewMode ? "Review participant information below." : "Update status or details as needed."}
+              {viewMode ? "user information below." : "Update status or details as needed."}
             </p>
           </DialogHeader>
 

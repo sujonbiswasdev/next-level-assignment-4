@@ -12,7 +12,7 @@ interface ViewPaymentDataProps {
 const ViewPaymentData: React.FC<ViewPaymentDataProps> = ({ viewData }) => {
   if (!viewData) return null;
 
-  const { id, userId, meal, order, amount, status } = viewData;
+  const { id, userId, meal, order, amount, status, } = viewData;
 
   return (
     <div className="space-y-4">
@@ -29,7 +29,7 @@ const ViewPaymentData: React.FC<ViewPaymentDataProps> = ({ viewData }) => {
           <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{userId}</p>
 
           <p className="text-sm text-gray-500 dark:text-gray-400">Amount:</p>
-          <p className="text-sm font-medium text-gray-900 dark:text-gray-100">${amount}</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-gray-100"> ৳ {amount}</p>
 
           <p className="text-sm text-gray-500 dark:text-gray-400">Status:</p>
           <p className={`text-sm font-medium ${
@@ -40,22 +40,22 @@ const ViewPaymentData: React.FC<ViewPaymentDataProps> = ({ viewData }) => {
 
           <p className="text-sm text-gray-500 dark:text-gray-400">Created At:</p>
           <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-            {/* {format(new Date(createdAt), "dd/MM/yyyy HH:mm")} */}
+            {format(new Date(viewData.createdAt), "dd/MM/yyyy HH:mm")}
           </p>
         </div>
       </div>
 
       {/* Event Info */}
-      {event && (
+      {meal && (
         <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
           <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
             Event Information
           </h3>
           <div className="grid grid-cols-2 gap-2">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Event ID:</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">meal ID:</p>
             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{meal.id}</p>
 
-            <p className="text-sm text-gray-500 dark:text-gray-400">Event Name:</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">meal Name:</p>
             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{viewData.meal.meals_name}</p>
 
             <p className="text-sm text-gray-500 dark:text-gray-400">createdAt:</p>

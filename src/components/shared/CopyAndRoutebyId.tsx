@@ -50,7 +50,7 @@ const CopyableId: React.FC<Props> = ({
       title="Click → View | Alt + Click → Copy"
     >
       <span className="hover:underline">
-        {showShort ? `${id.slice(0, 6)}...` : id}
+        {showShort ? `${id.slice(0,6)}...` : id}
       </span>
 
       {/* Hover copy hint */}

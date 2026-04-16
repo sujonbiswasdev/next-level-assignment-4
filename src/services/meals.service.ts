@@ -24,6 +24,7 @@ export interface IMealStatus{
 
 export const mealsService = {
   createMeals: async (mealsdata: TCreateMealsData) => {
+    console.log(mealsdata,'mealdata')
     const cookieStore = await cookies();
     try {
       const res = await fetch(`${api_url}/api/v1/provider/meal`, {

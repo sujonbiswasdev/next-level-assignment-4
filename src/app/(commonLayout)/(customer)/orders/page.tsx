@@ -11,8 +11,8 @@ const MyOrders = async ({
   searchParams:Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
   const res =await getSession()
-  const role =res?.data.role
-  if (role==null || !role) {
+  const role =res?.data?.role
+  if (!res?.success || !res?.data || role==null || !role) {
     return (
       <ErrorFallback
         title="Access Denied"

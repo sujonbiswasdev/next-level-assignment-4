@@ -1,8 +1,8 @@
 import React from "react";
 
-const LoadingContent = ({data}:{data:string}) => {
+const LoadingContent = ({ data }: { data: string }) => {
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300">
+    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300 z-50">
       <div
         role="status"
         className="flex flex-col items-center justify-center"
@@ -43,8 +43,6 @@ const LoadingContent = ({data}:{data:string}) => {
         <span className="text-lg sm:text-xl font-semibold text-gray-700 text-center">
           Please wait while we prepare your {data}...
         </span>
-   
-   
       </div>
     </div>
   );

@@ -67,10 +67,6 @@ export function UpdateUserForm({
 
   return (
     <Card className="w-full max-w-md mx-auto border-none shadow-none">
-      <CardHeader>
-        <CardTitle className="text-center">Update User</CardTitle>
-        <CardDescription className="text-center">Change user role, status, or email. All fields are optional.</CardDescription>
-      </CardHeader>
       <CardContent>
         <form
           id="update-user-form"

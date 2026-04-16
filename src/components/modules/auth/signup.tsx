@@ -35,7 +35,7 @@ export function SignupForm() {
       name: "",
       email: "",
       password: "",
-      image: "",
+      image: null as File | null,
       phone: "",
       role: "",
       restaurantName: "",
@@ -204,33 +204,40 @@ export function SignupForm() {
                 }}
               />
 
-              <form.Field
-                name="image"
-                validators={{ onChange: createUserSchema.shape.image }}
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
-                  return (
-                    <Field data-invalid={isInvalid} className="mb-2">
-                      <FieldLabel htmlFor={field.name}>profile image</FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        aria-invalid={isInvalid}
-                        placeholder="Link to profile image (optional)"
-                        className="focus:border-purple-500 transition"
-                        autoComplete="off"
-                      />
-                      {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </Field>
-                  );
-                }}
-              />
+<form.Field
+              name="image"
+              children={(field) => (
+                <Field>
+                  <FieldLabel>profile Image *</FieldLabel>
+
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        if (file.size > 1 * 1024 * 1024) {
+                          toast.error("Image size must be less than 1MB!");
+                          e.target.value = "";
+                          field.handleChange(null);
+                          setPreview(null);
+                          return;
+                        }
+                        field.handleChange(file);
+                        setPreview(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+
+                  {preview && (
+                    <img
+                      src={preview}
+                      className="h-32 rounded-md object-cover mt-2"
+                    />
+                  )}
+                </Field>
+              )}
+            />
 
               <form.Field
                 name="phone"

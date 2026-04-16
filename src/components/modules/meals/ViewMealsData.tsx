@@ -175,7 +175,7 @@ const ViewMealsData = ({
             <span className="block mt-0.5 font-mono text-sm text-gray-700 select-all bg-gray-50 rounded px-2 py-1">
               <div className="flex items-center gap-2">
                 <Link
-                  href={`/meals/${viewData.providerId}`}
+                  href={`/providers/${viewData.providerId}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:underline"

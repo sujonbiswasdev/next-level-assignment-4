@@ -11,7 +11,7 @@ const Page = async() => {
       <React.Suspense fallback={<div>Loading settings...</div>}>
         <ErrorBoundary fallback={<div>Something went wrong in settings.</div>}>
           <ChangePasswordForm />
-          <VerifyOtp email={userinfo?.data.email} type="email-verification" />
+          <VerifyOtp email={userinfo?.data?.email} type="email-verification" />
         </ErrorBoundary>
       </React.Suspense>
     </div>
