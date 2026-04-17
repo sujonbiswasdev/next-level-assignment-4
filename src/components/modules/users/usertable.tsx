@@ -100,8 +100,10 @@ export default function UserTable({
       value: form.role,
       onChange: (val: string) => handleChange("role", val),
       options: [
-        { label: "Admin", value: "ADMIN" },
-        { label: "User", value: "USER" },
+        { label: "Admin", value: "Admin" },
+        { label: "Customer", value: "Customer" },
+        { label: "Provider", value: "Provider" },
+   
       ],
     },
     {
@@ -111,10 +113,8 @@ export default function UserTable({
       value: form.status,
       onChange: (val: string) => handleChange("status", val),
       options: [
-        { label: "Active", value: "ACTIVE" },
-        { label: "Inactive", value: "INACTIVE" },
-        { label: "Blocked", value: "BLOCKED" },
-        { label: "Deleted", value: "DELETED" },
+        { label: "Activate", value: "activate" },
+        { label: "Suspend", value: "suspend" },   
       ],
     },
     {

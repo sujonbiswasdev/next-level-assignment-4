@@ -45,14 +45,19 @@ export const createUserColumns = () => [
       let color = "";
       let text = "";
       switch (row.role) {
-        case "ADMIN":
+        case "Admin":
           color = "bg-indigo-100 text-indigo-800";
           text = "Admin";
           break;
-        case "USER":
+        case "Customer":
           color = "bg-green-100 text-green-800";
-          text = "User";
+          text = "Customer";
           break;
+        case "Provider":
+          color = "bg-yellow-100 text-yellow-800";
+          text = "Provider";
+          break;
+   
         default:
           color = "bg-gray-100 text-gray-800";
           text = row.role || "Unknown";
@@ -71,20 +76,20 @@ export const createUserColumns = () => [
       let color = "";
       let text = "";
       switch (row.status) {
-        case "ACTIVE":
-        case true:
+        case "activate":
           color = "bg-green-100 text-green-800";
           text = "Active";
           break;
-        case "INACTIVE":
-        case false:
-          color = "bg-gray-100 text-gray-700";
-          text = "Inactive";
+        case "suspend":
+          color = "bg-yellow-100 text-yellow-800";
+          text = "Suspend";
           break;
         default:
           color = "bg-gray-100 text-gray-800";
           text = row.status || "--";
       }
+ 
+ 
       return (
         <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${color}`}>
           {text}
