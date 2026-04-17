@@ -3,12 +3,12 @@ import { IGetMealData } from "./meals.type";
 // category create
 export interface ICreateCategory {
   name: string;
-  image: string; 
+  image: any; 
 }
 
 export interface IUpdateCategory {
   name?: string;
-  image?: string; 
+  image?: any; 
 }
 
 

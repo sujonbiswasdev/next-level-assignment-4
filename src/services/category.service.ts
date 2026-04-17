@@ -60,15 +60,21 @@ export const CategoriesService = {
 
     try {
       const cookieStore = await cookies();
+      const formData = new FormData();
+
+      const { image, ...rest } = value;
+  
+      formData.append("data", JSON.stringify(rest));
+      if (image) {
+        formData.append("file", image);
+      }
 
       const response = await fetch(`${api_url}/api/v1/admin/category`, {
-        method: "POST",
-        credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-          Cookie: cookieStore.toString()
+          Cookie: cookieStore.toString(),
         },
-        body: JSON.stringify(value)
+        method: "POST",
+        body: formData
       })
       revalidateTag('category', 'max')
       const data = await response.json()
@@ -91,14 +97,21 @@ export const CategoriesService = {
   updateCategory: async (id: string, updateUser: IUpdateCategory) => {
     try {
       const cookieStore = await cookies()
+      const formData = new FormData();
+
+      const { image, ...rest } = updateUser;
+  
+      formData.append("data", JSON.stringify(rest));
+      if (image) {
+        formData.append("file", image);
+      }
       const res = await fetch(`${api_url}/api/v1/admin/category/${id}`, {
         method: "PUT",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
           Cookie: cookieStore.toString(),
         },
-        body: JSON.stringify(updateUser),
+        body:formData,
       });
       revalidateTag('category', 'max')
       const data = await res.json();

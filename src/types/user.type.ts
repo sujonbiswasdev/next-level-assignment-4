@@ -14,7 +14,7 @@ export type TUser = {
   name: string;
   email: string;
   emailVerified: boolean;
-  image: string | null;
+  image: any| string | null;
   createdAt: string;
   updatedAt: string;
   role: string;

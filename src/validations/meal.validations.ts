@@ -6,23 +6,7 @@ export const CreateMealData = z.object({
   meals_name: z.string().min(1, "meals name is required"),
   description: z.string().min(5, "description atleast 5 character"),
   deliverycharge: z.number(),
-  image: z
-    .string()
-    .min(1, "Image is required")
-    .url("Invalid image URL")
-    .refine(
-      (url) => {
-        try {
-          const parsed = new URL(url);
-          return allowedDomains.includes(parsed.hostname);
-        } catch {
-          return false;
-        }
-      },
-      {
-        message: "Only Cloudinary and Pexels images allowed",
-      },
-    ),
+  image: z.any(),
   price: z
   .preprocess((val) => {
     if (val === "" || val === null) return 0;
@@ -44,17 +28,8 @@ export const CreateMealData = z.object({
 export const UpdatemealData = z.object({
   meals_name: z.string().optional(),
   description: z.string().optional(),
-  image: z.string().optional(),
-  price: z
-  .preprocess((val) => {
-    if (val === "" || val === null) return undefined;
-    return Number(val);
-  }, z
-    .number()
-    .min(60, { message: "Fee must be at least 60 Taka." })
-    .max(6000, { message: "Fee cannot exceed 6000 Taka." })
-    .optional()
-  ),
+  image: z.any().optional(),
+  price: z.number().min(60,"price must be al least 60 taka").optional(),
   isAvailable: z.boolean().optional(),
   category_name: z.string().optional(),
   cuisine: z.enum([

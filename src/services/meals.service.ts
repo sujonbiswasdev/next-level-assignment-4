@@ -24,16 +24,22 @@ export interface IMealStatus{
 
 export const mealsService = {
   createMeals: async (mealsdata: TCreateMealsData) => {
-    console.log(mealsdata,'mealdata')
+    const formData = new FormData();
+
+    const { image, ...rest } = mealsdata;
+
+    formData.append("data", JSON.stringify(rest));
+    if (image) {
+      formData.append("file", image);
+    }
     const cookieStore = await cookies();
     try {
       const res = await fetch(`${api_url}/api/v1/provider/meal`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Cookie: cookieStore.toString(),
         },
-        body: JSON.stringify(mealsdata),
+        body: formData,
       });
       revalidateTag("meal",'max')
 
@@ -210,14 +216,22 @@ export const mealsService = {
   updateMeals: async (id: string, mealsdata: TUpdateMealsData) => {
     try {
       const cookieStore = await cookies();
+      const formData = new FormData();
+
+      const { image, ...rest } = mealsdata;
+  
+      formData.append("data", JSON.stringify(rest));
+      if (image) {
+        formData.append("file", image);
+      }
+      console.log(formData,'dd')
       const res = await fetch(`${api_url}/api/v1/provider/meal/${id}`, {
         method: "PUT",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
           Cookie: cookieStore.toString(),
         },
-        body: JSON.stringify(mealsdata),
+        body:formData,
       });
       const data = await res.json();
       const result = data as ApiResponse<TResponseMeals>

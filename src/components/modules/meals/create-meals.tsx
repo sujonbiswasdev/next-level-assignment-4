@@ -28,6 +28,7 @@ import { cuisines, dietaryPreferences, IGetMealData, TCreateMealsData } from "@/
 import { CreateMealData } from "@/validations/meal.validations"
 import { TUser } from "@/types/user.type"
 export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData,user:TUser}>[]}) {
+  const [preview, setPreview] = useState<string | null>(null);
   const [category, setcategory] = useState<TGetCategory[] | undefined>()
   const router = useRouter()
   const form = useForm({
@@ -35,7 +36,7 @@ export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData
       meals_name: "",
       deliverycharge:0,
       description: "",
-      image: "",
+      image: null as File | null,
       price: 0,
       isAvailable: true,
       dietaryPreference: 'ANY',
@@ -56,6 +57,7 @@ export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData
         }
         toast.dismiss(toastid)
         toast.success("meals created successfully")
+        setPreview(null)
         form.reset()
       } catch (error) {
         toast.dismiss(toastid)
@@ -105,32 +107,39 @@ export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData
               }}
             />
 
-            <form.Field
+<form.Field
               name="image"
-                  validators={{ onChange: CreateMealData.shape.image }}
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Image</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="please enter your image"
-                      autoComplete="off"
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
+              children={(field) => (
+                <Field>
+                  <FieldLabel>profile Image *</FieldLabel>
 
-                  </Field>
-                )
-              }}
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        if (file.size > 1 * 1024 * 1024) {
+                          toast.error("Image size must be less than 1MB!");
+                          e.target.value = "";
+                          field.handleChange(null);
+                          setPreview(null);
+                          return;
+                        }
+                        field.handleChange(file);
+                        setPreview(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+
+                  {preview && (
+                    <img
+                      src={preview}
+                      className="h-32 rounded-md object-cover mt-2"
+                    />
+                  )}
+                </Field>
+              )}
             />
 
             <form.Field

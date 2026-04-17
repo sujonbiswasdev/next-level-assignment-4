@@ -8,24 +8,26 @@ import { Label } from "../../ui/label";
 import {
   cuisines,
   dietaryPreferences,
-  UpdateMealsData
+  UpdateMealsData,
 } from "@/types/meals.type";
 import { UpdatemealData } from "@/validations/meal.validations";
+import { Input } from "@/components/ui/input";
 
 const UpdateMeal = ({ mealId }: { mealId: string }) => {
+  const [preview, setPreview] = useState<string | null>(null);
   const [mealData, setMealData] = useState<UpdateMealsData>({});
   const parsedata = UpdatemealData.safeParse(mealData);
   const [loading, setLoading] = useState(false);
 
-  const handleInput = (
-    field: keyof UpdateMealsData,
-    value: any
-  ) => setMealData((prev) => ({ ...prev, [field]: value }));
+  const handleInput = (field: keyof UpdateMealsData, value: any) =>
+    setMealData((prev) => ({ ...prev, [field]: value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!parsedata.success) {
-      toast.error(parsedata.error.issues[0]?.message || "Please check the fields");
+      toast.error(
+        parsedata.error.issues[0]?.message || "Please check the fields",
+      );
       return;
     }
     setLoading(true);
@@ -73,24 +75,22 @@ const UpdateMeal = ({ mealId }: { mealId: string }) => {
             <input
               id="price"
               type="number"
-              min={0}
               step="0.01"
               placeholder="Price"
               value={mealData.price ?? ""}
-              onChange={(e) =>
-                handleInput(
-                  "price",
-                  e.target.value === ""
-                    ? undefined
-                    : Math.max(0, Number(e.target.value))
-                )
+              onChange={(e) => {
+                setMealData((prev)=>({...prev,price:Number(e.target.value)}))
+              }
               }
               className="w-full border border-gray-300 dark:border-gray-800 p-3 rounded-lg focus:ring-2 focus:ring-green-400 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition"
               autoComplete="off"
             />
             {parsedata.error?.issues.find((i) => i.path[0] === "price") && (
               <span className="text-xs text-red-600 block">
-                {parsedata.error.issues.find((i) => i.path[0] === "price")?.message}
+                {
+                  parsedata.error.issues.find((i) => i.path[0] === "price")
+                    ?.message
+                }
               </span>
             )}
           </div>
@@ -101,18 +101,38 @@ const UpdateMeal = ({ mealId }: { mealId: string }) => {
           <Label htmlFor="image" className="font-medium">
             Image URL
           </Label>
-          <input
-            id="image"
-            type="url"
-            placeholder="Paste Cloudinary or Pexels image URL..."
-            value={mealData.image ?? ""}
-            onChange={(e) => handleInput("image", e.target.value)}
-            className="w-full border border-gray-300 dark:border-gray-800 p-3 rounded-lg focus:ring-2 focus:ring-green-400 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition"
-            autoComplete="off"
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                if (file.size > 1 * 1024 * 1024) {
+                  toast.error("Image size must be less than 1MB!");
+                  e.target.value = "";
+                  setMealData((prev: UpdateMealsData) => ({
+                    ...prev,
+                    image: undefined,
+                  }));
+                  setPreview(null);
+                  return;
+                }
+                setMealData((prev: UpdateMealsData) => ({
+                  ...prev,
+                  image: file,
+                }));
+           
+                setPreview(URL.createObjectURL(file));
+              }
+            }}
           />
+
           {parsedata.error?.issues.find((i) => i.path[0] === "image") && (
             <span className="text-xs text-red-600 block">
-              {parsedata.error.issues.find((i) => i.path[0] === "image")?.message}
+              {
+                parsedata.error.issues.find((i) => i.path[0] === "image")
+                  ?.message
+              }
             </span>
           )}
         </div>
@@ -143,7 +163,10 @@ const UpdateMeal = ({ mealId }: { mealId: string }) => {
               id="cuisine"
               value={mealData.cuisine ?? ""}
               onChange={(e) =>
-                handleInput("cuisine", e.target.value as typeof cuisines[number] || undefined)
+                handleInput(
+                  "cuisine",
+                  (e.target.value as (typeof cuisines)[number]) || undefined,
+                )
               }
               className="w-full border border-gray-300 dark:border-gray-800 p-3 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition"
             >
@@ -165,7 +188,8 @@ const UpdateMeal = ({ mealId }: { mealId: string }) => {
               onChange={(e) =>
                 handleInput(
                   "dietaryPreference",
-                  e.target.value as typeof dietaryPreferences[number] || undefined
+                  (e.target.value as (typeof dietaryPreferences)[number]) ||
+                    undefined,
                 )
               }
               className="w-full border border-gray-300 dark:border-gray-800 p-3 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition"

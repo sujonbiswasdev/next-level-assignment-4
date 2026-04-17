@@ -5,8 +5,10 @@ import { toast } from "react-toastify";
 import { FieldError } from "../../ui/field";
 import { UpdateCategory } from "@/validations/category.schema";
 import { IUpdateCategory } from "@/types/category";
+import { Input } from "@/components/ui/input";
 
 const Categoryupdate = ({ categoryid }: { categoryid: string }) => {
+  const [preview, setPreview] = useState<string | null>(null);
   const [categorydata, setcategorydata] = useState<IUpdateCategory>({});
   const parsedata = UpdateCategory.safeParse(categorydata);
   const handleSubmit = async (e: React.FormEvent) => {
@@ -49,9 +51,41 @@ const Categoryupdate = ({ categoryid }: { categoryid: string }) => {
             <input
               type="text"
               placeholder="please enter your image url (cloudinary,pexels)"
-              onChange={(e) => setcategorydata({ ...categorydata, image: e.target.value })}
+              
               className="w-full border-2 border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 transition"
             />
+
+<Input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                if (file.size > 1 * 1024 * 1024) {
+                  toast.error("Image size must be less than 1MB!");
+                  e.target.value = "";
+                  setcategorydata((prev: IUpdateCategory) => ({
+                    ...prev,
+                    image: undefined,
+                  }));
+                  setPreview(null);
+                  return;
+                }
+                setcategorydata((prev: IUpdateCategory) => ({
+                  ...prev,
+                  image: file,
+                }));
+           
+                setPreview(URL.createObjectURL(file));
+              }
+            }}
+          />
+            {preview && (
+                    <img
+                      src={preview}
+                      className="h-32 rounded-md object-cover mt-2"
+                    />
+                  )}
 
             {!parsedata.success && parsedata.error && (
               <FieldError errors={parsedata.error.issues} />

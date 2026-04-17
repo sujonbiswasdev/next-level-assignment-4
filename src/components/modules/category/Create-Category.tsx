@@ -22,15 +22,17 @@ import { Input } from "@/components/ui/input";
 import { toast } from "react-toastify";
 import { CreateCategory } from "@/validations/category.schema";
 import { categoryCreate } from "@/actions/category";
+import { useState } from "react";
 
 export function CreateCategoryForm() {
+  const [preview, setPreview] = useState<string | null>(null);
   const form = useForm({
     defaultValues: {
       name: "",
-      image: "",
+      image: null as File | null,
     },
     validators: {
-      onSubmit: CreateCategory,
+      onSubmit: CreateCategory as any,
     },
     onSubmit: async ({ value }) => {
       const toastId = toast.loading("Creating category...", {
@@ -40,7 +42,7 @@ export function CreateCategoryForm() {
 
       try {
         // Using native fetch
-        const res= await categoryCreate(value)
+        const res= await categoryCreate(value as any)
 
         toast.dismiss(toastId);
 
@@ -56,6 +58,7 @@ export function CreateCategoryForm() {
           theme: "colored",
           position: "bottom-right",
         });
+        setPreview(null)
 
         form.reset();
       } catch (error) {
@@ -111,28 +114,39 @@ export function CreateCategoryForm() {
               }}
             />
 
-            <form.Field
+<form.Field
               name="image"
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Image URL</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                      placeholder="Enter image URL"
-                      className="border-indigo-400 focus:ring-indigo-400 focus:border-indigo-500"
+              children={(field) => (
+                <Field>
+                  <FieldLabel>profile Image *</FieldLabel>
+
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        if (file.size > 1 * 1024 * 1024) {
+                          toast.error("Image size must be less than 1MB!");
+                          e.target.value = "";
+                          field.handleChange(null);
+                          setPreview(null);
+                          return;
+                        }
+                        field.handleChange(file);
+                        setPreview(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+
+                  {preview && (
+                    <img
+                      src={preview}
+                      className="h-32 rounded-md object-cover mt-2"
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                  </Field>
-                );
-              }}
+                  )}
+                </Field>
+              )}
             />
           </FieldGroup>
         </form>
