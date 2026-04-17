@@ -117,7 +117,7 @@ const Navbar = ({
             >
               <img
                 src={logo.src}
-                className="w-[38px] h-[38px] md:w-[44px] md:h-[44px] lg:w-[50px] lg:h-[50px] aspect-square dark:invert object-contain min-w-[32px] max-h-[56px]"
+                className="w-[38px] h-[38px] md:w-[44px] md:h-[44px] lg:w-[50px] lg:h-[50px] aspect-square dark:invert object-contain min-w-[32px] max-h-[56px] rounded-full"
                 alt={logo.alt}
                 style={{
                   objectFit: "contain",
@@ -259,18 +259,39 @@ const renderMenuItem = (item: MenuItem) => {
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
         className={cn(
-          "group inline-flex h-10 min-w-[60px] md:min-w-[72px] md:w-auto items-center justify-center rounded-md bg-background px-2 md:px-4 text-xs md:text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground",
-          "whitespace-nowrap"
+          "group inline-flex h-12 min-w-[70px] md:min-w-[90px] md:w-auto items-center justify-center rounded-full shadow transition-all duration-200 px-4 md:px-6 text-sm md:text-[17px] font-semibold tracking-wide",
+          isActive
+            ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg scale-105"
+            : "bg-white text-gray-700 hover:bg-blue-50 hover:from-blue-500/10 hover:to-purple-500/10 hover:text-blue-700"
         )}
         asChild
+        style={{
+          border: isActive ? "2px solid #7C3AED" : "1.5px solid #E5E7EB",
+          boxShadow: isActive
+            ? "0 4px 20px 0 rgba(124,58,237,0.10)"
+            : "0 1px 4px 0 rgba(0,0,0,0.04)",
+        }}
       >
         <Link
-          className={isActive ? "text-blue-600 font-bold" : "text-gray-600"}
           href={item.url}
+          className={cn(
+            "w-full h-full flex items-center justify-center",
+            isActive ? "" : "transition-colors"
+          )}
         >
-          {item.title}
+          <span
+            className={cn(
+              "relative",
+              isActive
+                ? "after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-[3px] after:bg-gradient-to-r after:from-blue-400 after:to-purple-400 after:rounded-md after:content-['']"
+                : ""
+            )}
+          >
+            {item.title}
+          </span>
         </Link>
       </NavigationMenuLink>
+ 
     </NavigationMenuItem>
   );
 };

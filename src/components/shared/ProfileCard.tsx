@@ -16,6 +16,7 @@ import {
   LogOut,
   Settings,
 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -41,12 +42,12 @@ export default function ProfileCard({ profile }: { profile: TUser }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="relative w-8 h-8 rounded-full overflow-hidden border-primary shadow-md">
-          <img
+          <Image
             src={profile.image || defaultProfile}
             alt={profile.name}
             width={100}
             height={100}
-            className="object-cover"
+            className="object-cover w-full h-full"
           />
         </div>
       </DropdownMenuTrigger>
