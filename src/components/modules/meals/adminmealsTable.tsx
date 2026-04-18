@@ -52,7 +52,7 @@ const AdminMealsTable = ({ initialmeals }: { initialmeals: IGetMealData[] }) => 
         </h1>
 
         <button
-          onClick={() => router.push("/provider-dashboard/create-meals")}
+          onClick={() => router.push("/admin/dashboard/create-meals")}
           className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition duration-300"
         >
           <BadgePlus size={18} />

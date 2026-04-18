@@ -30,7 +30,7 @@ export const CategoriesService = {
           Cookie: cookieStore.toString(),
         },
         next: {
-          tags: ["category"]
+          tags: ["category","categories"]
         },
       });
       const data = await res.json();

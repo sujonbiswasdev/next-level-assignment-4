@@ -106,6 +106,17 @@ export const StatsCounts = ({
           : "0",
         trend: "up",
       },
+      {
+        title: "Payments",
+        value: statsCount.paymentCount?.toString() || "0",
+        bgGradient: "from-indigo-500 to-purple-400",
+        iconName: "CreditCard",
+        key: "payments",
+        percentage: adminTotal
+          ? (((statsCount.paymentCount || 0) / adminTotal) * 100).toFixed(0)
+          : "0",
+        trend: "up",
+      },
     ];
 
     const cardsToRender = isAdmin ? adminCards : providerCards;

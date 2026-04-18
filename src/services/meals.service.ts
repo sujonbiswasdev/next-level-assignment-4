@@ -202,6 +202,7 @@ export const mealsService = {
           Cookie:cookieStore.toString()
         }
       });
+      revalidateTag("meal",'max')
       const data = await res.json();
       const result = data as ApiResponse<TResponseMeals>
       if (!res.ok) {
@@ -224,10 +225,12 @@ export const mealsService = {
       if (image) {
         formData.append("file", image);
       }
-      console.log(formData,'dd')
+      console.log(formData,'data')
+      revalidateTag("meal",'max')
       const res = await fetch(`${api_url}/api/v1/provider/meal/${id}`, {
         method: "PUT",
         credentials: "include",
+        next:{tags:["category"]},
         headers: {
           Cookie: cookieStore.toString(),
         },

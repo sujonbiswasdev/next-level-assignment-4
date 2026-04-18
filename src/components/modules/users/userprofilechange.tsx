@@ -104,7 +104,7 @@ export function UpdateUserForm({
                     className="w-full border rounded p-2"
                   >
                     <option value="">Select Role (optional)</option>
-                    {['USER', 'ADMIN'].map((r: string) => (
+                    {['Customer', 'Admin','Provider'].map((r: string) => (
                       <option key={r} value={r}>{r}</option>
                     ))}
                   </select>
@@ -125,7 +125,8 @@ export function UpdateUserForm({
                     className="w-full border rounded p-2"
                   >
                     <option value="">Select Status (optional)</option>
-                    {['ACTIVE', 'BLOCKED', 'DELETED', "INACTIVE"].map((s: string) => (
+                    {['activate', 'suspend'].map((s: string) => (
+               
                       <option key={s} value={s}>{s}</option>
                     ))}
                   </select>

@@ -3,6 +3,7 @@ import { env } from "@/env"
 import { ICreateorderData, IGetOrderData, TResponseOrderData } from "@/types/order/order.type"
 import { Ipagination } from "@/types/pagination.type"
 import { ApiErrorResponse, ApiResponse } from "@/types/response.type"
+import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 
 const api_url = env.API_URL
@@ -125,6 +126,7 @@ export const OrderService = {
                 body: JSON.stringify(orderdata),
 
             });
+            revalidateTag("order",'max')
             const data = await res.json();
             const result = data as ApiResponse<IGetOrderData>
             if (!res.ok) {
@@ -149,6 +151,7 @@ export const OrderService = {
                 credentials: "include",
                 body: JSON.stringify(orderData),
             });
+            revalidateTag("order",'max')
 
             const data = await res.json();
         
@@ -164,13 +167,14 @@ export const OrderService = {
     },
     getorderbyid: async (id: string) => {
         try {
-            const cookiestore = await cookies()
+            const cookieStore = await cookies()
             const res = await fetch(`${api_url}/api/v1/orders/${id}`, {
-                headers: {
-                    Cookie: cookiestore.toString(),
-                },
                 credentials: "include",
-                next: { tags: ['orderupdate'] }
+
+                headers: {
+                    Cookie: cookieStore.toString(),
+                },
+                cache:"no-store"
             })
             const body = await res.json()
             const result = body as ApiResponse<IGetOrderData>
@@ -228,6 +232,7 @@ export const OrderService = {
                     Cookie: cookieStore.toString(),
                 },
             });
+            revalidateTag("order",'max')
             const body = await res.json();
             if (!res.ok) {
                 return {

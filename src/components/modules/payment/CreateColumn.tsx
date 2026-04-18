@@ -46,7 +46,7 @@ export const createPaymentColumns = () => [
     key: "amount",
     label: "Amount",
     render: (row: TResponsePayment<any>) => (
-      <span className="text-gray-900 dark:text-gray-100">${row.amount}</span>
+      <span className="text-gray-900 dark:text-gray-100">৳ {row.amount}</span>
     ),
   },
   {

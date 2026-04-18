@@ -99,7 +99,7 @@ const UpdateMeal = ({ mealId }: { mealId: string }) => {
         {/* Image URL Field */}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="image" className="font-medium">
-            Image URL
+            Image (optional)
           </Label>
           <Input
             type="file"
@@ -121,11 +121,20 @@ const UpdateMeal = ({ mealId }: { mealId: string }) => {
                   ...prev,
                   image: file,
                 }));
-           
                 setPreview(URL.createObjectURL(file));
+              } else {
+                // If file cleared, set as undefined (optional)
+                setMealData((prev: UpdateMealsData) => ({
+                  ...prev,
+                  image: undefined,
+                }));
+                setPreview(null);
               }
             }}
           />
+          {/* Optional note for user */}
+          <span className="text-xs text-gray-500">Image is optional. If not selected, existing image will remain.</span>
+ 
 
           {parsedata.error?.issues.find((i) => i.path[0] === "image") && (
             <span className="text-xs text-red-600 block">

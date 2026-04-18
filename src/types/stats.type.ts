@@ -6,7 +6,8 @@ export interface ICounts {
     mealsCount: number;
     orderCount: number;
     reviewCount: number;
-    userCount:number
+    userCount:number;
+    paymentCount:number
 }
 
 export interface MonthlyRevenue {

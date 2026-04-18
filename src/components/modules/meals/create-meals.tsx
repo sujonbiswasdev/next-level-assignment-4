@@ -111,7 +111,7 @@ export function MealsForm({data}:{data:TResponseCategoryData<{meals:IGetMealData
               name="image"
               children={(field) => (
                 <Field>
-                  <FieldLabel>profile Image *</FieldLabel>
+                  <FieldLabel>Image *</FieldLabel>
 
                   <Input
                     type="file"

@@ -56,14 +56,14 @@ export default function TestimonialSection({
           Discover the best-rated restaurants, trusted for flavor and excellence.
         </p>
         <Marquee>
-          <div className="grid gap-6 sm:gap-8 md:gap-10 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="max-w-[1340px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 lg:gap-10">
             {testomonialdata.map((item) => {
               const avgRating = item.avgRating ?? 0;
               const totalReviews = item.totalReviews ?? 0;
               return (
                 <div
                   key={item.id}
-                  className="relative bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-200 group flex flex-col min-h-[320px] md:min-h-[320px] xl:min-h-[320px] overflow-hidden"
+                  className="relative bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-200 group flex flex-col min-h-[320px] md:min-h-[320px] xl:min-h-[320px] max-w-[250px] md:max-w-[300px] lg:max-w-[400px] overflow-hidden"
                 >
                   {/* Profile & Header */}
                   <div className="flex items-center gap-3 mb-2 px-5 pt-5">
@@ -89,7 +89,7 @@ export default function TestimonialSection({
                     <p className="text-gray-700 text-sm leading-tight font-normal mb-1 line-clamp-2">{item.description}</p>
                     <div className="flex-grow" />
                     {/* Ratings and View Button row, aligned to bottom */}
-                    <div className="flex items-center justify-between mt-2">
+                    <div className="flex flex-wrap space-x-2 space-y-2 items-center justify-between mt-2">
                       <div className="flex items-center gap-1">
                         {renderStars(avgRating)}
                         <span className="text-gray-900 font-semibold text-sm pl-1">{Number(avgRating).toFixed(1)}</span>

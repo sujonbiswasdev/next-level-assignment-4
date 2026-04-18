@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import OrderDetails from '@/components/modules/orders/orderdetails';
 import NotFound from '@/components/Notfound';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';

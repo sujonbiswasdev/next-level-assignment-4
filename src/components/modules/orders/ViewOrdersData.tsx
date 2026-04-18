@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import CopyableId from "@/components/shared/CopyAndRoutebyId";
 
 // Type for the order object
 interface OrderItem {
@@ -173,7 +174,14 @@ const ViewOrdersData = ({
                   <div className="flex flex-col sm:flex-row gap-2 text-[15px] mt-1">
                     <span>
                       <span className="text-gray-500">Meal ID:</span>{" "}
-                      <span className="font-mono text-xs text-gray-700 select-all">{item.meal.id}</span>
+                      <span className="font-mono text-xs text-gray-700 select-all flex items-center gap-1">
+                        <div className="space-y-1">
+                        
+                        <CopyableId href={item.meal.id} showShort={item.meal.id as any} id={item.meal.id} /> ,
+                        </div>
+                        
+                      </span>
+                 
                     </span>
                     <span>
                       <span className="text-gray-500">Description:</span>{" "}

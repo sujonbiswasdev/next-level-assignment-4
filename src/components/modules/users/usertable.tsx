@@ -129,6 +129,18 @@ export default function UserTable({
       ],
  
     },
+    {
+      type: "select",
+      name: "isActive",
+      label: "isActive",
+      value: String(form.isActive),
+      onChange: (val: string) => handleChange("isActive", val),
+      options: [
+        { label: "No", value: "false" },
+        { label: "Yes", value: "true" },
+      ],
+ 
+    },
   ];
 
   const handleDeleteUser = useCallback(async (id: string) => {

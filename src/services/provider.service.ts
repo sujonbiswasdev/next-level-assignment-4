@@ -3,6 +3,7 @@ import { IGetMealData } from "@/types/meals.type";
 import { IProviderInfo, TResponseproviderData } from "@/types/provider.type";
 import { ApiErrorResponse, ApiResponse } from "@/types/response.type";
 import { TUser } from "@/types/user.type";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 const api_url=env.API_URL
@@ -106,8 +107,8 @@ export const providerService = {
           Cookie: cookieStore.toString(),
         },
         body: JSON.stringify(updateProvider),
-        next: { tags: ["provider", "providers"] }
       });
+      revalidateTag("provider",'max')
 
       const data = await response.json();
 

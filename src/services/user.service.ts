@@ -15,13 +15,14 @@ export const userService={
     const res = await fetch(`${api_url}/api/v1/user/profile/update`, {
       method: "PUT",
       credentials:"include",
+      cache:"no-store",
       headers: {
         "Content-Type": "application/json",
         Cookie: cookieStore.toString(),
       },
       body: JSON.stringify(updateUser),
     });
-    revalidateTag("userdata",'max')
+    revalidateTag("user",'max')
     const data= await res.json();
     const result =data as ApiResponse<TUser> 
     if (!res.ok) {
@@ -43,10 +44,8 @@ export const userService={
                     headers: {
                         Cookie: cookieStore.toString()
                     },
-                    next:{
-                        tags:['userdata']
-                    }
                 })
+                revalidateTag("user",'max')
                 const body = await res.json()
                 const result = body as ApiResponse<TUser>
                 if(!res.ok){
@@ -78,6 +77,8 @@ export const userService={
               body: JSON.stringify(body)
             });
             const data = await res.json();
+            console.log(data,'daat')
+            revalidateTag("user",'max')
             if (!res.ok) {
               return { success: false, message: data?.message || "Failed to update user", errors: data?.errors };
             }
@@ -103,7 +104,7 @@ export const userService={
                 Cookie: cookieStore.toString(),
               },
               next: {
-                tags: ["userdata"],
+                tags: ["user",'users'],
               },
             });
             const data = await res.json();
@@ -132,7 +133,7 @@ export const userService={
                 Cookie: cookieStore.toString(),
               },
               next: {
-                tags: ["userdata"],
+                tags: ["user"],
               },
             });
             const body = await res.json();
@@ -160,11 +161,9 @@ export const userService={
               credentials: "include",
               headers: {
                 Cookie: cookieStore.toString(),
-              },
-              next: {
-                tags: ["userdata"],
-              },
+              }
             });
+            revalidateTag("user",'max')
             const body = await res.json();
                 const result = body as ApiResponse<TUser>;
                       if (!res.ok) {

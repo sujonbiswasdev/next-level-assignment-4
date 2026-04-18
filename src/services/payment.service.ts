@@ -66,6 +66,7 @@ export const PaymentService = {
 
       const res = await fetch(`${API_BASE_URL}/api/v1/payments/${paymentId}/status`, {
         method: "PATCH",
+        cache:"no-store",
         headers: {
           "Content-Type": "application/json",
           Cookie: cookieStore.toString(),
@@ -104,6 +105,7 @@ export const PaymentService = {
 
         const res = await fetch(`${API_BASE_URL}/api/v1/payments/${paymentId}`, {
             method: "DELETE",
+            cache:"no-store",
             headers: {
                 "Content-Type": "application/json",
                 Cookie: cookieStore.toString(),

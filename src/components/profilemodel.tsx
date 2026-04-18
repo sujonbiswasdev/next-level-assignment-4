@@ -91,6 +91,7 @@ function ProfileModal({ user }: { user: TUser }) {
     }
     toast.dismiss(toastid);
     toast.success(res.result?.message || "user account delete successfully");
+    router.push("/")
     router.refresh();
     window.location.reload();
   };
